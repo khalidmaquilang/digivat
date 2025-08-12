@@ -1,9 +1,14 @@
 <?php
 
 use Features\UserProfile\Enums\AddressTypeEnum;
+use Features\UserProfile\Enums\BirInvoiceMannerTypeEnum;
+use Features\UserProfile\Enums\BirInvoiceTypeEnum;
 use Features\UserProfile\Enums\BusinessClassificationEnum;
 use Features\UserProfile\Enums\CivilStatusEnum;
+use Features\UserProfile\Enums\FacilityTypeEnum;
 use Features\UserProfile\Enums\GenderEnum;
+use Features\UserProfile\Enums\MultipleEmploymentTypeEnum;
+use Features\UserProfile\Enums\RegistrationAccreditationTaxRegimeEnum;
 use Features\UserProfile\Enums\SpouseEmploymentStatusEnum;
 use Features\UserProfile\Enums\TaxPayerTypeEnum;
 use Illuminate\Database\Migrations\Migration;
@@ -98,6 +103,70 @@ return new class extends Migration
             $table->string('authorized_zip_code')->nullable();
             $table->json('authorized_contact_type')->nullable();
             // Part 5 - Business Information
+            $table->string('business_number')->nullable();
+            $table->json('industries')->nullable();
+            $table->string('incentives_investment_promotion')->nullable();
+            $table->string('incentives_legal_basis')->nullable();
+            $table->string('incentives_granted')->nullable();
+            $table->integer('incentives_number_of_years')->nullable();
+            $table->date('incentives_start_date')->nullable();
+            $table->date('incentives_end_date')->nullable();
+            $table->string('registration_accreditation_number')->nullable();
+            $table->date('registration_accreditation_effective_date_from')->nullable();
+            $table->date('registration_accreditation_effective_date_to')->nullable();
+            $table->date('registration_accreditation_date_issued')->nullable();
+            $table->string('registration_accreditation_registered_activity')->nullable();
+            $table->enum('registration_accreditation_tax_regime', RegistrationAccreditationTaxRegimeEnum::toArray())->nullable();
+            $table->date('registration_accreditation_activity_start_date')->nullable();
+            $table->date('registration_accreditation_activity_end_date')->nullable();
+            // Part 6 – Facility Details
+            $table->string('facility_code')->nullable();
+            $table->enum('facility_type', FacilityTypeEnum::toArray())->nullable();
+            $table->string('facility_others')->nullable();
+            $table->string('facility_unit')->nullable();
+            $table->string('facility_building')->nullable();
+            $table->string('facility_block')->nullable();
+            $table->string('facility_street')->nullable();
+            $table->string('facility_street')->nullable();
+            $table->string('facility_subdivision')->nullable();
+            $table->string('facility_barangay')->nullable();
+            $table->string('facility_district')->nullable();
+            $table->string('facility_city')->nullable();
+            $table->string('facility_province')->nullable();
+            $table->string('facility_zip_code')->nullable();
+            // Part 7 – Tax Types
+            $table->json('tax_types')->nullable();
+            // Part 8 – Invoices
+            $table->boolean('use_bir_invoice')->nullable();
+            $table->enum('bir_invoice_type', BirInvoiceTypeEnum::toArray())->nullable();
+            $table->integer('number_of_booklets')->nullable();
+            $table->string('serial_number_start')->nullable();
+            $table->string('serial_number_end')->nullable();
+            $table->string('printers_name')->nullable();
+            $table->string('printers_tin_number')->nullable();
+            $table->string('printers_accreditation_number')->nullable();
+            $table->date('printers_accreditation_date')->nullable();
+            $table->string('printers_unit')->nullable();
+            $table->string('printers_building')->nullable();
+            $table->string('printers_block')->nullable();
+            $table->string('printers_street')->nullable();
+            $table->string('printers_street')->nullable();
+            $table->string('printers_subdivision')->nullable();
+            $table->string('printers_barangay')->nullable();
+            $table->string('printers_district')->nullable();
+            $table->string('printers_city')->nullable();
+            $table->string('printers_province')->nullable();
+            $table->string('printers_zip_code')->nullable();
+            $table->string('printers_phone')->nullable();
+            $table->string('printers_email')->nullable();
+            $table->enum('invoice_manner_type', BirInvoiceMannerTypeEnum::toArray())->nullable();
+            $table->json('invoice_descriptions')->nullable();
+            // Part 9 – For Employee with Two or More Employers (Multiple Employments) Within the Calendar Year
+            $table->enum('multiple_employment_type', MultipleEmploymentTypeEnum::toArray())->nullable();
+            $table->json('employers');
+            $table->date('primary_employer_relationship_date')->nullable();
+            $table->json('primary_employer_contact_type')->nullable();
+            $table->string('signature_image')->nullable();
 
             $table->timestamps();
             $table->softDeletes();
