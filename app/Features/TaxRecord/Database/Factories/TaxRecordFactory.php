@@ -15,11 +15,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 final class TaxRecordFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
     protected $model = TaxRecord::class;
 
     /**

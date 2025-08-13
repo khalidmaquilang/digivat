@@ -67,7 +67,7 @@ class TaxRecord extends Model
     use HasUuidsTrait;
     use SoftDeletes;
 
-    protected static function newFactory()
+    protected static function newFactory(): TaxRecordFactory
     {
         // Explicitly point to the correct factory class
         return TaxRecordFactory::new();

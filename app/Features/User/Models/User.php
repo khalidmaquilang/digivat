@@ -70,7 +70,7 @@ class User extends Authenticatable
     use Notifiable;
     use SoftDeletes;
 
-    protected static function newFactory()
+    protected static function newFactory(): UserFactory
     {
         // Explicitly point to the correct factory class
         return UserFactory::new();

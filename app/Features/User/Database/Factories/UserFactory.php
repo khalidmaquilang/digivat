@@ -13,11 +13,6 @@ use Illuminate\Support\Str;
  */
 final class UserFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
     protected $model = User::class;
 
     /**
@@ -33,7 +28,7 @@ final class UserFactory extends Factory
             'nickname' => fake()->optional()->word,
             'email' => fake()->safeEmail,
             'tin_number' => fake()->optional()->word,
-            'email_verified_at' => fake()->optional()->datetime(),
+            'email_verified_at' => fake()->optional()->dateTime(),
             'password' => bcrypt(fake()->password),
             'remember_token' => Str::random(10),
         ];

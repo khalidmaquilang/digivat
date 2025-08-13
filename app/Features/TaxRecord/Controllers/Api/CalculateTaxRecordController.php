@@ -7,6 +7,8 @@ namespace Features\TaxRecord\Controllers\Api;
 use Features\Shared\Controllers\ApiController;
 use Features\TaxRecord\Actions\CalculateTaxAction;
 use Features\TaxRecord\Data\CalculateTaxRecordData;
+use Features\User\Models\User;
+use Illuminate\Http\JsonResponse;
 
 class CalculateTaxRecordController extends ApiController
 {
@@ -15,8 +17,9 @@ class CalculateTaxRecordController extends ApiController
     /**
      * @throws \Throwable
      */
-    public function __invoke(CalculateTaxRecordData $request)
+    public function __invoke(CalculateTaxRecordData $request): JsonResponse
     {
+        /** @var ?User $user */
         $user = auth('sanctum')->user();
         abort_if($user === null, 404);
 
