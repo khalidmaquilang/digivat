@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Features\TaxRecord\Controllers\Api;
 
-use App\Models\User;
 use Features\Shared\Controllers\ApiController;
 use Features\TaxRecord\Actions\CalculateTaxAction;
 use Features\TaxRecord\Data\CalculateTaxRecordData;
@@ -18,7 +17,7 @@ class CalculateTaxRecordController extends ApiController
      */
     public function __invoke(CalculateTaxRecordData $request)
     {
-        $user = User::first();
+        $user = auth('sanctum')->user();
         abort_if($user === null, 404);
 
         $result = $this->action->handle($request, $user->id);
