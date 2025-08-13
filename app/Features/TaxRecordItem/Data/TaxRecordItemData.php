@@ -18,5 +18,8 @@ class TaxRecordItemData extends Data
         public int $quantity = 1,
         #[Min(0)]
         public float $discount_amount = 0,
-    ) {}
+        public float $total = 0
+    ) {
+        $this->total = ($this->unit_price * $this->quantity) - $this->discount_amount;
+    }
 }

@@ -6,6 +6,7 @@ namespace Features\TaxRecord\Actions;
 
 use Exception;
 use Features\TaxRecord\Data\CalculateTaxRecordData;
+use Features\TaxRecord\Enums\CalculateTaxRecordModeEnum;
 use Features\TaxRecordItem\Actions\CalculateTaxRecordItemAction;
 use Features\TaxRecordItem\Actions\CreateTaxRecordItemAction;
 use Illuminate\Support\Facades\DB;
@@ -41,6 +42,10 @@ class CalculateTaxAction
             tax_amount: $tax_amount,
             valid_until: now()->addMonth()
         );
+
+        if ($data->mode === CalculateTaxRecordModeEnum::Preview) {
+            return $tax_record_data->toArray();
+        }
 
         try {
             DB::beginTransaction();
