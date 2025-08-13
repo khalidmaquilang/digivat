@@ -38,6 +38,17 @@
       0 => 'BladeUI\\Icons\\BladeIconsServiceProvider',
     ),
   ),
+  'codewithdennis/filament-lucide-icons' => 
+  array (
+    'aliases' => 
+    array (
+      'FilamentLucideIcons' => 'CodeWithDennis\\FilamentLucideIcons\\Facades\\FilamentLucideIcons',
+    ),
+    'providers' => 
+    array (
+      0 => 'CodeWithDennis\\FilamentLucideIcons\\FilamentLucideIconsServiceProvider',
+    ),
+  ),
   'filament/actions' => 
   array (
     'providers' => 
@@ -209,6 +220,13 @@
     'providers' => 
     array (
       0 => 'Spatie\\StructureDiscoverer\\StructureDiscovererServiceProvider',
+    ),
+  ),
+  'technikermathe/blade-lucide-icons' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Technikermathe\\LucideIcons\\BladeLucideIconsServiceProvider',
     ),
   ),
 );
