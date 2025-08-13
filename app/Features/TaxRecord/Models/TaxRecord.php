@@ -4,24 +4,27 @@ declare(strict_types=1);
 
 namespace Features\TaxRecord\Models;
 
+use Features\Shared\Models\Casts\Money;
 use Features\Shared\Models\Traits\HasUuidsTrait;
+use Features\TaxRecord\Enums\CategoryTypeEnum;
+use Features\TaxRecord\Enums\TaxRecordStatusEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property string $id
  * @property string $user_id
- * @property string|null $sales_date
+ * @property \Illuminate\Support\Carbon|null $sales_date
  * @property string $transaction_reference
- * @property int $order_discount
- * @property int $gross_amount
- * @property int $discount_amount
- * @property int $taxable_amount
- * @property int $tax_amount
- * @property int $total_amount
- * @property string $valid_until
- * @property string $status
- * @property string $category_type
+ * @property \Brick\Money\Money|float $order_discount
+ * @property \Brick\Money\Money|float $gross_amount
+ * @property \Brick\Money\Money|float $discount_amount
+ * @property \Brick\Money\Money|float $taxable_amount
+ * @property \Brick\Money\Money|float $tax_amount
+ * @property \Brick\Money\Money|float $total_amount
+ * @property \Illuminate\Support\Carbon $valid_until
+ * @property TaxRecordStatusEnum $status
+ * @property CategoryTypeEnum $category_type
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
@@ -55,6 +58,22 @@ class TaxRecord extends Model
 {
     use HasUuidsTrait;
     use SoftDeletes;
+
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'order_discount' => Money::class,
+        'gross_amount' => Money::class,
+        'discount_amount' => Money::class,
+        'taxable_amount' => Money::class,
+        'tax_amount' => Money::class,
+        'total_amount' => Money::class,
+        'sales_date' => 'datetime',
+        'valid_until' => 'date',
+        'status' => TaxRecordStatusEnum::class,
+        'category_type' => CategoryTypeEnum::class,
+    ];
 
     protected function getPrefixId(): string
     {

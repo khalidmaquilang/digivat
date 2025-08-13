@@ -1,6 +1,6 @@
 <?php
 
-use Features\Shared\Enums\CategoryTypeEnum;
+use Features\TaxRecord\Enums\CategoryTypeEnum;
 use Features\TaxRecord\Enums\TaxRecordStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;

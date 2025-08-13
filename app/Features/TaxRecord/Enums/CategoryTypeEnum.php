@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Features\Shared\Enums;
+namespace Features\TaxRecord\Enums;
+
+use Features\Shared\Enums\EnumArrayTrait;
 
 enum CategoryTypeEnum: string
 {

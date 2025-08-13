@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Features\TaxRecordItem\Models;
 
+use Features\Shared\Models\Casts\Money;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -13,9 +14,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $tax_record_id
  * @property string $item_name
  * @property int $quantity
- * @property int $unit_price
- * @property int $discount_amount
- * @property int $total
+ * @property \Brick\Money\Money|float $unit_price
+ * @property \Brick\Money\Money|float $discount_amount
+ * @property \Brick\Money\Money|float $total
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
@@ -43,4 +44,13 @@ class TaxRecordItem extends Model
 {
     use HasUuids;
     use SoftDeletes;
+
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'unit_price' => Money::class,
+        'discount_amount' => Money::class,
+        'total' => Money::class,
+    ];
 }
