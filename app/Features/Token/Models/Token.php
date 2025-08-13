@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Features\Token\Models;
 
+use Features\Shared\Models\Scopes\UserScope;
 use Features\Token\Database\Factories\TokenFactory;
 use Features\User\Models\User;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -40,6 +42,7 @@ use Illuminate\Support\Str;
  *
  * @mixin \Eloquent
  */
+#[ScopedBy(UserScope::class)]
 class Token extends Model
 {
     /** @use HasFactory<TokenFactory> */

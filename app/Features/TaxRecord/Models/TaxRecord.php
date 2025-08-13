@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Features\TaxRecord\Models;
 
 use Features\Shared\Models\Casts\Money;
+use Features\Shared\Models\Scopes\UserScope;
 use Features\Shared\Models\Traits\HasUuidsTrait;
 use Features\TaxRecord\Database\Factories\TaxRecordFactory;
 use Features\TaxRecord\Enums\CategoryTypeEnum;
 use Features\TaxRecord\Enums\TaxRecordStatusEnum;
 use Features\TaxRecordItem\Models\TaxRecordItem;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -59,6 +61,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *
  * @mixin \Eloquent
  */
+#[ScopedBy(UserScope::class)]
 class TaxRecord extends Model
 {
     /** @use HasFactory<TaxRecordFactory> */
