@@ -9,7 +9,9 @@ use Features\TaxRecord\Enums\CalculateTaxRecordModeEnum;
 use Features\TaxRecord\Enums\CategoryTypeEnum;
 use Features\TaxRecord\Enums\TaxRecordStatusEnum;
 use Features\TaxRecordItem\Data\TaxRecordItemData;
-use Spatie\LaravelData\Attributes\Validation\Min;
+use Spatie\LaravelData\Attributes\Validation\GreaterThanOrEqualTo;
+use Spatie\LaravelData\Attributes\WithCast;
+use Spatie\LaravelData\Casts\DateTimeInterfaceCast;
 use Spatie\LaravelData\Data;
 
 class CalculateTaxRecordData extends Data
@@ -18,12 +20,13 @@ class CalculateTaxRecordData extends Data
         public CalculateTaxRecordModeEnum $mode,
         public CategoryTypeEnum $category_type,
         public string $transaction_reference,
+        #[WithCast(DateTimeInterfaceCast::class, format: 'Y-m-d\TH:i:s.uP')]
         public Carbon $sales_date,
         /**
          * @var array<TaxRecordItemData>
          */
         public array $items,
-        #[Min(0)]
+        #[GreaterThanOrEqualTo(0)]
         public float $order_discount = 0
     ) {}
 
