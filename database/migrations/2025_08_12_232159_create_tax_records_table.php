@@ -17,10 +17,9 @@ return new class extends Migration
             $table->string('id', 60)->primary();
             $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
             $table->dateTime('sales_date')->nullable();
-            $table->string('transaction_reference')->unique();
-            $table->integer('order_discount')->default(0);
+            $table->string('transaction_reference');
             $table->integer('gross_amount');
-            $table->integer('discount_amount');
+            $table->integer('order_discount')->default(0);
             $table->integer('taxable_amount');
             $table->integer('tax_amount');
             $table->integer('total_amount');

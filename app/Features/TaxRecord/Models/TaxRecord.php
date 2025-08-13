@@ -8,7 +8,9 @@ use Features\Shared\Models\Casts\Money;
 use Features\Shared\Models\Traits\HasUuidsTrait;
 use Features\TaxRecord\Enums\CategoryTypeEnum;
 use Features\TaxRecord\Enums\TaxRecordStatusEnum;
+use Features\TaxRecordItem\Models\TaxRecordItem;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -18,7 +20,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $transaction_reference
  * @property \Brick\Money\Money|float $order_discount
  * @property \Brick\Money\Money|float $gross_amount
- * @property \Brick\Money\Money|float $discount_amount
+ * @property int $discount_amount
  * @property \Brick\Money\Money|float $taxable_amount
  * @property \Brick\Money\Money|float $tax_amount
  * @property \Brick\Money\Money|float $total_amount
@@ -28,6 +30,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, TaxRecordItem> $taxRecordItems
+ * @property-read int|null $tax_record_items_count
  *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord newQuery()
@@ -59,13 +63,22 @@ class TaxRecord extends Model
     use HasUuidsTrait;
     use SoftDeletes;
 
+    protected function getPrefixId(): string
+    {
+        return 'BIR-TX-';
+    }
+
+    protected function isValidUniqueId(mixed $value): bool
+    {
+        return true;
+    }
+
     /**
      * @var array<string, string>
      */
     protected $casts = [
-        'order_discount' => Money::class,
         'gross_amount' => Money::class,
-        'discount_amount' => Money::class,
+        'order_discount' => Money::class,
         'taxable_amount' => Money::class,
         'tax_amount' => Money::class,
         'total_amount' => Money::class,
@@ -75,13 +88,11 @@ class TaxRecord extends Model
         'category_type' => CategoryTypeEnum::class,
     ];
 
-    protected function getPrefixId(): string
+    /**
+     * @return HasMany<TaxRecordItem, $this>
+     */
+    public function taxRecordItems(): HasMany
     {
-        return 'BIR-TX-';
-    }
-
-    protected function isValidUniqueId(mixed $value): bool
-    {
-        return true;
+        return $this->hasMany(TaxRecordItem::class);
     }
 }

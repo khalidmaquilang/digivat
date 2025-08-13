@@ -23534,6 +23534,266 @@ namespace Barryvdh\Debugbar\Facades {
             }
     }
 
+namespace Inspector\Laravel\Facades {
+    /**
+     */
+    class Inspector extends \Inspector\Inspector {
+        /**
+         * A wrap to monitor a function execution called by Laravel Container.
+         *
+         * @param mixed $callback
+         * @param array $parameters
+         * @return mixed|void
+         * @throws \Throwable
+         * @static
+         */
+        public static function call($callback, $parameters = [])
+        {
+            /** @var \Inspector\Laravel\Inspector $instance */
+            return $instance->call($callback, $parameters);
+        }
+
+        /**
+         * Create an Inspector instance with a single ingestion key.
+         *
+         * @static
+         */
+        public static function create($ingestionKey, $configure = null)
+        {
+            //Method inherited from \Inspector\Inspector 
+            return \Inspector\Laravel\Inspector::create($ingestionKey, $configure);
+        }
+
+        /**
+         * Change the configuration instance.
+         *
+         * @static
+         */
+        public static function configure($callback)
+        {
+            //Method inherited from \Inspector\Inspector 
+            /** @var \Inspector\Laravel\Inspector $instance */
+            return $instance->configure($callback);
+        }
+
+        /**
+         * Set custom transport.
+         *
+         * @throws InspectorException
+         * @static
+         */
+        public static function setTransport($resolver)
+        {
+            //Method inherited from \Inspector\Inspector 
+            /** @var \Inspector\Laravel\Inspector $instance */
+            return $instance->setTransport($resolver);
+        }
+
+        /**
+         * Create and start new Transaction.
+         *
+         * @throws \Exception
+         * @static
+         */
+        public static function startTransaction($name)
+        {
+            //Method inherited from \Inspector\Inspector 
+            /** @var \Inspector\Laravel\Inspector $instance */
+            return $instance->startTransaction($name);
+        }
+
+        /**
+         * Get current transaction instance.
+         *
+         * @deprecated
+         * @return null|\Inspector\Transaction
+         * @static
+         */
+        public static function currentTransaction()
+        {
+            //Method inherited from \Inspector\Inspector 
+            /** @var \Inspector\Laravel\Inspector $instance */
+            return $instance->currentTransaction();
+        }
+
+        /**
+         * Get current transaction instance.
+         *
+         * @return null|\Inspector\Transaction
+         * @static
+         */
+        public static function transaction()
+        {
+            //Method inherited from \Inspector\Inspector 
+            /** @var \Inspector\Laravel\Inspector $instance */
+            return $instance->transaction();
+        }
+
+        /**
+         * Determine if an active transaction exists.
+         *
+         * @return bool
+         * @static
+         */
+        public static function hasTransaction()
+        {
+            //Method inherited from \Inspector\Inspector 
+            /** @var \Inspector\Laravel\Inspector $instance */
+            return $instance->hasTransaction();
+        }
+
+        /**
+         * Determine if the current cycle hasn't started its transaction yet.
+         *
+         * @return bool
+         * @static
+         */
+        public static function needTransaction()
+        {
+            //Method inherited from \Inspector\Inspector 
+            /** @var \Inspector\Laravel\Inspector $instance */
+            return $instance->needTransaction();
+        }
+
+        /**
+         * Determine if a new segment can be added.
+         *
+         * @return bool
+         * @static
+         */
+        public static function canAddSegments()
+        {
+            //Method inherited from \Inspector\Inspector 
+            /** @var \Inspector\Laravel\Inspector $instance */
+            return $instance->canAddSegments();
+        }
+
+        /**
+         * Check if the monitoring is enabled.
+         *
+         * @return bool
+         * @static
+         */
+        public static function isRecording()
+        {
+            //Method inherited from \Inspector\Inspector 
+            /** @var \Inspector\Laravel\Inspector $instance */
+            return $instance->isRecording();
+        }
+
+        /**
+         * Enable recording.
+         *
+         * @static
+         */
+        public static function startRecording()
+        {
+            //Method inherited from \Inspector\Inspector 
+            /** @var \Inspector\Laravel\Inspector $instance */
+            return $instance->startRecording();
+        }
+
+        /**
+         * Stop recording.
+         *
+         * @static
+         */
+        public static function stopRecording()
+        {
+            //Method inherited from \Inspector\Inspector 
+            /** @var \Inspector\Laravel\Inspector $instance */
+            return $instance->stopRecording();
+        }
+
+        /**
+         * Add a new segment to the queue.
+         *
+         * @static
+         */
+        public static function startSegment($type, $label = null)
+        {
+            //Method inherited from \Inspector\Inspector 
+            /** @var \Inspector\Laravel\Inspector $instance */
+            return $instance->startSegment($type, $label);
+        }
+
+        /**
+         * Monitor the execution of a code block.
+         *
+         * @throws \Throwable
+         * @static
+         */
+        public static function addSegment($callback, $type, $label = null, $throw = true)
+        {
+            //Method inherited from \Inspector\Inspector 
+            /** @var \Inspector\Laravel\Inspector $instance */
+            return $instance->addSegment($callback, $type, $label, $throw);
+        }
+
+        /**
+         * Error reporting.
+         *
+         * @throws \Exception
+         * @static
+         */
+        public static function reportException($exception, $handled = true)
+        {
+            //Method inherited from \Inspector\Inspector 
+            /** @var \Inspector\Laravel\Inspector $instance */
+            return $instance->reportException($exception, $handled);
+        }
+
+        /**
+         * Add an entry to the queue.
+         *
+         * @static
+         */
+        public static function addEntries($entries)
+        {
+            //Method inherited from \Inspector\Inspector 
+            /** @var \Inspector\Laravel\Inspector $instance */
+            return $instance->addEntries($entries);
+        }
+
+        /**
+         * Define a callback to run before flushing data to the remote platform.
+         *
+         * @static
+         */
+        public static function beforeFlush($callback)
+        {
+            //Method inherited from \Inspector\Inspector 
+            return \Inspector\Laravel\Inspector::beforeFlush($callback);
+        }
+
+        /**
+         * Flush data to the remote platform.
+         *
+         * @throws \Exception
+         * @static
+         */
+        public static function flush()
+        {
+            //Method inherited from \Inspector\Inspector 
+            /** @var \Inspector\Laravel\Inspector $instance */
+            return $instance->flush();
+        }
+
+        /**
+         * Cancel the current transaction, segments, and errors.
+         *
+         * @static
+         */
+        public static function reset()
+        {
+            //Method inherited from \Inspector\Inspector 
+            /** @var \Inspector\Laravel\Inspector $instance */
+            return $instance->reset();
+        }
+
+            }
+    }
+
 namespace Livewire {
     /**
      * @see \Livewire\LivewireManager
@@ -32325,6 +32585,7 @@ namespace  {
     class Vite extends \Illuminate\Support\Facades\Vite {}
     class EloquentSerialize extends \AnourValar\EloquentSerialize\Facades\EloquentSerializeFacade {}
     class Debugbar extends \Barryvdh\Debugbar\Facades\Debugbar {}
+    class Inspector extends \Inspector\Laravel\Facades\Inspector {}
     class Livewire extends \Livewire\Livewire {}
 }
 

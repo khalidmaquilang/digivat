@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Features\TaxRecord\Enums;
 
 use Features\Shared\Enums\EnumArrayTrait;
+use Features\TaxType\Interfaces\TaxInterface;
+use Features\TaxType\Vat;
 
 enum CategoryTypeEnum: string
 {
@@ -40,4 +42,14 @@ enum CategoryTypeEnum: string
     case EXPORT = 'export';                           // VAT 0%
     case EDUCATION = 'education';                     // VAT exempt
     case HEALTHCARE = 'healthcare';                   // VAT exempt
+
+    public function toTaxClass(): TaxInterface
+    {
+        // for now
+        return app(Vat::class);
+
+        //        return match($this) {
+        //            self::DIGITAL_STREAMING,self::DIGITAL_DOWNLOADS,self::SOFTWARE_LICENSE => app(Vat::class),
+        //        };
+    }
 }
