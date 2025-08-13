@@ -20,7 +20,7 @@ class CalculateTaxRecordController extends ApiController
     public function __invoke(CalculateTaxRecordData $request): JsonResponse
     {
         /** @var ?User $user */
-        $user = auth('sanctum')->user();
+        $user = $this->resolveUser();
         abort_if($user === null, 404);
 
         $result = $this->action->handle($request, $user->id);

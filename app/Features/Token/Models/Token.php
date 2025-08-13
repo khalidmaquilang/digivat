@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Features\Token\Models;
 
+use Features\Token\Database\Factories\TokenFactory;
 use Features\User\Models\User;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -21,6 +23,7 @@ use Illuminate\Support\Str;
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read User $user
  *
+ * @method static \Features\Token\Database\Factories\TokenFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Token newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Token newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Token onlyTrashed()
@@ -39,7 +42,10 @@ use Illuminate\Support\Str;
  */
 class Token extends Model
 {
+    /** @use HasFactory<TokenFactory> */
+    use HasFactory;
     use HasUuids;
+
     use SoftDeletes;
 
     protected static function booted(): void
@@ -47,6 +53,12 @@ class Token extends Model
         static::creating(function (Token $token): void {
             $token->token = Str::random(50);
         });
+    }
+
+    protected static function newFactory(): TokenFactory
+    {
+        // Explicitly point to the correct factory class
+        return TokenFactory::new();
     }
 
     /**
