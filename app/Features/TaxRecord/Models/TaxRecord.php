@@ -18,9 +18,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $user_id
  * @property \Illuminate\Support\Carbon|null $sales_date
  * @property string $transaction_reference
- * @property \Brick\Money\Money|float $order_discount
  * @property \Brick\Money\Money|float $gross_amount
- * @property int $discount_amount
+ * @property \Brick\Money\Money|float $order_discount
  * @property \Brick\Money\Money|float $taxable_amount
  * @property \Brick\Money\Money|float $tax_amount
  * @property \Brick\Money\Money|float $total_amount
@@ -40,7 +39,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord whereCategoryType($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord whereDiscountAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord whereGrossAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord whereOrderDiscount($value)

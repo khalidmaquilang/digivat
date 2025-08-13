@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Models;
+namespace Features\User\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Features\TaxRecord\Models\TaxRecord;
+use Features\User\Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -35,7 +36,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count
  *
- * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
+ * @method static \Features\User\Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User onlyTrashed()
@@ -61,10 +62,19 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens;
+
+    /** @use HasFactory<UserFactory> */
     use HasFactory;
+
     use HasUuids;
     use Notifiable;
     use SoftDeletes;
+
+    protected static function newFactory()
+    {
+        // Explicitly point to the correct factory class
+        return UserFactory::new();
+    }
 
     /**
      * The attributes that are mass assignable.
