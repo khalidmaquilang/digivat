@@ -19,9 +19,9 @@ class TaxRecordData extends Data
         public float $order_discount,
         public float $taxable_amount,
         public float $tax_amount,
-        public Carbon $valid_until,
         public TaxRecordStatusEnum $status,
         public CategoryTypeEnum $category_type,
+        public ?Carbon $valid_until = null,
         public float $total_amount = 0
     ) {
         $this->total_amount = $taxable_amount + $tax_amount;

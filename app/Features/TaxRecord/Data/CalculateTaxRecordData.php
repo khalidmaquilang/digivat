@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Features\TaxRecord\Data;
 
 use Carbon\Carbon;
+use Features\Shared\Helpers\MoneyHelper;
 use Features\TaxRecord\Enums\CalculateTaxRecordModeEnum;
 use Features\TaxRecord\Enums\CategoryTypeEnum;
 use Features\TaxRecord\Enums\TaxRecordStatusEnum;
@@ -44,9 +45,9 @@ class CalculateTaxRecordData extends Data
             gross_amount: $gross_amount,
             order_discount: $this->order_discount,
             taxable_amount: $taxable_amount,
-            tax_amount: $tax_amount,
+            tax_amount: MoneyHelper::evaluate($tax_amount),
             valid_until: $valid_until,
-            status: TaxRecordStatusEnum::Acknowledged,
+            status: $this->mode === CalculateTaxRecordModeEnum::Acknowledge ? TaxRecordStatusEnum::Acknowledged : TaxRecordStatusEnum::Preview,
             category_type: $this->category_type,
         );
     }
