@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Features\TaxRecordItem\Models;
 
 use Features\Shared\Models\Casts\Money;
+use Features\TaxRecordItem\Database\Factories\TaxRecordItemFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -21,6 +23,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
  *
+ * @method static \Features\TaxRecordItem\Database\Factories\TaxRecordItemFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecordItem newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecordItem newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecordItem onlyTrashed()
@@ -42,8 +45,17 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class TaxRecordItem extends Model
 {
+    /** @use HasFactory<TaxRecordItemFactory> */
+    use HasFactory;
+
     use HasUuids;
     use SoftDeletes;
+
+    protected static function newFactory()
+    {
+        // Explicitly point to the correct factory class
+        return TaxRecordItemFactory::new();
+    }
 
     /**
      * @var array<string, string>
