@@ -44,8 +44,8 @@ class Token extends Model
 {
     /** @use HasFactory<TokenFactory> */
     use HasFactory;
-    use HasUuids;
 
+    use HasUuids;
     use SoftDeletes;
 
     protected static function booted(): void
