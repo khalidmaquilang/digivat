@@ -10,6 +10,8 @@ class CreateTokenAction
 {
     public function handle(User $user, string $name): void
     {
-        $user->createToken($name);
+        $user->tokens()->create([
+            'name' => $name,
+        ]);
     }
 }

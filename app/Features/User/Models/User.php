@@ -6,6 +6,7 @@ namespace Features\User\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Features\TaxRecord\Models\TaxRecord;
+use Features\Token\Models\Token;
 use Features\User\Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasName;
@@ -16,7 +17,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 /**
  * @property string $id
@@ -37,7 +37,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, TaxRecord> $taxRecords
  * @property-read int|null $tax_records_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Token> $tokens
  * @property-read int|null $tokens_count
  *
  * @method static \Features\User\Database\Factories\UserFactory factory($count = null, $state = [])
@@ -66,8 +66,6 @@ use Laravel\Sanctum\HasApiTokens;
  */
 class User extends Authenticatable implements FilamentUser, HasName
 {
-    use HasApiTokens;
-
     /** @use HasFactory<UserFactory> */
     use HasFactory;
 
@@ -110,6 +108,14 @@ class User extends Authenticatable implements FilamentUser, HasName
     public function taxRecords(): HasMany
     {
         return $this->hasMany(TaxRecord::class);
+    }
+
+    /**
+     * @return HasMany<Token, $this>
+     */
+    public function tokens(): HasMany
+    {
+        return $this->hasMany(Token::class);
     }
 
     public function canAccessPanel(Panel $panel): bool
