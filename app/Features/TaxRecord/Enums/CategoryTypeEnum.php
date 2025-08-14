@@ -7,8 +7,9 @@ namespace Features\TaxRecord\Enums;
 use Features\Shared\Enums\EnumArrayTrait;
 use Features\TaxType\Interfaces\TaxInterface;
 use Features\TaxType\Vat;
+use Filament\Support\Contracts\HasLabel;
 
-enum CategoryTypeEnum: string
+enum CategoryTypeEnum: string implements HasLabel
 {
     use EnumArrayTrait;
 
@@ -42,6 +43,42 @@ enum CategoryTypeEnum: string
     case EXPORT = 'export';                           // VAT 0%
     case EDUCATION = 'education';                     // VAT exempt
     case HEALTHCARE = 'healthcare';                   // VAT exempt
+
+    public function getLabel(): string
+    {
+        return match ($this) {
+            // Digital & Subscription Services
+            self::DIGITAL_STREAMING => 'Digital Streaming',       // Netflix, Spotify
+            self::DIGITAL_DOWNLOADS => 'Digital Downloads',       // Games, E-books
+            self::SOFTWARE_LICENSE => 'Software License',        // SaaS, Office 365
+
+            // Goods (General)
+            self::RETAIL_GOODS => 'Retail Goods',            // Physical products
+            self::GROCERIES => 'Groceries',               // Basic necessities
+            self::PHARMACEUTICALS => 'Pharmaceuticals',         // Medicine
+            self::ALCOHOL => 'Alcohol',                 // Excise + VAT
+            self::TOBACCO => 'Tobacco',                 // Excise + VAT
+            self::FUEL => 'Fuel',                    // Excise + VAT
+            self::AUTOMOBILES => 'Automobiles',
+
+            // Financial & Legal
+            self::LOAN => 'Loan',
+            self::INSURANCE => 'Insurance',
+            self::LEASE => 'Lease',
+            self::BOND => 'Bond',
+
+            // Services (General)
+            self::PROFESSIONAL_SERVICES => 'Professional Services',
+            self::CONSTRUCTION => 'Construction',
+            self::TRANSPORTATION => 'Transportation',
+            self::FOOD_SERVICE => 'Food Service',
+
+            // Special
+            self::EXPORT => 'Export',
+            self::EDUCATION => 'Education',
+            self::HEALTHCARE => 'Healthcare',
+        };
+    }
 
     public function toTaxClass(): TaxInterface
     {

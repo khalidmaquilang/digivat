@@ -6,6 +6,7 @@ namespace Features\TaxRecord\Tests\Controllers\Api;
 
 use Features\TaxRecord\Enums\CalculateTaxRecordModeEnum;
 use Features\TaxRecord\Enums\CategoryTypeEnum;
+use Features\Token\Models\Token;
 use Features\User\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -17,6 +18,9 @@ final class CalculateTaxRecordControllerTest extends TestCase
     public function test_can_calculate_tax_with_authenticated_user(): void
     {
         $user = User::factory()->create();
+        $token = Token::factory()->create([
+            'user_id' => $user->id,
+        ]);
 
         $requestData = [
             'mode' => CalculateTaxRecordModeEnum::Acknowledge->value,
@@ -40,7 +44,8 @@ final class CalculateTaxRecordControllerTest extends TestCase
             'order_discount' => 10.0,
         ];
 
-        $response = $this->actingAs($user, 'sanctum')
+        $response = $this
+            ->withToken($token->token)
             ->postJson(route('api.tax.calculate'), $requestData);
 
         $response->assertSuccessful();
@@ -96,6 +101,9 @@ final class CalculateTaxRecordControllerTest extends TestCase
     public function test_preview_mode_does_not_create_database_records(): void
     {
         $user = User::factory()->create();
+        $token = Token::factory()->create([
+            'user_id' => $user->id,
+        ]);
 
         $requestData = [
             'mode' => CalculateTaxRecordModeEnum::Preview->value,
@@ -113,7 +121,8 @@ final class CalculateTaxRecordControllerTest extends TestCase
             'order_discount' => 0.0,
         ];
 
-        $response = $this->actingAs($user, 'sanctum')
+        $response = $this
+            ->withToken($token->token)
             ->postJson(route('api.tax.calculate'), $requestData);
 
         $response->assertSuccessful();
@@ -181,6 +190,9 @@ final class CalculateTaxRecordControllerTest extends TestCase
     public function test_calculates_tax_with_discounts(): void
     {
         $user = User::factory()->create();
+        $token = Token::factory()->create([
+            'user_id' => $user->id,
+        ]);
 
         $requestData = [
             'mode' => CalculateTaxRecordModeEnum::Acknowledge->value,
@@ -198,7 +210,8 @@ final class CalculateTaxRecordControllerTest extends TestCase
             'order_discount' => 15.0,
         ];
 
-        $response = $this->actingAs($user, 'sanctum')
+        $response = $this
+            ->withToken($token->token)
             ->postJson(route('api.tax.calculate'), $requestData);
 
         $response->assertSuccessful();
@@ -231,6 +244,9 @@ final class CalculateTaxRecordControllerTest extends TestCase
     public function test_handles_multiple_items(): void
     {
         $user = User::factory()->create();
+        $token = Token::factory()->create([
+            'user_id' => $user->id,
+        ]);
 
         $requestData = [
             'mode' => CalculateTaxRecordModeEnum::Acknowledge->value,
@@ -260,7 +276,8 @@ final class CalculateTaxRecordControllerTest extends TestCase
             'order_discount' => 0.0,
         ];
 
-        $response = $this->actingAs($user, 'sanctum')
+        $response = $this
+            ->withToken($token->token)
             ->postJson(route('api.tax.calculate'), $requestData);
 
         $response->assertSuccessful();
@@ -299,8 +316,12 @@ final class CalculateTaxRecordControllerTest extends TestCase
     public function test_validates_required_fields(): void
     {
         $user = User::factory()->create();
+        $token = Token::factory()->create([
+            'user_id' => $user->id,
+        ]);
 
-        $response = $this->actingAs($user, 'sanctum')
+        $response = $this
+            ->withToken($token->token)
             ->postJson(route('api.tax.calculate'), []);
 
         $response->assertUnprocessable();
@@ -313,6 +334,9 @@ final class CalculateTaxRecordControllerTest extends TestCase
     public function test_validates_item_structure(): void
     {
         $user = User::factory()->create();
+        $token = Token::factory()->create([
+            'user_id' => $user->id,
+        ]);
 
         $requestData = [
             'mode' => CalculateTaxRecordModeEnum::Acknowledge->value,
@@ -327,7 +351,8 @@ final class CalculateTaxRecordControllerTest extends TestCase
             ],
         ];
 
-        $response = $this->actingAs($user, 'sanctum')
+        $response = $this
+            ->withToken($token->token)
             ->postJson(route('api.tax.calculate'), $requestData);
 
         $response->assertUnprocessable();

@@ -7,6 +7,7 @@ namespace App\Filament\Client\Pages;
 use App\Filament\Components\Fields\TextInput\TextInput;
 use BackedEnum;
 use CodeWithDennis\FilamentLucideIcons\Enums\LucideIcon;
+use Features\Token\Models\Token;
 use Features\User\Actions\CreateTokenAction;
 use Features\User\Models\User;
 use Filament\Actions\CreateAction;
@@ -17,6 +18,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
+use Illuminate\Support\Str;
 use UnitEnum;
 
 class ApiTokens extends Page implements HasTable
@@ -43,12 +45,13 @@ class ApiTokens extends Page implements HasTable
         abort_if($user === null, 404);
 
         return $table
-            ->query(fn () => $user->tokens())
+            ->query(Token::query())
             ->columns([
                 TextColumn::make('name'),
                 TextColumn::make('token')
                     ->copyable()
-                    ->copyMessage('token copied'),
+                    ->copyMessage('token copied')
+                    ->formatStateUsing(fn (string $state): string => app()->isProduction() ? Str::mask($state, '*', 10) : $state),
             ])
             ->headerActions([
                 CreateAction::make()
