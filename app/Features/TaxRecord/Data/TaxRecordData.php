@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Features\TaxRecord\Enums\CategoryTypeEnum;
 use Features\TaxRecord\Enums\TaxRecordStatusEnum;
 use Spatie\LaravelData\Data;
+use Spatie\LaravelData\Optional;
 
 class TaxRecordData extends Data
 {
@@ -21,6 +22,7 @@ class TaxRecordData extends Data
         public float $tax_amount,
         public TaxRecordStatusEnum $status,
         public CategoryTypeEnum $category_type,
+        public Optional|string|null $bir_receipt_id = null,
         public ?Carbon $valid_until = null,
         public float $total_amount = 0
     ) {

@@ -57,6 +57,7 @@ class TaxRecordsTable
             ->toolbarActions([
                 BulkActionGroup::make([
                 ]),
-            ]);
+            ])
+            ->defaultSort('created_at', 'desc');
     }
 }
