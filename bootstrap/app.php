@@ -8,6 +8,9 @@ use Infinitypaul\Idempotency\Middleware\EnsureIdempotency;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withProviders()
+    ->withCommands([
+        \App\Features\TaxRecord\Commands\UpdateExpiredTaxRecordsCommand::class,
+    ])
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
         commands: __DIR__.'/../routes/console.php',
