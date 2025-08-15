@@ -40,7 +40,6 @@ class CalculateTaxRecordData extends Data
         Carbon $valid_until,
     ): TaxRecordData {
         return new TaxRecordData(
-            bir_receipt_id: Optional::create(),
             user_id: $user_id,
             sales_date: $this->sales_date,
             transaction_reference: $this->transaction_reference,
@@ -50,6 +49,7 @@ class CalculateTaxRecordData extends Data
             tax_amount: MoneyHelper::evaluate($tax_amount),
             status: $this->mode === CalculateTaxRecordModeEnum::Acknowledge ? TaxRecordStatusEnum::Acknowledged : TaxRecordStatusEnum::Preview,
             category_type: $this->category_type,
+            bir_receipt_id: Optional::create(),
             valid_until: $valid_until,
         );
     }

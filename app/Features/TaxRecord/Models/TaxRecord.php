@@ -30,6 +30,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon $valid_until
  * @property TaxRecordStatusEnum $status
  * @property CategoryTypeEnum $category_type
+ * @property string|null $referer
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
@@ -47,6 +48,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord whereGrossAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord whereOrderDiscount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord whereReferer($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord whereSalesDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord whereTaxAmount($value)

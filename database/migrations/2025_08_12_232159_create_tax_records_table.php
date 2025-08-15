@@ -26,6 +26,7 @@ return new class extends Migration
             $table->date('valid_until');
             $table->enum('status', TaxRecordStatusEnum::toArray());
             $table->enum('category_type', CategoryTypeEnum::toArray());
+            $table->string('referer')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

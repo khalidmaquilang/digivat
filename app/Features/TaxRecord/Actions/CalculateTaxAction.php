@@ -25,7 +25,7 @@ class CalculateTaxAction
      *
      * @throws \Throwable
      */
-    public function handle(CalculateTaxRecordData $data, string $user_id): array
+    public function handle(CalculateTaxRecordData $data, string $user_id, string $referer_url): array
     {
         // calculate total amount of the item
         $total_item_amount = $this->calculate_record_item_action->handle($data->items);
@@ -46,6 +46,9 @@ class CalculateTaxAction
         if ($data->mode === CalculateTaxRecordModeEnum::Preview) {
             return $tax_record_data->toArray();
         }
+
+        // Add referer
+        $tax_record_data['referer'] = $referer_url;
 
         try {
             DB::beginTransaction();

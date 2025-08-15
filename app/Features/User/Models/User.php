@@ -21,7 +21,7 @@ use Illuminate\Notifications\Notifiable;
 /**
  * @property string $id
  * @property string $first_name
- * @property string $middle_name
+ * @property string|null $middle_name
  * @property string $last_name
  * @property string|null $suffix
  * @property string|null $nickname

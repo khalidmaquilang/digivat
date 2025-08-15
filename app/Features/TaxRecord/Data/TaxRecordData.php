@@ -24,7 +24,8 @@ class TaxRecordData extends Data
         public CategoryTypeEnum $category_type,
         public Optional|string|null $bir_receipt_id = null,
         public ?Carbon $valid_until = null,
-        public float $total_amount = 0
+        public float $total_amount = 0,
+        public ?string $referer = null,
     ) {
         $this->total_amount = $taxable_amount + $tax_amount;
     }

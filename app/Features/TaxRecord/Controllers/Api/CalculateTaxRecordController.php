@@ -23,7 +23,10 @@ class CalculateTaxRecordController extends ApiController
         $user = $this->resolveUser();
         abort_if($user === null, 404);
 
-        $result = $this->action->handle($request, $user->id);
+        // Get referer from the request
+        $referer = request()->header('referer', '');
+
+        $result = $this->action->handle($request, $user->id, $referer);
 
         return response()->json($result);
     }
