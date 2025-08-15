@@ -7,6 +7,7 @@ namespace App\Features\TaxRecordItem\Tests\Actions;
 use App\Features\TaxRecord\Models\TaxRecord;
 use App\Features\TaxRecordItem\Actions\CreateTaxRecordItemAction;
 use App\Features\TaxRecordItem\Data\TaxRecordItemData;
+use App\Features\TaxRecordItem\Models\TaxRecordItem;
 use App\Features\User\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -30,7 +31,7 @@ final class CreateTaxRecordItemActionTest extends TestCase
 
         $result = app(CreateTaxRecordItemAction::class)->handle($data);
 
-        $this->assertInstanceOf(\Features\TaxRecordItem\Models\TaxRecordItem::class, $result);
+        $this->assertInstanceOf(TaxRecordItem::class, $result);
         $this->assertEquals($taxRecord->id, $result->tax_record_id);
         $this->assertEquals('Test Item', $result->item_name);
 
@@ -59,7 +60,7 @@ final class CreateTaxRecordItemActionTest extends TestCase
 
         $result = app(CreateTaxRecordItemAction::class)->handle($data);
 
-        $this->assertInstanceOf(\Features\TaxRecordItem\Models\TaxRecordItem::class, $result);
+        $this->assertInstanceOf(TaxRecordItem::class, $result);
 
         $this->assertDatabaseHas('tax_record_items', [
             'tax_record_id' => $data->tax_record_id,
@@ -86,7 +87,7 @@ final class CreateTaxRecordItemActionTest extends TestCase
 
         $result = app(CreateTaxRecordItemAction::class)->handle($data);
 
-        $this->assertInstanceOf(\Features\TaxRecordItem\Models\TaxRecordItem::class, $result);
+        $this->assertInstanceOf(TaxRecordItem::class, $result);
 
         $this->assertDatabaseHas('tax_record_items', [
             'tax_record_id' => $data->tax_record_id,
@@ -113,7 +114,7 @@ final class CreateTaxRecordItemActionTest extends TestCase
 
         $result = app(CreateTaxRecordItemAction::class)->handle($data);
 
-        $this->assertInstanceOf(\Features\TaxRecordItem\Models\TaxRecordItem::class, $result);
+        $this->assertInstanceOf(TaxRecordItem::class, $result);
 
         $expectedTotal = (12.99 * 4) - 2.50; // 51.96 - 2.50 = 49.46
 
@@ -142,7 +143,7 @@ final class CreateTaxRecordItemActionTest extends TestCase
 
         $result = app(CreateTaxRecordItemAction::class)->handle($data);
 
-        $this->assertInstanceOf(\Features\TaxRecordItem\Models\TaxRecordItem::class, $result);
+        $this->assertInstanceOf(TaxRecordItem::class, $result);
 
         $expectedTotal = (25.0 * 100) - 50.0; // 2500 - 50 = 2450
 
@@ -171,7 +172,7 @@ final class CreateTaxRecordItemActionTest extends TestCase
 
         $result = app(CreateTaxRecordItemAction::class)->handle($data);
 
-        $this->assertInstanceOf(\Features\TaxRecordItem\Models\TaxRecordItem::class, $result);
+        $this->assertInstanceOf(TaxRecordItem::class, $result);
 
         $this->assertDatabaseHas('tax_record_items', [
             'tax_record_id' => $data->tax_record_id,
@@ -209,8 +210,8 @@ final class CreateTaxRecordItemActionTest extends TestCase
         $result1 = $action->handle($data1);
         $result2 = $action->handle($data2);
 
-        $this->assertInstanceOf(\Features\TaxRecordItem\Models\TaxRecordItem::class, $result1);
-        $this->assertInstanceOf(\Features\TaxRecordItem\Models\TaxRecordItem::class, $result2);
+        $this->assertInstanceOf(TaxRecordItem::class, $result1);
+        $this->assertInstanceOf(TaxRecordItem::class, $result2);
 
         // Verify both items were created for the same tax record
         $this->assertDatabaseHas('tax_record_items', [
@@ -248,7 +249,7 @@ final class CreateTaxRecordItemActionTest extends TestCase
         $result = app(CreateTaxRecordItemAction::class)->handle($data);
         $afterCreation = now()->addSecond();
 
-        $this->assertInstanceOf(\Features\TaxRecordItem\Models\TaxRecordItem::class, $result);
+        $this->assertInstanceOf(TaxRecordItem::class, $result);
         $this->assertNotNull($result->created_at);
         $this->assertNotNull($result->updated_at);
 

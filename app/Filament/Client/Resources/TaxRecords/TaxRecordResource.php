@@ -58,6 +58,9 @@ class TaxRecordResource extends Resource
         ];
     }
 
+    /**
+     * @return Builder<TaxRecord>
+     */
     public static function getRecordRouteBindingEloquentQuery(): Builder
     {
         return parent::getRecordRouteBindingEloquentQuery()

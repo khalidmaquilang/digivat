@@ -9,7 +9,7 @@ use App\Features\TaxRecordItem\Models\TaxRecordItem;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<\Features\TaxRecordItem\Models\TaxRecordItem>
+ * @extends Factory<TaxRecordItem>
  */
 final class TaxRecordItemFactory extends Factory
 {

@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 /**
- * @extends Factory<\Features\Token\Models\Token>
+ * @extends Factory<Token>
  */
 final class TokenFactory extends Factory
 {

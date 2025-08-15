@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Scope;
 class UserScope implements Scope
 {
     /**
-     * @param  Builder<User>  $builder
+     * @param  Builder<Model>  $builder
      */
     public function apply(Builder $builder, Model $model): void
     {
