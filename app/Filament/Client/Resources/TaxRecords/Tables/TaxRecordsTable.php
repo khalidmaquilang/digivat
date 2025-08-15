@@ -4,15 +4,21 @@ declare(strict_types=1);
 
 namespace App\Filament\Client\Resources\TaxRecords\Tables;
 
+use App\Features\TaxRecord\Actions\BulkCancelTaxRecordAction;
+use App\Features\TaxRecord\Actions\CancelTaxRecordAction;
 use App\Features\TaxRecord\Enums\TaxRecordStatusEnum;
 use App\Filament\Components\Summarizes\Sum;
 use App\Filament\Components\TableColumns\MoneyColumn\MoneyColumn;
+use CodeWithDennis\FilamentLucideIcons\Enums\LucideIcon;
+use Filament\Actions\Action;
+use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Collection;
 use Malzariey\FilamentDaterangepickerFilter\Filters\DateRangeFilter;
 
 class TaxRecordsTable
@@ -53,9 +59,26 @@ class TaxRecordsTable
             ], layout: FiltersLayout::AboveContent)
             ->recordActions([
                 ViewAction::make(),
+                Action::make('cancel')
+                    ->label('Cancel')
+                    ->icon(LucideIcon::XCircle)
+                    ->color('danger')
+                    ->requiresConfirmation()
+                    ->modalHeading('Cancel Tax Record')
+                    ->modalDescription('Are you sure you want to cancel this tax record? This action cannot be undone.')
+                    ->action(fn ($record) => app(CancelTaxRecordAction::class)->handle($record))
+                    ->visible(fn ($record): bool => $record->status !== TaxRecordStatusEnum::Cancelled),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
+                    BulkAction::make('bulk_cancel')
+                        ->label('Cancel Selected')
+                        ->icon(LucideIcon::XCircle)
+                        ->color('danger')
+                        ->requiresConfirmation()
+                        ->modalHeading('Cancel Tax Records')
+                        ->modalDescription('Are you sure you want to cancel the selected tax records? This action cannot be undone.')
+                        ->action(fn (Collection $records) => app(BulkCancelTaxRecordAction::class)->handle($records)),
                 ]),
             ])
             ->defaultSort('created_at', 'desc');
