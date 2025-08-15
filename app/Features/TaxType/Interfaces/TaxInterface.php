@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Features\TaxType\Interfaces;
+namespace App\Features\TaxType\Interfaces;
 
 interface TaxInterface
 {

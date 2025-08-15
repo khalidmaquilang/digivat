@@ -2452,7 +2452,7 @@ namespace Illuminate\Support\Facades {
         /**
          * Get the currently authenticated user.
          *
-         * @return \Features\User\Models\User|null
+         * @return \App\Features\User\Models\User|null
          * @static
          */
         public static function user()
@@ -2490,7 +2490,7 @@ namespace Illuminate\Support\Facades {
          * Log the given user ID into the application without sessions or cookies.
          *
          * @param mixed $id
-         * @return \Features\User\Models\User|false
+         * @return \App\Features\User\Models\User|false
          * @static
          */
         public static function onceUsingId($id)
@@ -2576,7 +2576,7 @@ namespace Illuminate\Support\Facades {
          *
          * @param mixed $id
          * @param bool $remember
-         * @return \Features\User\Models\User|false
+         * @return \App\Features\User\Models\User|false
          * @static
          */
         public static function loginUsingId($id, $remember = false)
@@ -2631,7 +2631,7 @@ namespace Illuminate\Support\Facades {
          * The application must be using the AuthenticateSession middleware.
          *
          * @param string $password
-         * @return \Features\User\Models\User|null
+         * @return \App\Features\User\Models\User|null
          * @throws \Illuminate\Auth\AuthenticationException
          * @static
          */
@@ -2657,7 +2657,7 @@ namespace Illuminate\Support\Facades {
         /**
          * Get the last user we attempted to authenticate.
          *
-         * @return \Features\User\Models\User
+         * @return \App\Features\User\Models\User
          * @static
          */
         public static function getLastAttempted()
@@ -2781,7 +2781,7 @@ namespace Illuminate\Support\Facades {
         /**
          * Return the currently cached user.
          *
-         * @return \Features\User\Models\User|null
+         * @return \App\Features\User\Models\User|null
          * @static
          */
         public static function getUser()
@@ -2843,7 +2843,7 @@ namespace Illuminate\Support\Facades {
         /**
          * Determine if the current user is authenticated. If not, throw an exception.
          *
-         * @return \Features\User\Models\User
+         * @return \App\Features\User\Models\User
          * @throws \Illuminate\Auth\AuthenticationException
          * @static
          */
@@ -23794,6 +23794,64 @@ namespace Inspector\Laravel\Facades {
             }
     }
 
+namespace Laravel\Mcp\Server\Facades {
+    /**
+     */
+    class Mcp {
+        /**
+         * Register an web-based MCP server running over HTTP.
+         *
+         * @static
+         */
+        public static function web($handle, $serverClass)
+        {
+            /** @var \Laravel\Mcp\Server\Registrar $instance */
+            return $instance->web($handle, $serverClass);
+        }
+
+        /**
+         * Register a local MCP server running over STDIO.
+         *
+         * @static
+         */
+        public static function local($handle, $serverClass)
+        {
+            /** @var \Laravel\Mcp\Server\Registrar $instance */
+            return $instance->local($handle, $serverClass);
+        }
+
+        /**
+         * Get the server class for a local MCP.
+         *
+         * @static
+         */
+        public static function getLocalServer($handle)
+        {
+            /** @var \Laravel\Mcp\Server\Registrar $instance */
+            return $instance->getLocalServer($handle);
+        }
+
+        /**
+         * @static
+         */
+        public static function getWebServer($handle)
+        {
+            /** @var \Laravel\Mcp\Server\Registrar $instance */
+            return $instance->getWebServer($handle);
+        }
+
+        /**
+         * @static
+         */
+        public static function oauthRoutes($oauthPrefix = 'oauth')
+        {
+            /** @var \Laravel\Mcp\Server\Registrar $instance */
+            return $instance->oauthRoutes($oauthPrefix);
+        }
+
+            }
+    }
+
 namespace Livewire {
     /**
      * @see \Livewire\LivewireManager
@@ -32586,6 +32644,7 @@ namespace  {
     class EloquentSerialize extends \AnourValar\EloquentSerialize\Facades\EloquentSerializeFacade {}
     class Debugbar extends \Barryvdh\Debugbar\Facades\Debugbar {}
     class Inspector extends \Inspector\Laravel\Facades\Inspector {}
+    class Mcp extends \Laravel\Mcp\Server\Facades\Mcp {}
     class Livewire extends \Livewire\Livewire {}
 }
 

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Features\TaxType;
+namespace App\Features\TaxType;
 
-use Features\TaxType\Interfaces\TaxInterface;
+use App\Features\TaxType\Interfaces\TaxInterface;
 
 class Vat implements TaxInterface
 {

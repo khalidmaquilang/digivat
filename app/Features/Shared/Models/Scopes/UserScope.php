@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Features\Shared\Models\Scopes;
+namespace App\Features\Shared\Models\Scopes;
 
-use Features\User\Models\User;
+use App\Features\User\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;

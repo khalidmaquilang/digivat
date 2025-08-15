@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Features\TaxRecord\Tests\Controllers\Api;
+namespace App\Features\TaxRecord\Tests\Controllers\Api;
 
-use Features\TaxRecord\Enums\CalculateTaxRecordModeEnum;
-use Features\TaxRecord\Enums\CategoryTypeEnum;
-use Features\Token\Models\Token;
-use Features\User\Models\User;
+use App\Features\TaxRecord\Enums\CalculateTaxRecordModeEnum;
+use App\Features\TaxRecord\Enums\CategoryTypeEnum;
+use App\Features\Token\Models\Token;
+use App\Features\User\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

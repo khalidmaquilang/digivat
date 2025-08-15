@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Features\TaxRecord\Actions;
+namespace App\Features\TaxRecord\Actions;
 
-use Features\TaxRecord\Data\TaxRecordData;
-use Features\TaxRecord\Models\TaxRecord;
+use App\Features\TaxRecord\Data\TaxRecordData;
+use App\Features\TaxRecord\Models\TaxRecord;
 
 class CreateTaxRecordAction
 {

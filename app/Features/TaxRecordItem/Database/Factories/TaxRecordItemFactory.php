@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Features\TaxRecordItem\Database\Factories;
+namespace App\Features\TaxRecordItem\Database\Factories;
 
-use Features\TaxRecord\Models\TaxRecord;
-use Features\TaxRecordItem\Models\TaxRecordItem;
+use App\Features\TaxRecord\Models\TaxRecord;
+use App\Features\TaxRecordItem\Models\TaxRecordItem;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

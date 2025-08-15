@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Features\TaxRecord\Enums;
+namespace App\Features\TaxRecord\Enums;
 
-use Features\Shared\Enums\EnumArrayTrait;
+use App\Features\Shared\Enums\EnumArrayTrait;
 
 enum CalculateTaxRecordModeEnum: string
 {

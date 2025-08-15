@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Features\Shared\Models\Traits;
+namespace App\Features\Shared\Models\Traits;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Support\Str;

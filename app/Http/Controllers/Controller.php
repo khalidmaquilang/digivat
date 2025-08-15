@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use Features\User\Models\User;
+use App\Features\User\Models\User;
 
 abstract class Controller
 {

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Features\Token\Database\Factories;
+namespace App\Features\Token\Database\Factories;
 
-use Features\Token\Models\Token;
-use Features\User\Models\User;
+use App\Features\Token\Models\Token;
+use App\Features\User\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 

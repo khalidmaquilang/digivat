@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Filament\Client\Resources\TaxRecords\Tables;
 
+use App\Features\TaxRecord\Enums\TaxRecordStatusEnum;
 use App\Filament\Components\Summarizes\Sum;
 use App\Filament\Components\TableColumns\MoneyColumn\MoneyColumn;
-use Features\TaxRecord\Enums\TaxRecordStatusEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;

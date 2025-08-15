@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Features\Shared\Models\Casts;
+namespace App\Features\Shared\Models\Casts;
 
 use Brick\Math\RoundingMode;
 use Brick\Money\Money as BrickMoney;

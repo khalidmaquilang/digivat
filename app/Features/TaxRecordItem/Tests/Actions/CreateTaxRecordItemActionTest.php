@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Features\TaxRecordItem\Tests\Actions;
+namespace App\Features\TaxRecordItem\Tests\Actions;
 
-use Features\TaxRecord\Models\TaxRecord;
-use Features\TaxRecordItem\Actions\CreateTaxRecordItemAction;
-use Features\TaxRecordItem\Data\TaxRecordItemData;
-use Features\User\Models\User;
+use App\Features\TaxRecord\Models\TaxRecord;
+use App\Features\TaxRecordItem\Actions\CreateTaxRecordItemAction;
+use App\Features\TaxRecordItem\Data\TaxRecordItemData;
+use App\Features\User\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Features\TaxRecord\Controllers\Api;
+namespace App\Features\TaxRecord\Controllers\Api;
 
-use Features\Shared\Controllers\ApiController;
-use Features\TaxRecord\Actions\CalculateTaxAction;
-use Features\TaxRecord\Data\CalculateTaxRecordData;
-use Features\User\Models\User;
+use App\Features\Shared\Controllers\ApiController;
+use App\Features\TaxRecord\Actions\CalculateTaxAction;
+use App\Features\TaxRecord\Data\CalculateTaxRecordData;
+use App\Features\User\Models\User;
 use Illuminate\Http\JsonResponse;
 
 class CalculateTaxRecordController extends ApiController

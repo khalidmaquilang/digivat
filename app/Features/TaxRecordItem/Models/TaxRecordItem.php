@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Features\TaxRecordItem\Models;
+namespace App\Features\TaxRecordItem\Models;
 
-use Features\Shared\Models\Casts\Money;
-use Features\TaxRecordItem\Database\Factories\TaxRecordItemFactory;
+use App\Features\Shared\Models\Casts\Money;
+use App\Features\TaxRecordItem\Database\Factories\TaxRecordItemFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -23,7 +23,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
  *
- * @method static \Features\TaxRecordItem\Database\Factories\TaxRecordItemFactory factory($count = null, $state = [])
+ * @method static \App\Features\TaxRecordItem\Database\Factories\TaxRecordItemFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecordItem newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecordItem newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecordItem onlyTrashed()

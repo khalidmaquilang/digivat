@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Features\User\Database\Factories;
+namespace App\Features\User\Database\Factories;
 
-use Features\User\Models\User;
+use App\Features\User\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 /**
- * @extends Factory<\Features\User\Models\User>
+ * @extends Factory<\App\Features\User\Models\User>
  */
 final class UserFactory extends Factory
 {

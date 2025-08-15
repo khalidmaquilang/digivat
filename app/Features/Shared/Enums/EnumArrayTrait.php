@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Features\Shared\Enums;
+namespace App\Features\Shared\Enums;
 
 trait EnumArrayTrait
 {

@@ -1,7 +1,7 @@
 <?php
 
-use Features\TaxRecord\Enums\CategoryTypeEnum;
-use Features\TaxRecord\Enums\TaxRecordStatusEnum;
+use App\Features\TaxRecord\Enums\CategoryTypeEnum;
+use App\Features\TaxRecord\Enums\TaxRecordStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

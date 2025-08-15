@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Features\TaxRecordItem\Actions;
+namespace App\Features\TaxRecordItem\Actions;
 
-use Features\TaxRecordItem\Data\TaxRecordItemData;
+use App\Features\TaxRecordItem\Data\TaxRecordItemData;
 
 class CalculateTaxRecordItemAction
 {

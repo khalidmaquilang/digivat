@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Features\TaxRecord\Data;
+namespace App\Features\TaxRecord\Data;
 
+use App\Features\TaxRecord\Enums\CategoryTypeEnum;
+use App\Features\TaxRecord\Enums\TaxRecordStatusEnum;
 use Carbon\Carbon;
-use Features\TaxRecord\Enums\CategoryTypeEnum;
-use Features\TaxRecord\Enums\TaxRecordStatusEnum;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Optional;
 

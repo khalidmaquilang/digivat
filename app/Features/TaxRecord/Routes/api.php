@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Features\Shared\Middlewares\ValidateClientToken;
-use Features\TaxRecord\Controllers\Api\CalculateTaxRecordController;
+use App\Features\Shared\Middlewares\ValidateClientToken;
+use App\Features\TaxRecord\Controllers\Api\CalculateTaxRecordController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(ValidateClientToken::class)->group(function (): void {

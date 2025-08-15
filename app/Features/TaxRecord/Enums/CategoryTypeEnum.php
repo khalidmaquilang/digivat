@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Features\TaxRecord\Enums;
+namespace App\Features\TaxRecord\Enums;
 
-use Features\Shared\Enums\EnumArrayTrait;
-use Features\TaxType\Interfaces\TaxInterface;
-use Features\TaxType\Vat;
+use App\Features\Shared\Enums\EnumArrayTrait;
+use App\Features\TaxType\Interfaces\TaxInterface;
+use App\Features\TaxType\Vat;
 use Filament\Support\Contracts\HasLabel;
 
 enum CategoryTypeEnum: string implements HasLabel

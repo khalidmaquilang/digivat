@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Client\Resources\TaxRecords;
 
+use App\Features\TaxRecord\Models\TaxRecord;
 use App\Filament\Client\Resources\TaxRecords\Pages\CreateTaxRecord;
 use App\Filament\Client\Resources\TaxRecords\Pages\EditTaxRecord;
 use App\Filament\Client\Resources\TaxRecords\Pages\ListTaxRecords;
@@ -13,7 +14,6 @@ use App\Filament\Client\Resources\TaxRecords\Schemas\TaxRecordInfolist;
 use App\Filament\Client\Resources\TaxRecords\Tables\TaxRecordsTable;
 use BackedEnum;
 use CodeWithDennis\FilamentLucideIcons\Enums\LucideIcon;
-use Features\TaxRecord\Models\TaxRecord;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;

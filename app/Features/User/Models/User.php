@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Features\User\Models;
+namespace App\Features\User\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Features\TaxRecord\Models\TaxRecord;
-use Features\Token\Models\Token;
-use Features\User\Database\Factories\UserFactory;
+use App\Features\TaxRecord\Models\TaxRecord;
+use App\Features\Token\Models\Token;
+use App\Features\User\Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasName;
 use Filament\Panel;
@@ -40,7 +40,7 @@ use Illuminate\Notifications\Notifiable;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Token> $tokens
  * @property-read int|null $tokens_count
  *
- * @method static \Features\User\Database\Factories\UserFactory factory($count = null, $state = [])
+ * @method static \App\Features\User\Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User onlyTrashed()

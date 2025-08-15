@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Features\TaxRecord\Tests\Actions;
+namespace App\Features\TaxRecord\Tests\Actions;
 
-use Features\TaxRecord\Actions\CalculateTaxAction;
-use Features\TaxRecord\Data\CalculateTaxRecordData;
-use Features\TaxRecord\Enums\CalculateTaxRecordModeEnum;
-use Features\TaxRecord\Enums\CategoryTypeEnum;
-use Features\TaxRecord\Models\TaxRecord;
-use Features\TaxRecordItem\Data\TaxRecordItemData;
-use Features\User\Models\User;
+use App\Features\TaxRecord\Actions\CalculateTaxAction;
+use App\Features\TaxRecord\Data\CalculateTaxRecordData;
+use App\Features\TaxRecord\Enums\CalculateTaxRecordModeEnum;
+use App\Features\TaxRecord\Enums\CategoryTypeEnum;
+use App\Features\TaxRecord\Models\TaxRecord;
+use App\Features\TaxRecordItem\Data\TaxRecordItemData;
+use App\Features\User\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

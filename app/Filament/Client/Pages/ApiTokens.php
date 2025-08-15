@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Filament\Client\Pages;
 
+use App\Features\Token\Models\Token;
+use App\Features\User\Actions\CreateTokenAction;
+use App\Features\User\Models\User;
 use App\Filament\Components\Fields\TextInput\TextInput;
 use BackedEnum;
 use CodeWithDennis\FilamentLucideIcons\Enums\LucideIcon;
-use Features\Token\Models\Token;
-use Features\User\Actions\CreateTokenAction;
-use Features\User\Models\User;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Features\TaxRecord\Actions;
+namespace App\Features\TaxRecord\Actions;
 
+use App\Features\TaxRecord\Data\CalculateTaxRecordData;
+use App\Features\TaxRecord\Enums\CalculateTaxRecordModeEnum;
+use App\Features\TaxRecordItem\Actions\CalculateTaxRecordItemAction;
+use App\Features\TaxRecordItem\Actions\CreateTaxRecordItemAction;
 use Exception;
-use Features\TaxRecord\Data\CalculateTaxRecordData;
-use Features\TaxRecord\Enums\CalculateTaxRecordModeEnum;
-use Features\TaxRecordItem\Actions\CalculateTaxRecordItemAction;
-use Features\TaxRecordItem\Actions\CreateTaxRecordItemAction;
 use Illuminate\Support\Facades\DB;
 use Log;
 

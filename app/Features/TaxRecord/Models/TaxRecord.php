@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Features\TaxRecord\Models;
+namespace App\Features\TaxRecord\Models;
 
-use Features\Shared\Models\Casts\Money;
-use Features\Shared\Models\Scopes\UserScope;
-use Features\Shared\Models\Traits\HasUuidsTrait;
-use Features\TaxRecord\Database\Factories\TaxRecordFactory;
-use Features\TaxRecord\Enums\CategoryTypeEnum;
-use Features\TaxRecord\Enums\TaxRecordStatusEnum;
-use Features\TaxRecordItem\Models\TaxRecordItem;
+use App\Features\Shared\Models\Casts\Money;
+use App\Features\Shared\Models\Scopes\UserScope;
+use App\Features\Shared\Models\Traits\HasUuidsTrait;
+use App\Features\TaxRecord\Database\Factories\TaxRecordFactory;
+use App\Features\TaxRecord\Enums\CategoryTypeEnum;
+use App\Features\TaxRecord\Enums\TaxRecordStatusEnum;
+use App\Features\TaxRecordItem\Models\TaxRecordItem;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -37,7 +37,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, TaxRecordItem> $taxRecordItems
  * @property-read int|null $tax_record_items_count
  *
- * @method static \Features\TaxRecord\Database\Factories\TaxRecordFactory factory($count = null, $state = [])
+ * @method static \App\Features\TaxRecord\Database\Factories\TaxRecordFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord onlyTrashed()

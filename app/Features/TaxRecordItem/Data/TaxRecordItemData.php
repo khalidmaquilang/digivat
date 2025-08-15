@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Features\TaxRecordItem\Data;
+namespace App\Features\TaxRecordItem\Data;
 
 use Spatie\LaravelData\Attributes\Validation\GreaterThanOrEqualTo;
 use Spatie\LaravelData\Data;

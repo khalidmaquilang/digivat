@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Features\TaxRecord\Database\Factories;
+namespace App\Features\TaxRecord\Database\Factories;
 
-use Features\TaxRecord\Enums\CategoryTypeEnum;
-use Features\TaxRecord\Enums\TaxRecordStatusEnum;
-use Features\TaxRecord\Models\TaxRecord;
-use Features\User\Models\User;
+use App\Features\TaxRecord\Enums\CategoryTypeEnum;
+use App\Features\TaxRecord\Enums\TaxRecordStatusEnum;
+use App\Features\TaxRecord\Models\TaxRecord;
+use App\Features\User\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<\Features\TaxRecord\Models\TaxRecord>
+ * @extends Factory<\App\Features\TaxRecord\Models\TaxRecord>
  */
 final class TaxRecordFactory extends Factory
 {

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Features\TaxRecord\Tests\Actions;
+namespace App\Features\TaxRecord\Tests\Actions;
 
-use Features\TaxRecord\Actions\CreateTaxRecordAction;
-use Features\TaxRecord\Data\TaxRecordData;
-use Features\TaxRecord\Enums\CategoryTypeEnum;
-use Features\TaxRecord\Enums\TaxRecordStatusEnum;
-use Features\User\Models\User;
+use App\Features\TaxRecord\Actions\CreateTaxRecordAction;
+use App\Features\TaxRecord\Data\TaxRecordData;
+use App\Features\TaxRecord\Enums\CategoryTypeEnum;
+use App\Features\TaxRecord\Enums\TaxRecordStatusEnum;
+use App\Features\User\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -28,9 +28,9 @@ final class CreateTaxRecordActionTest extends TestCase
             order_discount: 10,
             taxable_amount: 100,
             tax_amount: 12,
-            valid_until: now()->addMonth(),
             status: TaxRecordStatusEnum::Acknowledged,
-            category_type: CategoryTypeEnum::DIGITAL_STREAMING
+            category_type: CategoryTypeEnum::DIGITAL_STREAMING,
+            valid_until: now()->addMonth()
         );
 
         app(CreateTaxRecordAction::class)->handle($data);

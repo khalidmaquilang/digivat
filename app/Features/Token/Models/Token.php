@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Features\Token\Models;
+namespace App\Features\Token\Models;
 
-use Features\Shared\Models\Scopes\UserScope;
-use Features\Token\Database\Factories\TokenFactory;
-use Features\User\Models\User;
+use App\Features\Shared\Models\Scopes\UserScope;
+use App\Features\Token\Database\Factories\TokenFactory;
+use App\Features\User\Models\User;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -25,7 +25,7 @@ use Illuminate\Support\Str;
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read User $user
  *
- * @method static \Features\Token\Database\Factories\TokenFactory factory($count = null, $state = [])
+ * @method static \App\Features\Token\Database\Factories\TokenFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Token newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Token newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Token onlyTrashed()

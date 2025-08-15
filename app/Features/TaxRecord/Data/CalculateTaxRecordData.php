@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Features\TaxRecord\Data;
+namespace App\Features\TaxRecord\Data;
 
+use App\Features\Shared\Helpers\MoneyHelper;
+use App\Features\TaxRecord\Enums\CalculateTaxRecordModeEnum;
+use App\Features\TaxRecord\Enums\CategoryTypeEnum;
+use App\Features\TaxRecord\Enums\TaxRecordStatusEnum;
+use App\Features\TaxRecordItem\Data\TaxRecordItemData;
 use Carbon\Carbon;
-use Features\Shared\Helpers\MoneyHelper;
-use Features\TaxRecord\Enums\CalculateTaxRecordModeEnum;
-use Features\TaxRecord\Enums\CategoryTypeEnum;
-use Features\TaxRecord\Enums\TaxRecordStatusEnum;
-use Features\TaxRecordItem\Data\TaxRecordItemData;
 use Spatie\LaravelData\Attributes\Validation\GreaterThanOrEqualTo;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Casts\DateTimeInterfaceCast;

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Features\Shared\Middlewares;
+namespace App\Features\Shared\Middlewares;
 
+use App\Features\Token\Models\Token;
 use Closure;
-use Features\Token\Models\Token;
 use Illuminate\Http\Request;
 
 class ValidateClientToken

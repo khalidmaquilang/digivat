@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Features\Shared\Helpers;
+namespace App\Features\Shared\Helpers;
 
 class MoneyHelper
 {

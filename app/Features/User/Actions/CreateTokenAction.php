@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Features\User\Actions;
+namespace App\Features\User\Actions;
 
-use Features\User\Models\User;
+use App\Features\User\Models\User;
 
 class CreateTokenAction
 {

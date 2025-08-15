@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Features\TaxRecordItem\Tests\Actions;
+namespace App\Features\TaxRecordItem\Tests\Actions;
 
-use Features\TaxRecordItem\Actions\CalculateTaxRecordItemAction;
-use Features\TaxRecordItem\Data\TaxRecordItemData;
+use App\Features\TaxRecordItem\Actions\CalculateTaxRecordItemAction;
+use App\Features\TaxRecordItem\Data\TaxRecordItemData;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
