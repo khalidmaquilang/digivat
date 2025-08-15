@@ -22,6 +22,10 @@ class UpdateBulkExpiredTaxRecords implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
+    public int $tries = 3; // Or more
+
+    public int $timeout = 120; // Avoid long-running DB locks
+
     /**
      * Create a new job instance.
      */
@@ -50,5 +54,20 @@ class UpdateBulkExpiredTaxRecords implements ShouldQueue
             ->update([
                 'status' => TaxRecordStatusEnum::Expired,
             ]);
+    }
+
+    public function tags(): array
+    {
+        return [
+            'UpdateBulkExpiredTaxRecords',
+            'chunk_size:'.count($this->tax_record_ids),
+        ];
+    }
+
+    public function backoff(): int
+    {
+        $base = 5 * 2 ** ($this->attempts() - 1); // Exponential
+
+        return $base + random_int(1, 10); // Add randomness to each retry
     }
 }
