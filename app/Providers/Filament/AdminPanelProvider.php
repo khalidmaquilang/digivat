@@ -30,6 +30,16 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->brandName('DTRMS')
+            ->brandLogo(function () {
+                // Hide brand logo when user is on dashboard
+                if (request()->routeIs('filament.admin.pages.*')) {
+                    return '';
+                }
+
+                return asset('/images/dtrms-logo.png');
+            })
+            ->brandLogoHeight('10rem')
             ->colors([
                 'primary' => Color::Amber,
             ])

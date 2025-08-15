@@ -29,6 +29,16 @@ class ClientPanelProvider extends PanelProvider
             ->id('client')
             ->path('client')
             ->login()
+            ->brandName('POST')
+            ->brandLogo(function () {
+                // Hide brand logo when user is on dashboard
+                if (request()->routeIs('filament.client.pages.*')) {
+                    return '';
+                }
+
+                return asset('/images/post-logo.png');
+            })
+            ->brandLogoHeight('10rem')
             ->colors([
                 'primary' => Color::Amber,
             ])

@@ -56,6 +56,9 @@ class UpdateBulkExpiredTaxRecords implements ShouldQueue
             ]);
     }
 
+    /**
+     * @return array<string>
+     */
     public function tags(): array
     {
         return [
