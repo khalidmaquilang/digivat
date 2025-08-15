@@ -40,8 +40,14 @@ class ClientPanelProvider extends PanelProvider
             })
             ->brandLogoHeight('10rem')
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Blue,
+                'success' => Color::Green,
+                'warning' => Color::Orange,
+                'danger' => Color::Red,
+                'info' => Color::Sky,
+                'gray' => Color::Slate,
             ])
+            ->darkMode()
             ->discoverResources(in: app_path('Filament/Client/Resources'), for: 'App\Filament\Client\Resources')
             ->discoverPages(in: app_path('Filament/Client/Pages'), for: 'App\Filament\Client\Pages')
             ->pages([
