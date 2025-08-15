@@ -18,17 +18,17 @@ final class CancelTaxRecordActionTest extends TestCase
     public function test_can_cancel_tax_record(): void
     {
         $user = User::factory()->create();
-        $taxRecord = TaxRecord::factory()->create([
+        $tax_record = TaxRecord::factory()->create([
             'user_id' => $user->id,
             'status' => TaxRecordStatusEnum::Acknowledged,
         ]);
 
-        $result = app(CancelTaxRecordAction::class)->handle($taxRecord);
+        $result = app(CancelTaxRecordAction::class)->handle($tax_record);
 
         $this->assertInstanceOf(TaxRecord::class, $result);
         $this->assertEquals(TaxRecordStatusEnum::Cancelled, $result->status);
         $this->assertDatabaseHas('tax_records', [
-            'id' => $taxRecord->id,
+            'id' => $tax_record->id,
             'status' => TaxRecordStatusEnum::Cancelled->value,
         ]);
     }
@@ -36,17 +36,17 @@ final class CancelTaxRecordActionTest extends TestCase
     public function test_does_not_update_already_cancelled_tax_record(): void
     {
         $user = User::factory()->create();
-        $taxRecord = TaxRecord::factory()->create([
+        $tax_record = TaxRecord::factory()->create([
             'user_id' => $user->id,
             'status' => TaxRecordStatusEnum::Cancelled,
         ]);
 
-        $originalUpdatedAt = $taxRecord->updated_at;
+        $original_updated_at = $tax_record->updated_at;
 
-        $result = app(CancelTaxRecordAction::class)->handle($taxRecord);
+        $result = app(CancelTaxRecordAction::class)->handle($tax_record);
 
         $this->assertInstanceOf(TaxRecord::class, $result);
         $this->assertEquals(TaxRecordStatusEnum::Cancelled, $result->status);
-        $this->assertEquals($originalUpdatedAt, $result->updated_at);
+        $this->assertEquals($original_updated_at, $result->updated_at);
     }
 }

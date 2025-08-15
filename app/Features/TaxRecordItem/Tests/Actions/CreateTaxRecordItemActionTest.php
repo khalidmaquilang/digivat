@@ -19,12 +19,12 @@ final class CreateTaxRecordItemActionTest extends TestCase
     public function test_can_create_tax_record_item(): void
     {
         $user = User::factory()->create();
-        $taxRecord = TaxRecord::factory()->create(['user_id' => $user->id]);
+        $tax_record = TaxRecord::factory()->create(['user_id' => $user->id]);
 
         $data = new TaxRecordItemData(
             item_name: 'Test Item',
             unit_price: 100.0,
-            tax_record_id: $taxRecord->id,
+            tax_record_id: $tax_record->id,
             quantity: 2,
             discount_amount: 10.0
         );
@@ -32,7 +32,7 @@ final class CreateTaxRecordItemActionTest extends TestCase
         $result = app(CreateTaxRecordItemAction::class)->handle($data);
 
         $this->assertInstanceOf(TaxRecordItem::class, $result);
-        $this->assertEquals($taxRecord->id, $result->tax_record_id);
+        $this->assertEquals($tax_record->id, $result->tax_record_id);
         $this->assertEquals('Test Item', $result->item_name);
 
         $this->assertDatabaseHas('tax_record_items', [
@@ -48,12 +48,12 @@ final class CreateTaxRecordItemActionTest extends TestCase
     public function test_can_create_item_without_discount(): void
     {
         $user = User::factory()->create();
-        $taxRecord = TaxRecord::factory()->create(['user_id' => $user->id]);
+        $tax_record = TaxRecord::factory()->create(['user_id' => $user->id]);
 
         $data = new TaxRecordItemData(
             item_name: 'No Discount Item',
             unit_price: 75.0,
-            tax_record_id: $taxRecord->id,
+            tax_record_id: $tax_record->id,
             quantity: 3,
             discount_amount: 0.0
         );
@@ -75,12 +75,12 @@ final class CreateTaxRecordItemActionTest extends TestCase
     public function test_can_create_item_with_single_quantity(): void
     {
         $user = User::factory()->create();
-        $taxRecord = TaxRecord::factory()->create(['user_id' => $user->id]);
+        $tax_record = TaxRecord::factory()->create(['user_id' => $user->id]);
 
         $data = new TaxRecordItemData(
             item_name: 'Single Item',
             unit_price: 50.0,
-            tax_record_id: $taxRecord->id,
+            tax_record_id: $tax_record->id,
             quantity: 1,
             discount_amount: 5.0
         );
@@ -102,12 +102,12 @@ final class CreateTaxRecordItemActionTest extends TestCase
     public function test_can_create_item_with_decimal_prices(): void
     {
         $user = User::factory()->create();
-        $taxRecord = TaxRecord::factory()->create(['user_id' => $user->id]);
+        $tax_record = TaxRecord::factory()->create(['user_id' => $user->id]);
 
         $data = new TaxRecordItemData(
             item_name: 'Decimal Price Item',
             unit_price: 12.99,
-            tax_record_id: $taxRecord->id,
+            tax_record_id: $tax_record->id,
             quantity: 4,
             discount_amount: 2.50
         );
@@ -131,12 +131,12 @@ final class CreateTaxRecordItemActionTest extends TestCase
     public function test_can_create_item_with_high_quantity(): void
     {
         $user = User::factory()->create();
-        $taxRecord = TaxRecord::factory()->create(['user_id' => $user->id]);
+        $tax_record = TaxRecord::factory()->create(['user_id' => $user->id]);
 
         $data = new TaxRecordItemData(
             item_name: 'Bulk Purchase',
             unit_price: 25.0,
-            tax_record_id: $taxRecord->id,
+            tax_record_id: $tax_record->id,
             quantity: 100,
             discount_amount: 50.0
         );
@@ -160,12 +160,12 @@ final class CreateTaxRecordItemActionTest extends TestCase
     public function test_can_create_item_with_zero_total(): void
     {
         $user = User::factory()->create();
-        $taxRecord = TaxRecord::factory()->create(['user_id' => $user->id]);
+        $tax_record = TaxRecord::factory()->create(['user_id' => $user->id]);
 
         $data = new TaxRecordItemData(
             item_name: 'Free Item',
             unit_price: 100.0,
-            tax_record_id: $taxRecord->id,
+            tax_record_id: $tax_record->id,
             quantity: 1,
             discount_amount: 100.0 // Full discount
         );
@@ -187,12 +187,12 @@ final class CreateTaxRecordItemActionTest extends TestCase
     public function test_can_create_multiple_items_for_same_tax_record(): void
     {
         $user = User::factory()->create();
-        $taxRecord = TaxRecord::factory()->create(['user_id' => $user->id]);
+        $tax_record = TaxRecord::factory()->create(['user_id' => $user->id]);
 
         $data1 = new TaxRecordItemData(
             item_name: 'First Item',
             unit_price: 50.0,
-            tax_record_id: $taxRecord->id,
+            tax_record_id: $tax_record->id,
             quantity: 1,
             discount_amount: 0.0
         );
@@ -200,7 +200,7 @@ final class CreateTaxRecordItemActionTest extends TestCase
         $data2 = new TaxRecordItemData(
             item_name: 'Second Item',
             unit_price: 75.0,
-            tax_record_id: $taxRecord->id,
+            tax_record_id: $tax_record->id,
             quantity: 2,
             discount_amount: 10.0
         );
@@ -215,14 +215,14 @@ final class CreateTaxRecordItemActionTest extends TestCase
 
         // Verify both items were created for the same tax record
         $this->assertDatabaseHas('tax_record_items', [
-            'tax_record_id' => $taxRecord->id,
+            'tax_record_id' => $tax_record->id,
             'item_name' => 'First Item',
             'unit_price' => $this->convertMoney(50.0),
             'total' => $this->convertMoney(50.0),
         ]);
 
         $this->assertDatabaseHas('tax_record_items', [
-            'tax_record_id' => $taxRecord->id,
+            'tax_record_id' => $tax_record->id,
             'item_name' => 'Second Item',
             'unit_price' => $this->convertMoney(75.0),
             'total' => $this->convertMoney(140.0), // 75 * 2 - 10 = 140
@@ -235,12 +235,12 @@ final class CreateTaxRecordItemActionTest extends TestCase
     public function test_creates_item_with_correct_timestamps(): void
     {
         $user = User::factory()->create();
-        $taxRecord = TaxRecord::factory()->create(['user_id' => $user->id]);
+        $tax_record = TaxRecord::factory()->create(['user_id' => $user->id]);
 
         $data = new TaxRecordItemData(
             item_name: 'Timestamp Test Item',
             unit_price: 30.0,
-            tax_record_id: $taxRecord->id,
+            tax_record_id: $tax_record->id,
             quantity: 1,
             discount_amount: 0.0
         );
@@ -261,12 +261,12 @@ final class CreateTaxRecordItemActionTest extends TestCase
     public function test_total_calculation_matches_data_object(): void
     {
         $user = User::factory()->create();
-        $taxRecord = TaxRecord::factory()->create(['user_id' => $user->id]);
+        $tax_record = TaxRecord::factory()->create(['user_id' => $user->id]);
 
         $data = new TaxRecordItemData(
             item_name: 'Calculation Test',
             unit_price: 33.33,
-            tax_record_id: $taxRecord->id,
+            tax_record_id: $tax_record->id,
             quantity: 3,
             discount_amount: 7.77
         );
