@@ -51,7 +51,7 @@ final class CalculateTaxActionTest extends TestCase
         );
 
         $action = app(CalculateTaxAction::class);
-        $result = $action->handle($data, $user->id);
+        $result = $action->handle($data, $user->id, 'https://example.com');
 
         // Verify the result structure
         $this->assertIsArray($result);
@@ -111,7 +111,7 @@ final class CalculateTaxActionTest extends TestCase
         );
 
         $action = app(CalculateTaxAction::class);
-        $result = $action->handle($data, $user->id);
+        $result = $action->handle($data, $user->id, 'https://example.com');
 
         // Verify calculation results
         $this->assertIsArray($result);
@@ -173,7 +173,7 @@ final class CalculateTaxActionTest extends TestCase
         );
 
         $action = app(CalculateTaxAction::class);
-        $result = $action->handle($data, $user->id);
+        $result = $action->handle($data, $user->id, 'https://example.com');
 
         $this->assertIsArray($result);
 
@@ -230,7 +230,7 @@ final class CalculateTaxActionTest extends TestCase
         );
 
         $action = app(CalculateTaxAction::class);
-        $result = $action->handle($data, $user->id);
+        $result = $action->handle($data, $user->id, 'https://example.com');
 
         // Verify the result structure is returned
         $this->assertIsArray($result);
@@ -275,7 +275,7 @@ final class CalculateTaxActionTest extends TestCase
         );
 
         $action = app(CalculateTaxAction::class);
-        $result = $action->handle($data, $user->id);
+        $result = $action->handle($data, $user->id, 'https://example.com');
 
         $this->assertIsArray($result);
         $this->assertEquals('TX22222222', $result['transaction_reference']);
@@ -326,7 +326,7 @@ final class CalculateTaxActionTest extends TestCase
         );
 
         $action = app(CalculateTaxAction::class);
-        $result = $action->handle($data, $user->id);
+        $result = $action->handle($data, $user->id, 'https://example.com');
 
         $this->assertIsArray($result);
         $this->assertEquals($salesDate->toAtomString(), $result['sales_date']);

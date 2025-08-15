@@ -28,5 +28,6 @@ class TaxRecordData extends Data
         public ?string $referer = null,
     ) {
         $this->total_amount = $taxable_amount + $tax_amount;
+        $this->bir_receipt_id = $bir_receipt_id ?? Optional::create();
     }
 }

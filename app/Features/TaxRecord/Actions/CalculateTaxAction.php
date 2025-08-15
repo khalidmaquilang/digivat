@@ -48,7 +48,7 @@ class CalculateTaxAction
         }
 
         // Add referer
-        $tax_record_data['referer'] = $referer_url;
+        $tax_record_data->referer = $referer_url;
 
         try {
             DB::beginTransaction();
