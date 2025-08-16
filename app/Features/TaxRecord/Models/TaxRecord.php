@@ -22,11 +22,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $user_id
  * @property \Illuminate\Support\Carbon|null $sales_date
  * @property string $transaction_reference
- * @property \Brick\Money\Money|float $gross_amount
- * @property \Brick\Money\Money|float $order_discount
- * @property \Brick\Money\Money|float $taxable_amount
- * @property \Brick\Money\Money|float $tax_amount
- * @property \Brick\Money\Money|float $total_amount
+ * @property float $gross_amount
+ * @property float $order_discount
+ * @property float $taxable_amount
+ * @property float $tax_amount
+ * @property float $total_amount
  * @property \Illuminate\Support\Carbon $valid_until
  * @property TaxRecordStatusEnum $status
  * @property CategoryTypeEnum $category_type

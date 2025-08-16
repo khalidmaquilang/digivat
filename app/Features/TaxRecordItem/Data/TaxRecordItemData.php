@@ -28,6 +28,9 @@ class TaxRecordItemData extends Data
         $this->total = ($this->unit_price * $this->quantity) - $this->discount_amount;
     }
 
+    /**
+     * @return array<class-string>
+     */
     public static function normalizers(): array
     {
         return [
