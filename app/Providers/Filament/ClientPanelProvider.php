@@ -32,7 +32,7 @@ class ClientPanelProvider extends PanelProvider
             ->brandName('POST')
             ->brandLogo(function () {
                 // Hide brand logo when user is on dashboard
-                if (request()->routeIs('filament.client.pages.*')) {
+                if (! request()->routeIs('filament.client.auth.*')) {
                     return '';
                 }
 
