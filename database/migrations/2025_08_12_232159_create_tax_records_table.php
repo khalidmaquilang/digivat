@@ -27,6 +27,7 @@ return new class extends Migration
             $table->enum('status', TaxRecordStatusEnum::toArray());
             $table->enum('category_type', CategoryTypeEnum::toArray());
             $table->string('referer')->nullable();
+            $table->string('cancel_reason')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
