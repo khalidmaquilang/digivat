@@ -65,4 +65,13 @@ class TaxRecordItem extends Model
         'discount_amount' => Money::class,
         'total' => Money::class,
     ];
+
+    protected static function booted(): void
+    {
+        static::creating(function (TaxRecordItem $record): void {
+            $total = ($record->unit_price * $record->quantity) - $record->discount_amount;
+
+            $record->total = $total;
+        });
+    }
 }
