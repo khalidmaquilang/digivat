@@ -36,8 +36,7 @@ class CalculateTaxRecordData extends Data
         string $user_id,
         float $gross_amount,
         float $taxable_amount,
-        float $tax_amount,
-        Carbon $valid_until,
+        float $tax_amount
     ): TaxRecordData {
         return new TaxRecordData(
             user_id: $user_id,
@@ -49,8 +48,7 @@ class CalculateTaxRecordData extends Data
             tax_amount: MoneyHelper::evaluate($tax_amount),
             status: $this->mode === CalculateTaxRecordModeEnum::Acknowledge ? TaxRecordStatusEnum::Acknowledged : TaxRecordStatusEnum::Preview,
             category_type: $this->category_type,
-            bir_receipt_id: Optional::create(),
-            valid_until: $valid_until,
+            bir_receipt_id: Optional::create()
         );
     }
 }
