@@ -17,7 +17,7 @@ class TaxRecordItemData extends Data
         #[GreaterThanOrEqualTo(0)]
         public float $unit_price,
         #[Required]
-        public ?string $item_name = null,
+        public ?string $item_name,
         public ?string $tax_record_id = null,
         #[GreaterThanOrEqualTo(1)]
         public int $quantity = 1,

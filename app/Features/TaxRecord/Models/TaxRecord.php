@@ -81,7 +81,7 @@ class TaxRecord extends Model
     protected static function booted(): void
     {
         static::creating(function (TaxRecord $record): void {
-            $record->valid_until = now()->addMonth();
+            $record->valid_until ??= now()->addMonth();
             $record->total_amount = $record->taxable_amount + $record->tax_amount;
         });
     }
