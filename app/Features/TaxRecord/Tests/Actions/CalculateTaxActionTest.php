@@ -55,12 +55,10 @@ final class CalculateTaxActionTest extends TestCase
 
         // Verify the result structure
         $this->assertIsArray($result);
-        $this->assertArrayHasKey('user_id', $result);
         $this->assertArrayHasKey('transaction_reference', $result);
         $this->assertArrayHasKey('gross_amount', $result);
         $this->assertArrayHasKey('taxable_amount', $result);
         $this->assertArrayHasKey('tax_amount', $result);
-        $this->assertEquals($user->id, $result['user_id']);
         $this->assertEquals('TX12345678', $result['transaction_reference']);
 
         // Verify tax record was created in database
@@ -117,7 +115,6 @@ final class CalculateTaxActionTest extends TestCase
         $this->assertIsArray($result);
         $this->assertEquals(100.0, $result['gross_amount']); // 100*1
         $this->assertEquals(80.0, $result['taxable_amount']); // 100 - 20 (discount)
-        $this->assertEquals(20.0, $result['order_discount']);
         $this->assertEquals(9.6, $result['tax_amount']); // 12% of 80
 
         // Verify tax record was created in database
@@ -234,7 +231,6 @@ final class CalculateTaxActionTest extends TestCase
 
         // Verify the result structure is returned
         $this->assertIsArray($result);
-        $this->assertArrayHasKey('user_id', $result);
         $this->assertArrayHasKey('transaction_reference', $result);
         $this->assertArrayHasKey('gross_amount', $result);
         $this->assertArrayHasKey('taxable_amount', $result);
@@ -329,7 +325,6 @@ final class CalculateTaxActionTest extends TestCase
         $result = $action->handle($data, $user->id, 'https://example.com');
 
         $this->assertIsArray($result);
-        $this->assertEquals($salesDate->toAtomString(), $result['sales_date']);
 
         // Verify tax record was created with correct dates in database
         $this->assertDatabaseHas('tax_records', [

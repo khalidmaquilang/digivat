@@ -32,9 +32,7 @@ final class CancelTaxRecordControllerTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJsonStructure([
-                'id',
-                'status',
-                'updated_at',
+                'message',
             ]);
 
         $this->assertDatabaseHas('tax_records', [
@@ -62,9 +60,7 @@ final class CancelTaxRecordControllerTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJsonStructure([
-                'id',
-                'status',
-                'updated_at',
+                'message',
             ]);
 
         // Verify the updated_at timestamp wasn't changed

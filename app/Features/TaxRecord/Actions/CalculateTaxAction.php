@@ -76,6 +76,6 @@ class CalculateTaxAction
             throw $exception;
         }
 
-        return CalculatedTaxRecordData::from($tax_record)->toArray() ?? [];
+        return CalculatedTaxRecordData::from($tax_record)->toArray();
     }
 }
