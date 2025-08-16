@@ -9,6 +9,7 @@
         "php": "^8.2",
         "brick/money": "^0.10.2",
         "codewithdennis/filament-lucide-icons": "^4.0",
+        "dedoc/scramble": "^0.12.30",
         "filament/filament": "~4.0",
         "infinitypaul/idempotency-laravel": "^1.0",
         "laravel/framework": "^12.0",

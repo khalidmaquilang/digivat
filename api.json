@@ -1,0 +1,314 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "DigiVat API Documentation",
+        "version": "1.0.0",
+        "description": "DigiVat Tax Management API - Comprehensive tax calculation and management system for Philippine tax compliance."
+    },
+    "servers": [
+        {
+            "url": "http://dv.test/api"
+        }
+    ],
+    "paths": {
+        "/v1/tax/calculate": {
+            "post": {
+                "operationId": "tax.calculate",
+                "description": "Calculate tax amounts for a transaction based on item details, category type, and sales information.\nThis endpoint processes tax calculations according to Philippine tax regulations and returns detailed\ntax breakdown including gross amount, taxable amount, tax amount, and total amount.",
+                "summary": "Calculate Tax for Transaction",
+                "tags": [
+                    "CalculateTaxRecord"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "mode": {
+                                        "description": "The calculation mode. Either \"preview\" for calculation without permanent record or \"acknowledge\" for creating a permanent tax record.",
+                                        "$ref": "#/components/schemas/CalculateTaxRecordModeEnum"
+                                    },
+                                    "category_type": {
+                                        "description": "The business category type for tax calculation. Determines applicable tax rates.",
+                                        "$ref": "#/components/schemas/CategoryTypeEnum"
+                                    },
+                                    "transaction_reference": {
+                                        "type": "string",
+                                        "description": "Unique transaction identifier. Must be unique across all user transactions."
+                                    },
+                                    "sales_date": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "description": "The date and time when the sale occurred in ISO 8601 format."
+                                    },
+                                    "items": {
+                                        "type": "array",
+                                        "description": "Array of transaction items for tax calculation. Each item must include name, description, quantity, and unit_price.",
+                                        "example": [
+                                            {
+                                                "name": "Premium Widget",
+                                                "description": "High-quality premium widget with advanced features",
+                                                "quantity": 2,
+                                                "unit_price": 5000
+                                            }
+                                        ],
+                                        "items": {}
+                                    },
+                                    "order_discount": {
+                                        "type": "object",
+                                        "description": "The discount amount in centavos applied to the order. Must be greater than or equal to 0. Defaults to 0.",
+                                        "example": 200
+                                    }
+                                },
+                                "required": [
+                                    "mode",
+                                    "category_type",
+                                    "transaction_reference",
+                                    "sales_date",
+                                    "items"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {}
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ModelNotFoundException"
+                    }
+                }
+            }
+        },
+        "/v1/tax/{tax_record}/cancel": {
+            "post": {
+                "operationId": "tax.cancel",
+                "description": "Cancels an existing tax record that belongs to the authenticated user.\nOnly tax records in 'preview' or 'acknowledged' status can be cancelled.\nOnce cancelled, the tax record status will be updated to 'cancelled' and cannot be reversed.",
+                "summary": "Cancel Tax Record",
+                "tags": [
+                    "CancelTaxRecord"
+                ],
+                "parameters": [
+                    {
+                        "name": "tax_record",
+                        "in": "path",
+                        "required": true,
+                        "description": "The UUID of the tax record to cancel",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TaxRecord"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "An error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "description": "Error overview.",
+                                            "example": "Unauthorized access to tax record"
+                                        }
+                                    },
+                                    "required": [
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ModelNotFoundException"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "CalculateTaxRecordModeEnum": {
+                "type": "string",
+                "enum": [
+                    "preview",
+                    "acknowledge"
+                ],
+                "title": "CalculateTaxRecordModeEnum"
+            },
+            "CategoryTypeEnum": {
+                "type": "string",
+                "enum": [
+                    "digital_streaming",
+                    "digital_downloads",
+                    "software_license",
+                    "retail_goods",
+                    "groceries",
+                    "pharmaceuticals",
+                    "alcohol",
+                    "tobacco",
+                    "fuel",
+                    "automobiles",
+                    "loan",
+                    "insurance",
+                    "lease",
+                    "bond",
+                    "professional_services",
+                    "construction",
+                    "transportation",
+                    "food_service",
+                    "export",
+                    "education",
+                    "healthcare"
+                ],
+                "title": "CategoryTypeEnum"
+            },
+            "TaxRecord": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "user_id": {
+                        "type": "string"
+                    },
+                    "sales_date": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date-time"
+                    },
+                    "transaction_reference": {
+                        "type": "string"
+                    },
+                    "gross_amount": {
+                        "type": "integer"
+                    },
+                    "order_discount": {
+                        "type": "integer"
+                    },
+                    "taxable_amount": {
+                        "type": "integer"
+                    },
+                    "tax_amount": {
+                        "type": "integer"
+                    },
+                    "total_amount": {
+                        "type": "integer"
+                    },
+                    "valid_until": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "status": {
+                        "$ref": "#/components/schemas/TaxRecordStatusEnum"
+                    },
+                    "category_type": {
+                        "$ref": "#/components/schemas/CategoryTypeEnum"
+                    },
+                    "referer": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "created_at": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date-time"
+                    },
+                    "deleted_at": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date-time"
+                    }
+                },
+                "required": [
+                    "id",
+                    "user_id",
+                    "sales_date",
+                    "transaction_reference",
+                    "gross_amount",
+                    "order_discount",
+                    "taxable_amount",
+                    "tax_amount",
+                    "total_amount",
+                    "valid_until",
+                    "status",
+                    "category_type",
+                    "referer",
+                    "created_at",
+                    "updated_at",
+                    "deleted_at"
+                ],
+                "title": "TaxRecord"
+            },
+            "TaxRecordStatusEnum": {
+                "type": "string",
+                "enum": [
+                    "preview",
+                    "acknowledged",
+                    "paid",
+                    "expired",
+                    "cancelled"
+                ],
+                "title": "TaxRecordStatusEnum"
+            }
+        },
+        "responses": {
+            "ModelNotFoundException": {
+                "description": "Not found",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "description": "Error overview."
+                                }
+                            },
+                            "required": [
+                                "message"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
