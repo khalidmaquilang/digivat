@@ -16,11 +16,6 @@ class CreateTaxRecord extends CreateRecord
     protected static string $resource = TaxRecordResource::class;
 
     /**
-     * @var array<string, mixed>
-     */
-    protected array $tax_items = [];
-
-    /**
      * @param  array<string, mixed>  $data
      * @return array<string, mixed>
      */
@@ -40,7 +35,6 @@ class CreateTaxRecord extends CreateRecord
         $data['tax_amount'] = app(GetTaxByCategoryAction::class)->handle($data['category_type'], $data['taxable_amount']);
         $data['status'] = TaxRecordStatusEnum::Acknowledged;
 
-        $this->tax_items = $tax_items;
         unset($data['taxRecordItems']);
 
         return $data;
