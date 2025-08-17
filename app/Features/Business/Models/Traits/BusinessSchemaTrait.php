@@ -6,6 +6,7 @@ namespace App\Features\Business\Models\Traits;
 
 use App\Filament\Components\Fields\TextInput\TextInput;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
 use Filament\Schemas\Components\Utilities\Set;
 use Illuminate\Support\Str;
 
@@ -31,6 +32,11 @@ trait BusinessSchemaTrait
                 ->unique(),
             FileUpload::make('logo')
                 ->image(),
+            Select::make('creativeDomains')
+                ->multiple()
+                ->relationship(titleAttribute: 'name')
+                ->required()
+                ->preload(),
         ];
     }
 }

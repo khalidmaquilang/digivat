@@ -18,6 +18,11 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        Schema::create('business_creative_domain', function (Blueprint $table) {
+            $table->foreignUuid('business_id')->constrained();
+            $table->foreignUuid('creative_domain_id')->constrained();
+        });
     }
 
     /**
@@ -25,6 +30,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('business_creative_domain');
         Schema::dropIfExists('creative_domains');
     }
 };
