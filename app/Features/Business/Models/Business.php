@@ -6,6 +6,7 @@ namespace App\Features\Business\Models;
 
 use App\Features\Business\Database\Factories\BusinessFactory;
 use App\Features\Business\Models\Traits\BusinessSchemaTrait;
+use App\Features\InviteUser\Models\InviteUser;
 use App\Features\TaxRecord\Models\TaxRecord;
 use App\Features\Token\Models\Token;
 use App\Features\User\Models\User;
@@ -27,6 +28,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, InviteUser> $inviteUsers
+ * @property-read int|null $invite_users_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $members
  * @property-read int|null $members_count
  * @property-read User $owner
@@ -99,5 +102,13 @@ class Business extends Model
     public function tokens(): HasMany
     {
         return $this->hasMany(Token::class);
+    }
+
+    /**
+     * @return HasMany<InviteUser, $this>
+     */
+    public function inviteUsers(): HasMany
+    {
+        return $this->hasMany(InviteUser::class);
     }
 }
