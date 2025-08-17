@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Features\TaxRecord\Database\Factories;
 
+use App\Features\Business\Models\Business;
 use App\Features\TaxRecord\Enums\CategoryTypeEnum;
 use App\Features\TaxRecord\Enums\TaxRecordStatusEnum;
 use App\Features\TaxRecord\Models\TaxRecord;
-use App\Features\User\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -23,7 +23,7 @@ final class TaxRecordFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory(),
+            'business_id' => Business::factory(),
             'sales_date' => fake()->dateTimeBetween('-1 month', 'now'),
             'transaction_reference' => fake()->unique()->regexify('TX[0-9]{8}'),
             'gross_amount' => fake()->randomFloat(2, 100, 10000),

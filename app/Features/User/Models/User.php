@@ -30,9 +30,7 @@ use Illuminate\Support\Collection;
  * @property string|null $middle_name
  * @property string $last_name
  * @property string|null $suffix
- * @property string|null $nickname
  * @property string $email
- * @property string|null $tin_number
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
  * @property string|null $remember_token
@@ -61,11 +59,9 @@ use Illuminate\Support\Collection;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereLastName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereMiddleName($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereNickname($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereSuffix($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereTinNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User withTrashed(bool $withTrashed = true)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User withoutTrashed()

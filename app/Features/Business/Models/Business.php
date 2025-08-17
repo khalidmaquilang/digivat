@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Features\Business\Models;
 
+use App\Features\Business\Database\Factories\BusinessFactory;
 use App\Features\Business\Models\Traits\BusinessSchemaTrait;
 use App\Features\TaxRecord\Models\TaxRecord;
 use App\Features\Token\Models\Token;
 use App\Features\User\Models\User;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -33,6 +35,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Token> $tokens
  * @property-read int|null $tokens_count
  *
+ * @method static \App\Features\Business\Database\Factories\BusinessFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Business newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Business newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Business onlyTrashed()
@@ -54,10 +57,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Business extends Model
 {
     use BusinessSchemaTrait;
-    use HasUuids;
 
-    //
+    /** @use HasFactory<BusinessFactory> */
+    use HasFactory;
+    use HasUuids;
     use SoftDeletes;
+
+    protected static function newFactory(): BusinessFactory
+    {
+        return BusinessFactory::new();
+    }
 
     public function members(): BelongsToMany
     {
