@@ -60,6 +60,7 @@ class Business extends Model
 
     /** @use HasFactory<BusinessFactory> */
     use HasFactory;
+
     use HasUuids;
     use SoftDeletes;
 
