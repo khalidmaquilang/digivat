@@ -13,6 +13,7 @@ use CodeWithDennis\FilamentLucideIcons\Enums\LucideIcon;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class UserResource extends Resource
 {
@@ -21,6 +22,8 @@ class UserResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = LucideIcon::Users;
 
     protected static ?string $recordTitleAttribute = 'first_name';
+
+    protected static string|UnitEnum|null $navigationGroup = 'Users';
 
     public static function form(Schema $schema): Schema
     {

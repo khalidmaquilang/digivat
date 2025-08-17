@@ -13,12 +13,15 @@ use CodeWithDennis\FilamentLucideIcons\Enums\LucideIcon;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class InviteUserResource extends Resource
 {
     protected static ?string $model = InviteUser::class;
 
     protected static string|BackedEnum|null $navigationIcon = LucideIcon::UserPlus;
+
+    protected static string|UnitEnum|null $navigationGroup = 'Users';
 
     public static function form(Schema $schema): Schema
     {

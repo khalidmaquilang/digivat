@@ -6,6 +6,7 @@ namespace App\Features\InviteUser\Models;
 
 use App\Features\Business\Models\Traits\HasBusinessTrait;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -17,6 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Features\Business\Models\Business $business
  *
+ * @method static \Database\Factories\InviteUserFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|InviteUser newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|InviteUser newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|InviteUser query()
@@ -32,7 +34,11 @@ use Illuminate\Database\Eloquent\Model;
 class InviteUser extends Model
 {
     use HasBusinessTrait;
-
-    //
+    use HasFactory;
     use HasUuids;
+
+    protected static function newFactory(): \Database\Factories\InviteUserFactory
+    {
+        return \Database\Factories\InviteUserFactory::new();
+    }
 }
