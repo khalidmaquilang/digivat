@@ -36,6 +36,7 @@ class ClientPanelProvider extends PanelProvider
             ->login()
             ->registration(Register::class)
             ->profile(Profile::class)
+            ->emailVerification()
             ->passwordReset()
             ->font('Poppins')
             ->brandName('POST')
