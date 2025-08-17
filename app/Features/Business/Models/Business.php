@@ -55,6 +55,7 @@ class Business extends Model
 {
     use BusinessSchemaTrait;
     use HasUuids;
+
     //
     use SoftDeletes;
 

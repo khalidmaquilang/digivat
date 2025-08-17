@@ -46,6 +46,7 @@ class Token extends Model
 
     /** @use HasFactory<TokenFactory> */
     use HasFactory;
+
     use HasUuids;
     use SoftDeletes;
 

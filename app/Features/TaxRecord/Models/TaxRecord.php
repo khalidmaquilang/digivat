@@ -72,6 +72,7 @@ class TaxRecord extends Model
 
     /** @use HasFactory<TaxRecordFactory> */
     use HasFactory;
+
     use HasUuidsTrait;
     use SoftDeletes;
 
