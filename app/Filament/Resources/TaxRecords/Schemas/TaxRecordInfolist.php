@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Filament\Client\Resources\TaxRecords\Schemas;
+namespace App\Filament\Resources\TaxRecords\Schemas;
 
 use App\Features\TaxRecord\Models\TaxRecord;
 use Filament\Schemas\Schema;

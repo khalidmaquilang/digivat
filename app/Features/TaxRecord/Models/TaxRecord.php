@@ -11,6 +11,7 @@ use App\Features\Shared\Models\Traits\HasUuidsTrait;
 use App\Features\TaxRecord\Database\Factories\TaxRecordFactory;
 use App\Features\TaxRecord\Enums\CategoryTypeEnum;
 use App\Features\TaxRecord\Enums\TaxRecordStatusEnum;
+use App\Features\TaxRecord\Models\Traits\TaxRecordSchemaTrait;
 use App\Features\TaxRecordItem\Models\TaxRecordItem;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -75,6 +76,7 @@ class TaxRecord extends Model
 
     use HasUuidsTrait;
     use SoftDeletes;
+    use TaxRecordSchemaTrait;
 
     protected static function newFactory(): TaxRecordFactory
     {

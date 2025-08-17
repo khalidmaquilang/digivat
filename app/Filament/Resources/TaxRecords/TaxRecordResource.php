@@ -2,21 +2,23 @@
 
 declare(strict_types=1);
 
-namespace App\Filament\Client\Resources\TaxRecords;
+namespace App\Filament\Resources\TaxRecords;
 
 use App\Features\TaxRecord\Models\TaxRecord;
-use App\Filament\Client\Resources\TaxRecords\Pages\CreateTaxRecord;
-use App\Filament\Client\Resources\TaxRecords\Pages\EditTaxRecord;
-use App\Filament\Client\Resources\TaxRecords\Pages\ListTaxRecords;
-use App\Filament\Client\Resources\TaxRecords\Pages\ViewTaxRecord;
-use App\Filament\Client\Resources\TaxRecords\Schemas\TaxRecordForm;
 use App\Filament\Client\Resources\TaxRecords\Schemas\TaxRecordInfolist;
-use App\Filament\Client\Resources\TaxRecords\Tables\TaxRecordsTable;
+use App\Filament\Resources\TaxRecords\Pages\CreateTaxRecord;
+use App\Filament\Resources\TaxRecords\Pages\EditTaxRecord;
+use App\Filament\Resources\TaxRecords\Pages\ListTaxRecords;
+use App\Filament\Resources\TaxRecords\Pages\ViewTaxRecord;
+use App\Filament\Resources\TaxRecords\Schemas\TaxRecordForm;
+use App\Filament\Resources\TaxRecords\Tables\TaxRecordsTable;
 use BackedEnum;
 use CodeWithDennis\FilamentLucideIcons\Enums\LucideIcon;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class TaxRecordResource extends Resource
 {
@@ -29,14 +31,14 @@ class TaxRecordResource extends Resource
         return TaxRecordForm::configure($schema);
     }
 
-    public static function infolist(Schema $schema): Schema
-    {
-        return TaxRecordInfolist::configure($schema);
-    }
-
     public static function table(Table $table): Table
     {
         return TaxRecordsTable::configure($table);
+    }
+
+    public static function infolist(Schema $schema): Schema
+    {
+        return TaxRecordInfolist::configure($schema);
     }
 
     public static function getRelations(): array
@@ -54,5 +56,13 @@ class TaxRecordResource extends Resource
             'view' => ViewTaxRecord::route('/{record}'),
             'edit' => EditTaxRecord::route('/{record}/edit'),
         ];
+    }
+
+    public static function getRecordRouteBindingEloquentQuery(): Builder
+    {
+        return parent::getRecordRouteBindingEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 }
