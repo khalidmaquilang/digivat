@@ -22,5 +22,9 @@ class DatabaseSeeder extends Seeder
             'email' => 'aa@aa.com',
             'password' => bcrypt('123123123'),
         ]);
+
+        $this->call([
+            CreativeDomainSeeder::class,
+        ]);
     }
 }
