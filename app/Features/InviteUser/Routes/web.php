@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Features\InviteUser\Filament\Pages\RegisterInvited;
+use App\Filament\Client\Pages\Auth\RegisterInvited;
 
-Route::get('invite-user/register', RegisterInvited::class)
-    ->name('register.user-invite')
+Route::get('client/invite-user/register', RegisterInvited::class)
+    ->name('filament.client.register.user-invite')
     ->middleware(['signed']);

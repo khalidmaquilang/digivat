@@ -32,6 +32,7 @@ use Illuminate\Database\Eloquent\Model;
 class InviteUser extends Model
 {
     use HasBusinessTrait;
+
     //
     use HasUuids;
 }

@@ -6,7 +6,7 @@ namespace App\Features\User\Actions;
 
 use App\Features\User\Models\User;
 
-class GetUserByEmail
+class GetUserByEmailAction
 {
     public function handle(string $email): ?User
     {

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Features\InviteUser\Notifications\UserInvitationMail;
 
 use App\Features\InviteUser\Models\InviteUser;
+use App\Features\Shared\Enums\QueueEnum;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
@@ -22,7 +23,7 @@ class UserInvitationMail extends Mailable
      */
     public function __construct(protected InviteUser $invite_user)
     {
-        //
+        $this->onQueue(QueueEnum::ShortRunning->value);
     }
 
     /**
@@ -41,10 +42,10 @@ class UserInvitationMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'Features.InviteUser.Notifications.UserInvitationMail.user-invitation-mail',
+            markdown: 'InviteUser.Notifications.UserInvitationMail.user-invitation-mail',
             with: [
                 'acceptUrl' => URL::signedRoute(
-                    'register.user-invite',
+                    'filament.client.register.user-invite',
                     [
                         'token' => $this->invite_user->code,
                     ],

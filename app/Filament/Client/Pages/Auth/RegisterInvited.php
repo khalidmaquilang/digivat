@@ -2,14 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Features\InviteUser\Filament\Pages;
+namespace App\Filament\Client\Pages\Auth;
 
 use App\Features\InviteUser\Actions\GetInvitationByCode;
 use App\Features\InviteUser\Models\InviteUser;
-use App\Features\User\Actions\GetUserByEmail;
+use App\Features\User\Actions\GetUserByEmailAction;
 use App\Features\User\Models\User;
-use App\Filament\Client\Pages\Auth\Register;
+use Exception;
+use Filament\Auth\Notifications\VerifyEmail;
 use Filament\Facades\Filament;
+use Filament\Pages\Dashboard;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Model;
 use Livewire\Attributes\Url;
 
@@ -22,11 +25,11 @@ class RegisterInvited extends Register
 
     protected GetInvitationByCode $get_invitation_by_code;
 
-    protected GetUserByEmail $get_user_by_email;
+    protected GetUserByEmailAction $get_user_by_email;
 
     public function boot(
         GetInvitationByCode $get_invitation_by_code,
-        GetUserByEmail $get_user_by_email
+        GetUserByEmailAction $get_user_by_email
     ): void {
         $this->get_invitation_by_code = $get_invitation_by_code;
         $this->get_user_by_email = $get_user_by_email;
@@ -34,6 +37,8 @@ class RegisterInvited extends Register
 
     public function afterFill(): void
     {
+        Filament::setCurrentPanel(panel: 'client');
+
         $this->invite_user = $this->get_invitation_by_code->handle($this->token);
         abort_if(! $this->invite_user instanceof \App\Features\InviteUser\Models\InviteUser, 404);
 
@@ -41,7 +46,7 @@ class RegisterInvited extends Register
         $user = $this->get_user_by_email->handle($this->invite_user->email);
         if ($user === null) {
             $this->form->fill([
-                'email' => $this->invite->email,
+                'email' => $this->invite_user->email,
             ]);
 
             return;
@@ -49,7 +54,33 @@ class RegisterInvited extends Register
 
         $this->connectToBusiness($user);
 
-        $this->redirect('/');
+        Filament::auth()->login($user);
+
+        $this->redirect(Dashboard::getUrl());
+    }
+
+    protected function sendEmailVerificationNotification(Model $user): void
+    {
+        Filament::setCurrentPanel(panel: 'client');
+
+        if (! $user instanceof MustVerifyEmail) {
+            return;
+        }
+
+        if ($user->hasVerifiedEmail()) {
+            return;
+        }
+
+        if (! method_exists($user, 'notify')) {
+            $userClass = $user::class;
+
+            throw new Exception(sprintf('Model [%s] does not have a [notify()] method.', $userClass));
+        }
+
+        $notification = app(VerifyEmail::class);
+        $notification->url = Filament::getVerifyEmailUrl($user);
+
+        $user->notify($notification);
     }
 
     /**
@@ -70,8 +101,6 @@ class RegisterInvited extends Register
         $business = $this->invite_user->business;
 
         $business->members()->attach($user);
-
-        Filament::auth()->login($user);
 
         $this->invite_user->delete();
     }
