@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('tax_records', function (Blueprint $table) {
             $table->string('id', 60)->primary();
-            $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignUuid('business_id')->constrained()->cascadeOnDelete();
             $table->dateTime('sales_date')->nullable();
             $table->string('transaction_reference');
             $table->integer('gross_amount');

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Features\TaxRecord\Tests\Actions;
 
+use App\Features\Business\Models\Business;
 use App\Features\TaxRecord\Actions\CalculateTaxAction;
 use App\Features\TaxRecord\Data\CalculateTaxRecordData;
 use App\Features\TaxRecord\Enums\CalculateTaxRecordModeEnum;
 use App\Features\TaxRecord\Enums\CategoryTypeEnum;
 use App\Features\TaxRecord\Models\TaxRecord;
 use App\Features\TaxRecordItem\Data\TaxRecordItemData;
-use App\Features\User\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -25,7 +25,7 @@ final class CalculateTaxActionTest extends TestCase
 
     public function test_can_calculate_tax_and_create_records(): void
     {
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
 
         $items = [
             new TaxRecordItemData(
@@ -51,21 +51,21 @@ final class CalculateTaxActionTest extends TestCase
         );
 
         $action = app(CalculateTaxAction::class);
-        $result = $action->handle($data, $user->id, 'https://example.com');
+        $result = $action->handle($data, $business->id, 'https://example.com');
 
         // Verify the result structure
         $this->assertIsArray($result);
-        $this->assertArrayHasKey('user_id', $result);
+        $this->assertArrayHasKey('business_id', $result);
         $this->assertArrayHasKey('transaction_reference', $result);
         $this->assertArrayHasKey('gross_amount', $result);
         $this->assertArrayHasKey('taxable_amount', $result);
         $this->assertArrayHasKey('tax_amount', $result);
-        $this->assertEquals($user->id, $result['user_id']);
+        $this->assertEquals($business->id, $result['business_id']);
         $this->assertEquals('TX12345678', $result['transaction_reference']);
 
         // Verify tax record was created in database
         $this->assertDatabaseHas('tax_records', [
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'transaction_reference' => 'TX12345678',
             'gross_amount' => $this->convertMoney(130.0), // (50*2) + (30*1)
             'order_discount' => $this->convertMoney(10.0),
@@ -91,7 +91,7 @@ final class CalculateTaxActionTest extends TestCase
 
     public function test_calculates_correct_amounts_with_discount(): void
     {
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
 
         $items = [
             new TaxRecordItemData(
@@ -111,7 +111,7 @@ final class CalculateTaxActionTest extends TestCase
         );
 
         $action = app(CalculateTaxAction::class);
-        $result = $action->handle($data, $user->id, 'https://example.com');
+        $result = $action->handle($data, $business->id, 'https://example.com');
 
         // Verify calculation results
         $this->assertIsArray($result);
@@ -122,7 +122,7 @@ final class CalculateTaxActionTest extends TestCase
 
         // Verify tax record was created in database
         $this->assertDatabaseHas('tax_records', [
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'transaction_reference' => 'TX87654321',
             'gross_amount' => $this->convertMoney(100.0),
             'order_discount' => $this->convertMoney(20.0),
@@ -142,7 +142,7 @@ final class CalculateTaxActionTest extends TestCase
 
     public function test_handles_multiple_items_correctly(): void
     {
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
 
         $items = [
             new TaxRecordItemData(
@@ -173,13 +173,13 @@ final class CalculateTaxActionTest extends TestCase
         );
 
         $action = app(CalculateTaxAction::class);
-        $result = $action->handle($data, $user->id, 'https://example.com');
+        $result = $action->handle($data, $business->id, 'https://example.com');
 
         $this->assertIsArray($result);
 
         // Verify tax record was created in database
         $this->assertDatabaseHas('tax_records', [
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'transaction_reference' => 'TX99999999',
             'order_discount' => $this->convertMoney(0.0),
             'category_type' => CategoryTypeEnum::DIGITAL_STREAMING->value,
@@ -211,7 +211,7 @@ final class CalculateTaxActionTest extends TestCase
 
     public function test_preview_mode_does_not_create_database_records(): void
     {
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
 
         $items = [
             new TaxRecordItemData(
@@ -230,11 +230,11 @@ final class CalculateTaxActionTest extends TestCase
         );
 
         $action = app(CalculateTaxAction::class);
-        $result = $action->handle($data, $user->id, 'https://example.com');
+        $result = $action->handle($data, $business->id, 'https://example.com');
 
         // Verify the result structure is returned
         $this->assertIsArray($result);
-        $this->assertArrayHasKey('user_id', $result);
+        $this->assertArrayHasKey('business_id', $result);
         $this->assertArrayHasKey('transaction_reference', $result);
         $this->assertArrayHasKey('gross_amount', $result);
         $this->assertArrayHasKey('taxable_amount', $result);
@@ -256,7 +256,7 @@ final class CalculateTaxActionTest extends TestCase
 
     public function test_successful_transaction_creates_all_records(): void
     {
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
 
         $items = [
             new TaxRecordItemData(
@@ -275,7 +275,7 @@ final class CalculateTaxActionTest extends TestCase
         );
 
         $action = app(CalculateTaxAction::class);
-        $result = $action->handle($data, $user->id, 'https://example.com');
+        $result = $action->handle($data, $business->id, 'https://example.com');
 
         $this->assertIsArray($result);
         $this->assertEquals('TX22222222', $result['transaction_reference']);
@@ -284,7 +284,7 @@ final class CalculateTaxActionTest extends TestCase
 
         // Verify both tax record and item were successfully created (transaction committed)
         $this->assertDatabaseHas('tax_records', [
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'transaction_reference' => 'TX22222222',
             'gross_amount' => $this->convertMoney(75.0),
             'taxable_amount' => $this->convertMoney(75.0),
@@ -304,7 +304,7 @@ final class CalculateTaxActionTest extends TestCase
 
     public function test_sets_valid_until_date_correctly(): void
     {
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
 
         $items = [
             new TaxRecordItemData(
@@ -326,14 +326,14 @@ final class CalculateTaxActionTest extends TestCase
         );
 
         $action = app(CalculateTaxAction::class);
-        $result = $action->handle($data, $user->id, 'https://example.com');
+        $result = $action->handle($data, $business->id, 'https://example.com');
 
         $this->assertIsArray($result);
         $this->assertEquals($salesDate->toAtomString(), $result['sales_date']);
 
         // Verify tax record was created with correct dates in database
         $this->assertDatabaseHas('tax_records', [
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'transaction_reference' => 'TX33333333',
             'sales_date' => $salesDate,
             'gross_amount' => $this->convertMoney(100.0),

@@ -4,24 +4,22 @@ declare(strict_types=1);
 
 namespace App\Features\TaxRecord\Models;
 
+use App\Features\Business\Models\Business;
+use App\Features\Business\Models\Traits\HasBusinessTrait;
 use App\Features\Shared\Models\Casts\Money;
-use App\Features\Shared\Models\Scopes\UserScope;
 use App\Features\Shared\Models\Traits\HasUuidsTrait;
 use App\Features\TaxRecord\Database\Factories\TaxRecordFactory;
 use App\Features\TaxRecord\Enums\CategoryTypeEnum;
 use App\Features\TaxRecord\Enums\TaxRecordStatusEnum;
 use App\Features\TaxRecordItem\Models\TaxRecordItem;
-use App\Features\User\Models\User;
-use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property string $id
- * @property string $user_id
+ * @property string $business_id
  * @property \Illuminate\Support\Carbon|null $sales_date
  * @property string $transaction_reference
  * @property float $gross_amount
@@ -33,18 +31,21 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property TaxRecordStatusEnum $status
  * @property CategoryTypeEnum $category_type
  * @property string|null $referer
+ * @property string|null $cancel_reason
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read Business $business
  * @property-read \Illuminate\Database\Eloquent\Collection<int, TaxRecordItem> $taxRecordItems
  * @property-read int|null $tax_record_items_count
- * @property-read User $user
  *
  * @method static \App\Features\TaxRecord\Database\Factories\TaxRecordFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord whereBusinessId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord whereCancelReason($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord whereCategoryType($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord whereDeletedAt($value)
@@ -59,16 +60,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord whereTotalAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord whereTransactionReference($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord whereValidUntil($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord withTrashed(bool $withTrashed = true)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord withoutTrashed()
  *
  * @mixin \Eloquent
  */
-#[ScopedBy(UserScope::class)]
 class TaxRecord extends Model
 {
+    use HasBusinessTrait;
+
     /** @use HasFactory<TaxRecordFactory> */
     use HasFactory;
 
@@ -120,13 +121,5 @@ class TaxRecord extends Model
     public function taxRecordItems(): HasMany
     {
         return $this->hasMany(TaxRecordItem::class);
-    }
-
-    /**
-     * @return BelongsTo<User, $this>
-     */
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
     }
 }

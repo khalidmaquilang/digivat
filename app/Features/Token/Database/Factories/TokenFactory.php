@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Features\Token\Database\Factories;
 
+use App\Features\Business\Models\Business;
 use App\Features\Token\Models\Token;
-use App\Features\User\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -22,7 +22,7 @@ final class TokenFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory(),
+            'business_id' => Business::factory(),
             'name' => fake()->name,
             'token' => Str::random(10),
         ];

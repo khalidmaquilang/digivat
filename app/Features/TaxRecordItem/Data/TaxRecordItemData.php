@@ -14,10 +14,10 @@ use Spatie\LaravelData\Normalizers\ObjectNormalizer;
 class TaxRecordItemData extends Data
 {
     public function __construct(
-        #[GreaterThanOrEqualTo(0)]
-        public float $unit_price,
         #[Required]
         public ?string $item_name,
+        #[GreaterThanOrEqualTo(0)]
+        public float $unit_price,
         public ?string $tax_record_id = null,
         #[GreaterThanOrEqualTo(1)]
         public int $quantity = 1,

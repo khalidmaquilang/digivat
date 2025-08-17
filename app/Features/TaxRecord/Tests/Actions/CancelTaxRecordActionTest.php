@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Features\TaxRecord\Tests\Actions;
 
+use App\Features\Business\Models\Business;
 use App\Features\TaxRecord\Actions\CancelTaxRecordAction;
 use App\Features\TaxRecord\Enums\TaxRecordStatusEnum;
 use App\Features\TaxRecord\Models\TaxRecord;
-use App\Features\User\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -17,9 +17,9 @@ final class CancelTaxRecordActionTest extends TestCase
 
     public function test_can_cancel_tax_record(): void
     {
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
         $tax_record = TaxRecord::factory()->create([
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'status' => TaxRecordStatusEnum::Acknowledged,
         ]);
 
@@ -35,9 +35,9 @@ final class CancelTaxRecordActionTest extends TestCase
 
     public function test_does_not_update_already_cancelled_tax_record(): void
     {
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
         $tax_record = TaxRecord::factory()->create([
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'status' => TaxRecordStatusEnum::Cancelled,
         ]);
 

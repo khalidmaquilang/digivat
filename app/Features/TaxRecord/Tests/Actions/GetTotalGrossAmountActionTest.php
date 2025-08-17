@@ -29,8 +29,8 @@ final class GetTotalGrossAmountActionTest extends TestCase
     public function test_can_calculate_total_with_single_tax_record_item_data(): void
     {
         $item = new TaxRecordItemData(
-            unit_price: 100.0,
             item_name: 'Test Item',
+            unit_price: 100.0,
             quantity: 2,
             discount_amount: 10.0
         );
@@ -45,20 +45,20 @@ final class GetTotalGrossAmountActionTest extends TestCase
     {
         $items = [
             new TaxRecordItemData(
-                unit_price: 50.0,
                 item_name: 'Item 1',
+                unit_price: 50.0,
                 quantity: 2,
                 discount_amount: 5.0
             ),
             new TaxRecordItemData(
-                unit_price: 30.0,
                 item_name: 'Item 2',
+                unit_price: 30.0,
                 quantity: 3,
                 discount_amount: 10.0
             ),
             new TaxRecordItemData(
-                unit_price: 20.0,
                 item_name: 'Item 3',
+                unit_price: 20.0,
                 quantity: 1,
                 discount_amount: 0.0
             ),
@@ -102,14 +102,14 @@ final class GetTotalGrossAmountActionTest extends TestCase
     {
         $items = [
             new TaxRecordItemData(
-                unit_price: 0.0,
                 item_name: 'Zero Price Item',
+                unit_price: 0.0,
                 quantity: 5,
                 discount_amount: 0.0
             ),
             new TaxRecordItemData(
-                unit_price: 100.0,
                 item_name: 'Normal Item',
+                unit_price: 100.0,
                 quantity: 0,
                 discount_amount: 0.0
             ),
@@ -126,8 +126,8 @@ final class GetTotalGrossAmountActionTest extends TestCase
     public function test_handles_discount_greater_than_item_total(): void
     {
         $item = new TaxRecordItemData(
-            unit_price: 50.0,
             item_name: 'Heavily Discounted Item',
+            unit_price: 50.0,
             quantity: 1,
             discount_amount: 100.0
         );
@@ -142,14 +142,14 @@ final class GetTotalGrossAmountActionTest extends TestCase
     {
         $items = [
             new TaxRecordItemData(
-                unit_price: 12.99,
                 item_name: 'Decimal Item 1',
+                unit_price: 12.99,
                 quantity: 3,
                 discount_amount: 2.50
             ),
             new TaxRecordItemData(
-                unit_price: 8.75,
                 item_name: 'Decimal Item 2',
+                unit_price: 8.75,
                 quantity: 2,
                 discount_amount: 1.25
             ),
@@ -166,8 +166,8 @@ final class GetTotalGrossAmountActionTest extends TestCase
     public function test_can_handle_large_quantities(): void
     {
         $item = new TaxRecordItemData(
-            unit_price: 1.0,
             item_name: 'Bulk Item',
+            unit_price: 1.0,
             quantity: 1000,
             discount_amount: 50.0
         );
@@ -182,20 +182,20 @@ final class GetTotalGrossAmountActionTest extends TestCase
     {
         $items = [
             new TaxRecordItemData(
-                unit_price: 100.0,
                 item_name: 'Positive Item',
+                unit_price: 100.0,
                 quantity: 2,
                 discount_amount: 10.0
             ),
             new TaxRecordItemData(
-                unit_price: 50.0,
                 item_name: 'Negative Item',
+                unit_price: 50.0,
                 quantity: 1,
                 discount_amount: 100.0
             ),
             new TaxRecordItemData(
-                unit_price: 30.0,
                 item_name: 'Another Positive Item',
+                unit_price: 30.0,
                 quantity: 3,
                 discount_amount: 5.0
             ),

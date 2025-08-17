@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Features\TaxRecord\Tests\Actions;
 
+use App\Features\Business\Models\Business;
 use App\Features\TaxRecord\Actions\CreateTaxRecordAction;
 use App\Features\TaxRecord\Data\TaxRecordData;
 use App\Features\TaxRecord\Enums\CategoryTypeEnum;
 use App\Features\TaxRecord\Enums\TaxRecordStatusEnum;
-use App\Features\User\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -18,10 +18,10 @@ final class CreateTaxRecordActionTest extends TestCase
 
     public function test_can_create_tax_record(): void
     {
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
 
         $data = new TaxRecordData(
-            user_id: $user->id,
+            business_id: $business->id,
             sales_date: now(),
             transaction_reference: 'reference',
             gross_amount: 110,
@@ -36,7 +36,7 @@ final class CreateTaxRecordActionTest extends TestCase
         app(CreateTaxRecordAction::class)->handle($data);
 
         $this->assertDatabaseHas('tax_records', [
-            'user_id' => $data->user_id,
+            'business_id' => $data->business_id,
             'sales_date' => $data->sales_date,
             'transaction_reference' => $data->transaction_reference,
             'gross_amount' => $this->convertMoney($data->gross_amount),

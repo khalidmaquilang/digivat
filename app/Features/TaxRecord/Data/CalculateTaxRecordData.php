@@ -33,13 +33,13 @@ class CalculateTaxRecordData extends Data
     ) {}
 
     public function toTaxRecordData(
-        string $user_id,
+        string $business_id,
         float $gross_amount,
         float $taxable_amount,
         float $tax_amount
     ): TaxRecordData {
         return new TaxRecordData(
-            user_id: $user_id,
+            business_id: $business_id,
             sales_date: $this->sales_date,
             transaction_reference: $this->transaction_reference,
             gross_amount: $gross_amount,
