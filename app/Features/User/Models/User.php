@@ -5,18 +5,24 @@ declare(strict_types=1);
 namespace App\Features\User\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Features\Business\Models\Business;
 use App\Features\TaxRecord\Models\TaxRecord;
 use App\Features\Token\Models\Token;
 use App\Features\User\Database\Factories\UserFactory;
+use App\Features\User\Models\Traits\UserSchemaTrait;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasName;
+use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 
 /**
  * @property string $id
@@ -33,6 +39,8 @@ use Illuminate\Notifications\Notifiable;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Business> $businesses
+ * @property-read int|null $businesses_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, TaxRecord> $taxRecords
@@ -64,7 +72,7 @@ use Illuminate\Notifications\Notifiable;
  *
  * @mixin \Eloquent
  */
-class User extends Authenticatable implements FilamentUser, HasName
+class User extends Authenticatable implements FilamentUser, HasName, HasTenants
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory;
@@ -72,6 +80,7 @@ class User extends Authenticatable implements FilamentUser, HasName
     use HasUuids;
     use Notifiable;
     use SoftDeletes;
+    use UserSchemaTrait;
 
     protected static function newFactory(): UserFactory
     {
@@ -126,5 +135,26 @@ class User extends Authenticatable implements FilamentUser, HasName
     public function getFilamentName(): string
     {
         return sprintf('%s %s', $this->first_name, $this->last_name);
+    }
+
+    /**
+     * @return BelongsToMany<Business, $this>
+     */
+    public function businesses(): BelongsToMany
+    {
+        return $this->belongsToMany(Business::class);
+    }
+
+    public function canAccessTenant(Model $tenant): bool
+    {
+        return $this->businesses()->whereKey($tenant)->exists();
+    }
+
+    /**
+     * @return Collection<Business>
+     */
+    public function getTenants(Panel $panel): Collection
+    {
+        return $this->businesses;
     }
 }

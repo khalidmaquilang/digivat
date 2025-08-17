@@ -7,7 +7,6 @@ namespace App\Filament\Client\Resources\TaxRecords\Pages;
 use App\Features\TaxRecord\Actions\GetTaxByCategoryAction;
 use App\Features\TaxRecord\Actions\GetTotalGrossAmountAction;
 use App\Features\TaxRecord\Enums\TaxRecordStatusEnum;
-use App\Features\User\Models\User;
 use App\Filament\Client\Resources\TaxRecords\TaxRecordResource;
 use Filament\Resources\Pages\CreateRecord;
 
@@ -21,12 +20,6 @@ class CreateTaxRecord extends CreateRecord
      */
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        /** @var ?User $user */
-        $user = auth()->user();
-        abort_if($user === null, 404);
-
-        $data['user_id'] = $user->id;
-
         /** @var array<string, mixed> $tax_items */
         $tax_items = $data['taxRecordItems'] ?? [];
 
