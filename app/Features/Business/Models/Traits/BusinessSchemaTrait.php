@@ -11,6 +11,9 @@ use Illuminate\Support\Str;
 
 trait BusinessSchemaTrait
 {
+    /**
+     * @return array<\Filament\Schemas\Components\Component>
+     */
     public static function schema(bool $disable_tin = false): array
     {
         return [

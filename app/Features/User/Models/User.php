@@ -147,7 +147,7 @@ class User extends Authenticatable implements FilamentUser, HasName, HasTenants
     }
 
     /**
-     * @return Collection<Business>
+     * @return Collection<int, Business>
      */
     public function getTenants(Panel $panel): Collection
     {

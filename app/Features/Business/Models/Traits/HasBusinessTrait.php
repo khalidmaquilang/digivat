@@ -6,6 +6,7 @@ namespace App\Features\Business\Models\Traits;
 
 use App\Features\Business\Models\Business;
 use Filament\Facades\Filament;
+use http\Exception\RuntimeException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -32,6 +33,10 @@ trait HasBusinessTrait
             $business = Filament::getTenant();
             if ($business === null) {
                 return;
+            }
+
+            if (! property_exists($model, 'business_id')) {
+                throw new RuntimeException('Model must have business_id property');
             }
 
             $model->business_id = $business->id;
