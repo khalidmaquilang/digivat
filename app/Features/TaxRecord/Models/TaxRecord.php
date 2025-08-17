@@ -11,9 +11,11 @@ use App\Features\TaxRecord\Database\Factories\TaxRecordFactory;
 use App\Features\TaxRecord\Enums\CategoryTypeEnum;
 use App\Features\TaxRecord\Enums\TaxRecordStatusEnum;
 use App\Features\TaxRecordItem\Models\TaxRecordItem;
+use App\Features\User\Models\User;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -36,6 +38,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, TaxRecordItem> $taxRecordItems
  * @property-read int|null $tax_record_items_count
+ * @property-read User $user
  *
  * @method static \App\Features\TaxRecord\Database\Factories\TaxRecordFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TaxRecord newModelQuery()
@@ -117,5 +120,13 @@ class TaxRecord extends Model
     public function taxRecordItems(): HasMany
     {
         return $this->hasMany(TaxRecordItem::class);
+    }
+
+    /**
+     * @return BelongsTo<User, $this>
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

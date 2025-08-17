@@ -15,7 +15,7 @@
             <h1 class="text-xl font-bold mb-2">DIGIVAT CORPORATION</h1>
             <p class="text-base">Complete Business Address</p>
             <p class="text-base">City, Province, ZIP Code</p>
-            <p class="text-base">TIN: 000-000-000-000</p>
+            <p class="text-base">TIN: {{ $taxRecord->user->tin_number }}</p>
             <p class="text-base font-semibold mt-2">BIR OFFICIAL RECEIPT</p>
         </div>
 
@@ -96,7 +96,7 @@
         <!-- VAT Information -->
         <div class="border-t border-gray-300 pt-4 mb-6">
             <p class="text-center text-xs">
-                <strong>VAT Reg. TIN:</strong> 000-000-000-000<br>
+                <strong>VAT Reg. TIN:</strong> {{ $taxRecord->user->tin_number }}<br>
                 This receipt shall be valid for five (5) years from the date of the ATP (Authority to Print)
             </p>
         </div>

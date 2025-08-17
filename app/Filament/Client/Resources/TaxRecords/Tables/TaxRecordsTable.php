@@ -7,10 +7,12 @@ namespace App\Filament\Client\Resources\TaxRecords\Tables;
 use App\Features\TaxRecord\Actions\BulkCancelTaxRecordAction;
 use App\Features\TaxRecord\Actions\CancelTaxRecordAction;
 use App\Features\TaxRecord\Enums\TaxRecordStatusEnum;
+use App\Features\TaxRecord\Models\TaxRecord;
 use App\Filament\Components\Summarizes\Sum;
 use App\Filament\Components\TableColumns\MoneyColumn\MoneyColumn;
 use CodeWithDennis\FilamentLucideIcons\Enums\LucideIcon;
 use Filament\Actions\Action;
+use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\ViewAction;
@@ -58,16 +60,22 @@ class TaxRecordsTable
                     ->options(TaxRecordStatusEnum::class),
             ], layout: FiltersLayout::AboveContent)
             ->recordActions([
-                ViewAction::make(),
-                Action::make('cancel')
-                    ->label('Cancel')
-                    ->icon(LucideIcon::XCircle)
-                    ->color('danger')
-                    ->requiresConfirmation()
-                    ->modalHeading('Cancel Tax Record')
-                    ->modalDescription('Are you sure you want to cancel this tax record? This action cannot be undone.')
-                    ->action(fn ($record) => app(CancelTaxRecordAction::class)->handle($record))
-                    ->visible(fn ($record): bool => $record->status !== TaxRecordStatusEnum::Cancelled),
+                ActionGroup::make([
+                    ViewAction::make(),
+                    Action::make('View Receipt')
+                        ->icon(LucideIcon::Receipt)
+                        ->color('primary')
+                        ->url(fn (TaxRecord $record) => route('bir-receipt.show', $record)),
+                    Action::make('cancel')
+                        ->label('Cancel')
+                        ->icon(LucideIcon::XCircle)
+                        ->color('danger')
+                        ->requiresConfirmation()
+                        ->modalHeading('Cancel Tax Record')
+                        ->modalDescription('Are you sure you want to cancel this tax record? This action cannot be undone.')
+                        ->action(fn ($record) => app(CancelTaxRecordAction::class)->handle($record))
+                        ->visible(fn ($record): bool => $record->status !== TaxRecordStatusEnum::Cancelled),
+                ]),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
