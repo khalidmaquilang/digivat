@@ -34,6 +34,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class CreativeDomain extends Model
 {
     use HasUuids;
+
     //
     use SoftDeletes;
 }
