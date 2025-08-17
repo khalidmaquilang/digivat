@@ -34,7 +34,10 @@ use Illuminate\Database\Eloquent\Model;
 class InviteUser extends Model
 {
     use HasBusinessTrait;
+
+    /** @use HasFactory<\Database\Factories\InviteUserFactory> */
     use HasFactory;
+
     use HasUuids;
 
     protected static function newFactory(): \Database\Factories\InviteUserFactory

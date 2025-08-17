@@ -98,6 +98,10 @@ class RegisterInvited extends Register
 
     protected function connectToBusiness(User $user): void
     {
+        if (! $this->invite_user instanceof \App\Features\InviteUser\Models\InviteUser) {
+            return;
+        }
+
         $business = $this->invite_user->business;
 
         $business->members()->attach($user);
