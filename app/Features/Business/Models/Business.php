@@ -6,6 +6,7 @@ namespace App\Features\Business\Models;
 
 use App\Features\Business\Database\Factories\BusinessFactory;
 use App\Features\Business\Models\Traits\BusinessSchemaTrait;
+use App\Features\CreativeDomain\Models\CreativeDomain;
 use App\Features\InviteUser\Models\InviteUser;
 use App\Features\TaxRecord\Models\TaxRecord;
 use App\Features\Token\Models\Token;
@@ -28,6 +29,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, CreativeDomain> $creativeDomains
+ * @property-read int|null $creative_domains_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, InviteUser> $inviteUsers
  * @property-read int|null $invite_users_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $members
@@ -110,5 +113,13 @@ class Business extends Model
     public function inviteUsers(): HasMany
     {
         return $this->hasMany(InviteUser::class);
+    }
+
+    /**
+     * @return BelongsToMany<BelongsToMany, $this>
+     */
+    public function creativeDomains(): BelongsToMany
+    {
+        return $this->belongsToMany(CreativeDomain::class);
     }
 }
