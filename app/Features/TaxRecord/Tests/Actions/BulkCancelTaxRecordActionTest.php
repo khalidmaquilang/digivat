@@ -21,7 +21,7 @@ final class BulkCancelTaxRecordActionTest extends TestCase
             'status' => TaxRecordStatusEnum::Acknowledged,
         ]);
 
-        $result = app(BulkCancelTaxRecordAction::class)->handle($tax_records);
+        $result = app(BulkCancelTaxRecordAction::class)->handle($tax_records, 'Test cancellation reason');
 
         $this->assertIsInt($result);
         $this->assertEquals(3, $result);
@@ -51,17 +51,18 @@ final class BulkCancelTaxRecordActionTest extends TestCase
         ]);
 
         $tax_records = new Collection([$acknowledged_record, $cancelled_record, $paid_record]);
-        $result = app(BulkCancelTaxRecordAction::class)->handle($tax_records);
+        $result = app(BulkCancelTaxRecordAction::class)->handle($tax_records, 'Mixed status cancellation');
 
         $this->assertIsInt($result);
-        $this->assertEquals(2, $result); // Only 2 records should be updated (acknowledged and paid)
+        $this->assertEquals(1, $result); // Only 1 record should be updated (acknowledged only)
 
-        // Verify in database - all should now be cancelled
+        // Verify in database - only acknowledged record should be cancelled
         $this->assertDatabaseHas('tax_records', [
             'id' => $acknowledged_record->id,
             'status' => TaxRecordStatusEnum::Cancelled->value,
         ]);
 
+        // Other records should remain unchanged
         $this->assertDatabaseHas('tax_records', [
             'id' => $cancelled_record->id,
             'status' => TaxRecordStatusEnum::Cancelled->value,
@@ -69,14 +70,14 @@ final class BulkCancelTaxRecordActionTest extends TestCase
 
         $this->assertDatabaseHas('tax_records', [
             'id' => $paid_record->id,
-            'status' => TaxRecordStatusEnum::Cancelled->value,
+            'status' => TaxRecordStatusEnum::Paid->value,
         ]);
     }
 
     public function test_handles_empty_collection(): void
     {
         $empty_collection = new Collection;
-        $result = app(BulkCancelTaxRecordAction::class)->handle($empty_collection);
+        $result = app(BulkCancelTaxRecordAction::class)->handle($empty_collection, 'Empty collection test');
 
         $this->assertIsInt($result);
         $this->assertEquals(0, $result);

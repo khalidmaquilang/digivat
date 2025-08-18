@@ -30,7 +30,8 @@ class CancelTaxRecordController extends ApiController
             abort(403, 'Unauthorized access to tax record');
         }
 
-        $result = $this->action->handle($tax_record_model);
+        $cancel_reason = $request->input('cancel_reason', 'Cancelled via API');
+        $result = $this->action->handle($tax_record_model, $cancel_reason);
 
         return response()->json($result);
     }
