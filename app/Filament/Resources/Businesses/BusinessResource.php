@@ -50,6 +50,9 @@ class BusinessResource extends Resource
         ];
     }
 
+    /**
+     * @return Builder<Business>
+     */
     public static function getRecordRouteBindingEloquentQuery(): Builder
     {
         return parent::getRecordRouteBindingEloquentQuery()

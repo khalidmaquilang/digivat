@@ -28,7 +28,12 @@ class ViewTaxRecord extends ViewRecord
             Action::make('Remit Tax')
                 ->color('success')
                 ->requiresConfirmation()
-                ->modalDescription("Are you sure you'd like you want to remit ".MoneyHelper::currency($this->record->tax_amount).' to the tax authority?')
+                ->modalDescription(function (): string {
+                    /** @var TaxRecord $record */
+                    $record = $this->record;
+
+                    return "Are you sure you'd like you want to remit ".MoneyHelper::currency($record->tax_amount).' to the tax authority?';
+                })
                 ->icon(LucideIcon::Banknote)
                 ->action(function (TaxRecord $record): void {
                     app(UpdateTaxRecordStatusAction::class)->handle($record, TaxRecordStatusEnum::Paid);

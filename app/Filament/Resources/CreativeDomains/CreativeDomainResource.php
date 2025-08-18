@@ -50,6 +50,9 @@ class CreativeDomainResource extends Resource
         ];
     }
 
+    /**
+     * @return Builder<CreativeDomain>
+     */
     public static function getRecordRouteBindingEloquentQuery(): Builder
     {
         return parent::getRecordRouteBindingEloquentQuery()

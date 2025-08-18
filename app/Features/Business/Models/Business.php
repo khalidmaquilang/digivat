@@ -116,7 +116,7 @@ class Business extends Model
     }
 
     /**
-     * @return BelongsToMany<BelongsToMany, $this>
+     * @return BelongsToMany<CreativeDomain, $this>
      */
     public function creativeDomains(): BelongsToMany
     {
