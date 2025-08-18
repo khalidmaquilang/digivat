@@ -61,6 +61,7 @@ class CreateTransactionJob implements ShouldQueue
             $tax_record,
             $business,
             $this->type,
+            null, // reference_number
             $this->description,
             $this->metadata
         );
