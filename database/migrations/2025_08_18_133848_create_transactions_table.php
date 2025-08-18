@@ -27,7 +27,10 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('tax_record_id')->onDelete('cascade');
+            $table->foreign('tax_record_id')
+                ->references('id')
+                ->on('tax_records')
+                ->cascadeOnDelete();
             $table->index(['tax_record_id', 'type']);
             $table->index(['user_id', 'transaction_date']);
             $table->index(['status', 'transaction_date']);
