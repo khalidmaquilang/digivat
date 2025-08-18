@@ -51,4 +51,17 @@ class CalculateTaxRecordData extends Data
             bir_receipt_id: Optional::create()
         );
     }
+
+    public function toCalculatedTaxRecordData(
+        float $gross_amount,
+        float $taxable_amount,
+        float $tax_amount,
+    ): CalculatedTaxRecordData {
+        return new CalculatedTaxRecordData(
+            transaction_reference: $this->transaction_reference,
+            gross_amount: $gross_amount,
+            taxable_amount: $taxable_amount,
+            tax_amount: MoneyHelper::evaluate($tax_amount),
+        );
+    }
 }

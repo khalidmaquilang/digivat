@@ -4,28 +4,22 @@ declare(strict_types=1);
 
 namespace App\Features\TaxRecord\Data;
 
-use App\Features\TaxRecord\Enums\CalculateTaxRecordModeEnum;
-use App\Features\TaxRecord\Enums\CategoryTypeEnum;
-use App\Features\TaxRecordItem\Data\TaxRecordItemData;
 use Carbon\Carbon;
-use Spatie\LaravelData\Attributes\Validation\GreaterThanOrEqualTo;
-use Spatie\LaravelData\Attributes\WithCast;
-use Spatie\LaravelData\Casts\DateTimeInterfaceCast;
+use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Data;
 
 class CalculatedTaxRecordData extends Data
 {
     public function __construct(
-        public CalculateTaxRecordModeEnum $mode,
-        public CategoryTypeEnum $category_type,
         public string $transaction_reference,
-        #[WithCast(DateTimeInterfaceCast::class, format: 'Y-m-d\TH:i:s.uP')]
-        public Carbon $sales_date,
-        /**
-         * @var array<TaxRecordItemData>
-         */
-        public array $items,
-        #[GreaterThanOrEqualTo(0)]
-        public float $order_discount = 0
-    ) {}
+        public float $gross_amount,
+        public float $taxable_amount,
+        public float $tax_amount,
+        public float $total_amount = 0,
+        public ?Carbon $valid_until = null,
+        #[MapInputName('id')]
+        public ?string $bir_receipt_id = null,
+    ) {
+        $this->total_amount = $taxable_amount + $tax_amount;
+    }
 }
