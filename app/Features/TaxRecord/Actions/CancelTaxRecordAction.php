@@ -9,13 +9,15 @@ use App\Features\TaxRecord\Models\TaxRecord;
 
 class CancelTaxRecordAction
 {
-    public function handle(TaxRecord $tax_record): TaxRecord
+    public function __construct(protected UpdateTaxRecordStatusAction $action) {}
+
+    public function handle(TaxRecord $tax_record, string $cancel_reason): TaxRecord
     {
-        if ($tax_record->status === TaxRecordStatusEnum::Cancelled) {
+        if ($tax_record->status !== TaxRecordStatusEnum::Acknowledged) {
             return $tax_record;
         }
 
-        $tax_record->update(['status' => TaxRecordStatusEnum::Cancelled]);
+        $this->action->handle($tax_record, TaxRecordStatusEnum::Cancelled, $cancel_reason);
 
         return $tax_record->refresh();
     }

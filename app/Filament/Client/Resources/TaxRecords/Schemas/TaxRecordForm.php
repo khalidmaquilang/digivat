@@ -60,6 +60,7 @@ class TaxRecordForm
                         ])
                             ->columns(2),
                         TextInput::make('transaction_reference')
+                            ->required()
                             ->columnSpanFull(),
                         Fieldset::make('Items')
                             ->schema([

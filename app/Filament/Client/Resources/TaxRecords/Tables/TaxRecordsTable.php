@@ -14,6 +14,8 @@ use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\ViewAction;
+use Filament\Forms\Components\Textarea;
+use Filament\Notifications\Notification;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -45,8 +47,26 @@ class TaxRecordsTable
                         ->requiresConfirmation()
                         ->modalHeading('Cancel Tax Record')
                         ->modalDescription('Are you sure you want to cancel this tax record? This action cannot be undone.')
-                        ->action(fn ($record) => app(CancelTaxRecordAction::class)->handle($record))
-                        ->visible(fn ($record): bool => $record->status !== TaxRecordStatusEnum::Cancelled),
+                        ->schema([
+                            Textarea::make('cancel_reason')
+                                ->required()
+                                ->columnSpanFull(),
+                        ])
+                        ->action(function (TaxRecord $record, array $data): void {
+                            /** @var ?string $cancel_reason */
+                            $cancel_reason = $data['cancel_reason'] ?? null;
+                            if ($cancel_reason === null) {
+                                return;
+                            }
+
+                            app(CancelTaxRecordAction::class)->handle($record, $data['cancel_reason']);
+
+                            Notification::make()
+                                ->title('Tax record cancelled successfully!')
+                                ->success()
+                                ->send();
+                        })
+                        ->visible(fn (TaxRecord $record): bool => $record->status === TaxRecordStatusEnum::Acknowledged),
                 ]),
             ])
             ->toolbarActions([
@@ -58,7 +78,25 @@ class TaxRecordsTable
                         ->requiresConfirmation()
                         ->modalHeading('Cancel Tax Records')
                         ->modalDescription('Are you sure you want to cancel the selected tax records? This action cannot be undone.')
-                        ->action(fn (Collection $records) => app(BulkCancelTaxRecordAction::class)->handle($records)),
+                        ->schema([
+                            Textarea::make('cancel_reason')
+                                ->required()
+                                ->columnSpanFull(),
+                        ])
+                        ->action(function (Collection $records, array $data): void {
+                            /** @var ?string $cancel_reason */
+                            $cancel_reason = $data['cancel_reason'] ?? null;
+                            if ($cancel_reason === null) {
+                                return;
+                            }
+
+                            app(BulkCancelTaxRecordAction::class)->handle($records, $cancel_reason);
+
+                            Notification::make()
+                                ->title('Tax records cancelled successfully!')
+                                ->success()
+                                ->send();
+                        }),
                 ]),
             ])
             ->defaultSort('created_at', 'desc');

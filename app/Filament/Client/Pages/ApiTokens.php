@@ -50,6 +50,7 @@ class ApiTokens extends Page implements HasTable
                 TextColumn::make('name'),
                 TextColumn::make('token')
                     ->copyable()
+                    ->copyableState(fn (string $state): string => $state)
                     ->copyMessage('token copied')
                     ->formatStateUsing(fn (string $state): string => app()->isProduction() ? Str::mask($state, '*', 10) : $state),
             ])
