@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Client\Resources\TaxRecords\Actions;
 
 use App\Features\Shared\Helpers\MoneyHelper;
-use App\Features\TaxRecord\Actions\UpdateTaxRecordStatusAction;
+use App\Features\TaxRecord\Actions\RemitTaxAction;
 use App\Features\TaxRecord\Enums\TaxRecordStatusEnum;
 use App\Features\TaxRecord\Models\TaxRecord;
 use CodeWithDennis\FilamentLucideIcons\Enums\LucideIcon;
@@ -30,7 +30,7 @@ class RemitTaxButton extends Action
             ->modalDescription(fn (TaxRecord $record): string => "Are you sure you'd like you want to remit ".MoneyHelper::currency($record->tax_amount).' to the tax authority?')
             ->icon(LucideIcon::Banknote)
             ->action(function (TaxRecord $record): void {
-                app(UpdateTaxRecordStatusAction::class)->handle($record, TaxRecordStatusEnum::Paid);
+                app(RemitTaxAction::class)->handle($record);
 
                 Notification::make()
                     ->title('Tax remitted successfully!')
