@@ -96,12 +96,14 @@ class TaxRecordsTable
                                     ->title(sprintf('Successfully remitted %d tax record(s)!', $remitted_count))
                                     ->success()
                                     ->send();
-                            } else {
-                                Notification::make()
-                                    ->title('No tax records were remitted. Only records with Acknowledged or Expired status can be remitted.')
-                                    ->warning()
-                                    ->send();
+
+                                return;
                             }
+
+                            Notification::make()
+                                ->title('No tax records were remitted. Only records with Acknowledged or Expired status can be remitted.')
+                                ->warning()
+                                ->send();
                         }),
                     BulkAction::make('bulk_cancel')
                         ->label('Cancel selected')
