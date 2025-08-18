@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Features\TaxRecord\Controllers\Api;
 
+use App\Features\Business\Models\Business;
 use App\Features\Shared\Controllers\ApiController;
 use App\Features\TaxRecord\Actions\CancelTaxRecordAction;
 use App\Features\TaxRecord\Models\TaxRecord;
@@ -26,16 +27,16 @@ class CancelTaxRecordController extends ApiController
     #[PathParameter(name: 'tax_record', description: 'The UUID of the tax record to cancel', required: true, type: 'string')]
     public function __invoke(Request $request, string $tax_record): JsonResponse
     {
-        /** @var ?User $user */
-        $user = $this->resolveUser();
-        abort_if($user === null, 404);
+        /** @var ?Business $business */
+        $business = $this->resolveBusiness();
+        abort_if($business === null, 404);
 
         // First check if the tax record exists at all
         $tax_record_model = TaxRecord::withoutGlobalScopes()->where('id', $tax_record)->first();
         abort_if($tax_record_model === null, 404, 'Tax record not found');
 
-        // Then check if it belongs to the authenticated user
-        if ($tax_record_model->user_id !== $user->id) {
+        // Then check if it belongs to the authenticated business
+        if ($tax_record_model->business_id !== $business->id) {
             abort(403, 'Unauthorized access to tax record');
         }
 

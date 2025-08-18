@@ -18,9 +18,12 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'first_name' => 'Test User',
             'last_name' => 'Test',
-            'tin_number' => '1234567890',
             'email' => 'aa@aa.com',
             'password' => bcrypt('123123123'),
+        ]);
+
+        $this->call([
+            CreativeDomainSeeder::class,
         ]);
     }
 }

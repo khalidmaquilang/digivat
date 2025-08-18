@@ -1,0 +1,35 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Filament\Resources\TaxRecords\Pages;
+
+use App\Filament\Resources\TaxRecords\RelationManagers\TaxRecordItemsRelationManager;
+use App\Filament\Resources\TaxRecords\TaxRecordResource;
+use CodeWithDennis\FilamentLucideIcons\Enums\LucideIcon;
+use Filament\Actions\Action;
+use Filament\Resources\Pages\ViewRecord;
+
+class ViewTaxRecord extends ViewRecord
+{
+    protected static string $resource = TaxRecordResource::class;
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            Action::make('View Receipt')
+                ->icon(LucideIcon::Receipt)
+                ->url(route('bir-receipt.show', $this->record)),
+        ];
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public function getRelationManagers(): array
+    {
+        return [
+            TaxRecordItemsRelationManager::class,
+        ];
+    }
+}

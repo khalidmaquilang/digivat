@@ -4,19 +4,26 @@ declare(strict_types=1);
 
 namespace App\Features\User\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Features\Business\Models\Business;
 use App\Features\TaxRecord\Models\TaxRecord;
 use App\Features\Token\Models\Token;
 use App\Features\User\Database\Factories\UserFactory;
+use App\Features\User\Models\Traits\UserSchemaTrait;
+use Filament\Facades\Filament;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasName;
+use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 
 /**
  * @property string $id
@@ -24,15 +31,18 @@ use Illuminate\Notifications\Notifiable;
  * @property string|null $middle_name
  * @property string $last_name
  * @property string|null $suffix
- * @property string|null $nickname
  * @property string $email
- * @property string|null $tin_number
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Business> $business
+ * @property-read int|null $business_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Business> $businesses
+ * @property-read int|null $businesses_count
+ * @property-read string $full_name
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, TaxRecord> $taxRecords
@@ -53,18 +63,16 @@ use Illuminate\Notifications\Notifiable;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereLastName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereMiddleName($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereNickname($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereSuffix($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereTinNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User withTrashed(bool $withTrashed = true)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User withoutTrashed()
  *
  * @mixin \Eloquent
  */
-class User extends Authenticatable implements FilamentUser, HasName
+class User extends Authenticatable implements FilamentUser, HasName, HasTenants, MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory;
@@ -72,6 +80,7 @@ class User extends Authenticatable implements FilamentUser, HasName
     use HasUuids;
     use Notifiable;
     use SoftDeletes;
+    use UserSchemaTrait;
 
     protected static function newFactory(): UserFactory
     {
@@ -102,6 +111,11 @@ class User extends Authenticatable implements FilamentUser, HasName
         ];
     }
 
+    public function getFullNameAttribute(): string
+    {
+        return $this->getFilamentName();
+    }
+
     /**
      * @return HasMany<TaxRecord, $this>
      */
@@ -126,5 +140,40 @@ class User extends Authenticatable implements FilamentUser, HasName
     public function getFilamentName(): string
     {
         return sprintf('%s %s', $this->first_name, $this->last_name);
+    }
+
+    /**
+     * @return BelongsToMany<Business, $this>
+     */
+    public function businesses(): BelongsToMany
+    {
+        return $this->belongsToMany(Business::class);
+    }
+
+    public function canAccessTenant(Model $tenant): bool
+    {
+        return $this->businesses()->whereKey($tenant)->exists();
+    }
+
+    /**
+     * @return Collection<int, Business>
+     */
+    public function getTenants(Panel $panel): Collection
+    {
+        return $this->businesses;
+    }
+
+    /**
+     * @return BelongsToMany<Business, $this>
+     */
+    public function business(): BelongsToMany
+    {
+        /** @var ?Business $business */
+        $business = Filament::getTenant();
+        if ($business === null) {
+            return $this->businesses();
+        }
+
+        return $this->businesses()->where('business_id', $business->id);
     }
 }

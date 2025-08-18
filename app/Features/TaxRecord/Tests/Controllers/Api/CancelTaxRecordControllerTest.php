@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Features\TaxRecord\Tests\Controllers\Api;
 
+use App\Features\Business\Models\Business;
 use App\Features\TaxRecord\Enums\TaxRecordStatusEnum;
 use App\Features\TaxRecord\Models\TaxRecord;
 use App\Features\Token\Models\Token;
-use App\Features\User\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -15,12 +15,12 @@ final class CancelTaxRecordControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_can_cancel_tax_record_with_authenticated_user(): void
+    public function test_can_cancel_tax_record_with_authenticated_business(): void
     {
-        $user = User::factory()->create();
-        $token = Token::factory()->create(['user_id' => $user->id]);
+        $business = Business::factory()->create();
+        $token = Token::factory()->create(['business_id' => $business->id]);
         $tax_record = TaxRecord::factory()->create([
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'status' => TaxRecordStatusEnum::Acknowledged,
         ]);
 
@@ -43,10 +43,10 @@ final class CancelTaxRecordControllerTest extends TestCase
 
     public function test_does_not_update_already_cancelled_tax_record(): void
     {
-        $user = User::factory()->create();
-        $token = Token::factory()->create(['user_id' => $user->id]);
+        $business = Business::factory()->create();
+        $token = Token::factory()->create(['business_id' => $business->id]);
         $tax_record = TaxRecord::factory()->create([
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'status' => TaxRecordStatusEnum::Cancelled,
         ]);
 
@@ -70,14 +70,14 @@ final class CancelTaxRecordControllerTest extends TestCase
         $this->assertEquals($original_updated_at->toDateTimeString(), $tax_record->updated_at->toDateTimeString());
     }
 
-    public function test_prevents_cancelling_other_users_tax_record(): void
+    public function test_prevents_cancelling_other_businesss_tax_record(): void
     {
-        $owner_user = User::factory()->create();
-        $other_user = User::factory()->create();
-        $token = Token::factory()->create(['user_id' => $other_user->id]);
+        $owner_business = Business::factory()->create();
+        $other_business = Business::factory()->create();
+        $token = Token::factory()->create(['business_id' => $other_business->id]);
 
         $tax_record = TaxRecord::factory()->create([
-            'user_id' => $owner_user->id,
+            'business_id' => $owner_business->id,
             'status' => TaxRecordStatusEnum::Acknowledged,
         ]);
 
@@ -98,8 +98,8 @@ final class CancelTaxRecordControllerTest extends TestCase
 
     public function test_returns_404_for_nonexistent_tax_record(): void
     {
-        $user = User::factory()->create();
-        $token = Token::factory()->create(['user_id' => $user->id]);
+        $business = Business::factory()->create();
+        $token = Token::factory()->create(['business_id' => $business->id]);
         $nonexistent_id = 'BIR-TX-999999999999';
 
         $response = $this->postJson(
@@ -113,9 +113,9 @@ final class CancelTaxRecordControllerTest extends TestCase
 
     public function test_unauthenticated_request_returns_401(): void
     {
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
         $tax_record = TaxRecord::factory()->create([
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'status' => TaxRecordStatusEnum::Acknowledged,
         ]);
 
@@ -129,9 +129,9 @@ final class CancelTaxRecordControllerTest extends TestCase
 
     public function test_invalid_token_returns_401(): void
     {
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
         $tax_record = TaxRecord::factory()->create([
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'status' => TaxRecordStatusEnum::Acknowledged,
         ]);
 

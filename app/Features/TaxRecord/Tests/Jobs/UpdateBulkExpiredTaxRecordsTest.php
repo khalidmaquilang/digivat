@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Features\TaxRecord\Tests\Jobs;
 
+use App\Features\Business\Models\Business;
 use App\Features\Shared\Enums\QueueEnum;
 use App\Features\TaxRecord\Enums\TaxRecordStatusEnum;
 use App\Features\TaxRecord\Jobs\UpdateBulkExpiredTaxRecords;
 use App\Features\TaxRecord\Models\TaxRecord;
-use App\Features\User\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Queue;
@@ -30,11 +30,11 @@ final class UpdateBulkExpiredTaxRecordsTest extends TestCase
 
     public function test_updates_acknowledged_records_to_expired(): void
     {
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
 
         // Create tax records with Acknowledged status
         $acknowledged_records = TaxRecord::factory()->count(3)->create([
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'status' => TaxRecordStatusEnum::Acknowledged,
             'valid_until' => Carbon::yesterday(),
         ]);
@@ -54,23 +54,23 @@ final class UpdateBulkExpiredTaxRecordsTest extends TestCase
 
     public function test_ignores_records_with_different_status(): void
     {
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
 
         // Create tax records with different statuses
         $cancelled_record = TaxRecord::factory()->create([
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'status' => TaxRecordStatusEnum::Cancelled,
             'valid_until' => Carbon::yesterday(),
         ]);
 
         $expired_record = TaxRecord::factory()->create([
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'status' => TaxRecordStatusEnum::Expired,
             'valid_until' => Carbon::yesterday(),
         ]);
 
         $acknowledged_record = TaxRecord::factory()->create([
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'status' => TaxRecordStatusEnum::Acknowledged,
             'valid_until' => Carbon::yesterday(),
         ]);
@@ -108,11 +108,11 @@ final class UpdateBulkExpiredTaxRecordsTest extends TestCase
 
     public function test_handles_nonexistent_tax_record_ids(): void
     {
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
 
         // Create one real record
         $real_record = TaxRecord::factory()->create([
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'status' => TaxRecordStatusEnum::Acknowledged,
             'valid_until' => Carbon::yesterday(),
         ]);
@@ -131,11 +131,11 @@ final class UpdateBulkExpiredTaxRecordsTest extends TestCase
 
     public function test_handles_large_batch_of_records(): void
     {
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
 
         // Create 500 tax records with Acknowledged status
         $acknowledged_records = TaxRecord::factory()->count(500)->create([
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'status' => TaxRecordStatusEnum::Acknowledged,
             'valid_until' => Carbon::yesterday(),
         ]);
@@ -153,23 +153,23 @@ final class UpdateBulkExpiredTaxRecordsTest extends TestCase
 
     public function test_handles_mixed_status_records(): void
     {
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
 
         // Create records with various statuses
         $acknowledged_records = TaxRecord::factory()->count(5)->create([
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'status' => TaxRecordStatusEnum::Acknowledged,
             'valid_until' => Carbon::yesterday(),
         ]);
 
         $cancelled_records = TaxRecord::factory()->count(3)->create([
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'status' => TaxRecordStatusEnum::Cancelled,
             'valid_until' => Carbon::yesterday(),
         ]);
 
         $already_expired_records = TaxRecord::factory()->count(2)->create([
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'status' => TaxRecordStatusEnum::Expired,
             'valid_until' => Carbon::yesterday(),
         ]);
@@ -190,10 +190,10 @@ final class UpdateBulkExpiredTaxRecordsTest extends TestCase
 
     public function test_handles_batch_cancellation(): void
     {
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
 
         $acknowledged_record = TaxRecord::factory()->create([
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'status' => TaxRecordStatusEnum::Acknowledged,
             'valid_until' => Carbon::yesterday(),
         ]);
@@ -242,25 +242,25 @@ final class UpdateBulkExpiredTaxRecordsTest extends TestCase
 
     public function test_bulk_update_uses_correct_query_conditions(): void
     {
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
 
-        // Create records with different statuses and different users
-        $user2 = User::factory()->create();
+        // Create records with different statuses and different businesss
+        $business2 = Business::factory()->create();
 
         $target_record = TaxRecord::factory()->create([
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'status' => TaxRecordStatusEnum::Acknowledged,
             'valid_until' => Carbon::yesterday(),
         ]);
 
-        $different_user_record = TaxRecord::factory()->create([
-            'user_id' => $user2->id,
+        $different_business_record = TaxRecord::factory()->create([
+            'business_id' => $business2->id,
             'status' => TaxRecordStatusEnum::Acknowledged,
             'valid_until' => Carbon::yesterday(),
         ]);
 
         $different_status_record = TaxRecord::factory()->create([
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'status' => TaxRecordStatusEnum::Cancelled,
             'valid_until' => Carbon::yesterday(),
         ]);
@@ -268,21 +268,21 @@ final class UpdateBulkExpiredTaxRecordsTest extends TestCase
         // Job should only update records that match both ID and Acknowledged status
         $tax_record_ids = [
             $target_record->id,
-            $different_user_record->id,
+            $different_business_record->id,
             $different_status_record->id,
         ];
 
         $job = new UpdateBulkExpiredTaxRecords($tax_record_ids);
         $job->handle();
 
-        // Only the target record and different_user_record should be updated (both have Acknowledged status)
+        // Only the target record and different_business_record should be updated (both have Acknowledged status)
         $this->assertDatabaseHas('tax_records', [
             'id' => $target_record->id,
             'status' => TaxRecordStatusEnum::Expired->value,
         ]);
 
         $this->assertDatabaseHas('tax_records', [
-            'id' => $different_user_record->id,
+            'id' => $different_business_record->id,
             'status' => TaxRecordStatusEnum::Expired->value,
         ]);
 

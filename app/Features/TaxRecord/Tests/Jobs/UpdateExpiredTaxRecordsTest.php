@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Features\TaxRecord\Tests\Jobs;
 
+use App\Features\Business\Models\Business;
 use App\Features\Shared\Enums\QueueEnum;
 use App\Features\TaxRecord\Enums\TaxRecordStatusEnum;
 use App\Features\TaxRecord\Jobs\UpdateBulkExpiredTaxRecords;
 use App\Features\TaxRecord\Jobs\UpdateExpiredTaxRecords;
 use App\Features\TaxRecord\Models\TaxRecord;
-use App\Features\User\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Bus;
@@ -33,11 +33,11 @@ final class UpdateExpiredTaxRecordsTest extends TestCase
     {
         Bus::fake();
 
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
 
         // Create tax records that are NOT expired (valid_until is in future)
         TaxRecord::factory()->create([
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'status' => TaxRecordStatusEnum::Acknowledged,
             'valid_until' => Carbon::tomorrow(),
         ]);
@@ -53,25 +53,25 @@ final class UpdateExpiredTaxRecordsTest extends TestCase
     {
         Bus::fake();
 
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
 
         // Create expired tax records with Acknowledged status
         $expired_records = TaxRecord::factory()->count(5)->create([
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'status' => TaxRecordStatusEnum::Acknowledged,
             'valid_until' => Carbon::yesterday(),
         ]);
 
         // Create non-expired records (should be ignored)
         TaxRecord::factory()->count(2)->create([
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'status' => TaxRecordStatusEnum::Acknowledged,
             'valid_until' => Carbon::tomorrow(),
         ]);
 
         // Create expired records with different status (should be ignored)
         TaxRecord::factory()->count(3)->create([
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'status' => TaxRecordStatusEnum::Cancelled,
             'valid_until' => Carbon::yesterday(),
         ]);
@@ -101,11 +101,11 @@ final class UpdateExpiredTaxRecordsTest extends TestCase
     {
         Bus::fake();
 
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
 
         // Create 2500 expired tax records (should create 3 batches: 1000, 1000, 500)
         TaxRecord::factory()->count(2500)->create([
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'status' => TaxRecordStatusEnum::Acknowledged,
             'valid_until' => Carbon::yesterday(),
         ]);
@@ -130,10 +130,10 @@ final class UpdateExpiredTaxRecordsTest extends TestCase
     {
         Bus::fake();
 
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
 
         TaxRecord::factory()->create([
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'status' => TaxRecordStatusEnum::Acknowledged,
             'valid_until' => Carbon::yesterday(),
         ]);
@@ -154,10 +154,10 @@ final class UpdateExpiredTaxRecordsTest extends TestCase
         // Set up Bus fake before creating any data
         Bus::fake();
 
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
 
         TaxRecord::factory()->create([
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'status' => TaxRecordStatusEnum::Acknowledged,
             'valid_until' => Carbon::yesterday(),
         ]);
@@ -195,11 +195,11 @@ final class UpdateExpiredTaxRecordsTest extends TestCase
     {
         Bus::fake();
 
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
 
         // Create records that are expired but already have Expired status
         TaxRecord::factory()->count(3)->create([
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'status' => TaxRecordStatusEnum::Expired,
             'valid_until' => Carbon::yesterday(),
         ]);
@@ -215,18 +215,18 @@ final class UpdateExpiredTaxRecordsTest extends TestCase
     {
         Bus::fake();
 
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
 
         // Create records expiring today (should not be processed)
         TaxRecord::factory()->create([
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'status' => TaxRecordStatusEnum::Acknowledged,
             'valid_until' => Carbon::today(),
         ]);
 
         // Create records expiring yesterday (should be processed)
         TaxRecord::factory()->create([
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'status' => TaxRecordStatusEnum::Acknowledged,
             'valid_until' => Carbon::yesterday(),
         ]);

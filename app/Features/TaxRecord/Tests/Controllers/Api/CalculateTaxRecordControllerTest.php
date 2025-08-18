@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Features\TaxRecord\Tests\Controllers\Api;
 
+use App\Features\Business\Models\Business;
 use App\Features\TaxRecord\Enums\CalculateTaxRecordModeEnum;
 use App\Features\TaxRecord\Enums\CategoryTypeEnum;
 use App\Features\Token\Models\Token;
-use App\Features\User\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -15,11 +15,11 @@ final class CalculateTaxRecordControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_can_calculate_tax_with_authenticated_user(): void
+    public function test_can_calculate_tax_with_authenticated_business(): void
     {
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
         $token = Token::factory()->create([
-            'user_id' => $user->id,
+            'business_id' => $business->id,
         ]);
 
         $requestData = [
@@ -68,7 +68,7 @@ final class CalculateTaxRecordControllerTest extends TestCase
 
         // Verify tax record was created in database
         $this->assertDatabaseHas('tax_records', [
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'transaction_reference' => 'TX12345678',
             'gross_amount' => $this->convertMoney(130.0),
             'order_discount' => $this->convertMoney(10.0),
@@ -94,9 +94,9 @@ final class CalculateTaxRecordControllerTest extends TestCase
 
     public function test_preview_mode_does_not_create_database_records(): void
     {
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
         $token = Token::factory()->create([
-            'user_id' => $user->id,
+            'business_id' => $business->id,
         ]);
 
         $requestData = [
@@ -178,9 +178,9 @@ final class CalculateTaxRecordControllerTest extends TestCase
 
     public function test_calculates_tax_with_discounts(): void
     {
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
         $token = Token::factory()->create([
-            'user_id' => $user->id,
+            'business_id' => $business->id,
         ]);
 
         $requestData = [
@@ -213,7 +213,7 @@ final class CalculateTaxRecordControllerTest extends TestCase
 
         // Verify database records
         $this->assertDatabaseHas('tax_records', [
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'transaction_reference' => 'TX87654321',
             'gross_amount' => $this->convertMoney(95.0),
             'order_discount' => $this->convertMoney(15.0),
@@ -231,9 +231,9 @@ final class CalculateTaxRecordControllerTest extends TestCase
 
     public function test_handles_multiple_items(): void
     {
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
         $token = Token::factory()->create([
-            'user_id' => $user->id,
+            'business_id' => $business->id,
         ]);
 
         $requestData = [
@@ -272,7 +272,7 @@ final class CalculateTaxRecordControllerTest extends TestCase
 
         // Verify database records were created for all items
         $this->assertDatabaseHas('tax_records', [
-            'user_id' => $user->id,
+            'business_id' => $business->id,
             'transaction_reference' => 'TX99999999',
             'order_discount' => $this->convertMoney(0.0),
         ]);
@@ -303,9 +303,9 @@ final class CalculateTaxRecordControllerTest extends TestCase
 
     public function test_validates_required_fields(): void
     {
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
         $token = Token::factory()->create([
-            'user_id' => $user->id,
+            'business_id' => $business->id,
         ]);
 
         $response = $this
@@ -321,9 +321,9 @@ final class CalculateTaxRecordControllerTest extends TestCase
 
     public function test_validates_item_structure(): void
     {
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
         $token = Token::factory()->create([
-            'user_id' => $user->id,
+            'business_id' => $business->id,
         ]);
 
         $requestData = [

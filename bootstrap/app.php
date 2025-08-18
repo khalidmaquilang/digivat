@@ -38,6 +38,15 @@ return Application::configure(basePath: dirname(__DIR__))
                         ->middleware($middlewares)
                         ->group($api_routes);
                 }
+
+                if (
+                    $file->isFile()
+                    && $file->getFilename() === 'web.php'
+                ) {
+                    $web_routes = $file->getPathname();
+
+                    Route::middleware(['web'])->group($web_routes);
+                }
             }
         }
     )

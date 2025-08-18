@@ -16,9 +16,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $tax_record_id
  * @property string $item_name
  * @property int $quantity
- * @property \Brick\Money\Money|float $unit_price
- * @property \Brick\Money\Money|float $discount_amount
- * @property \Brick\Money\Money|float $total
+ * @property float $unit_price
+ * @property float $discount_amount
+ * @property float $total
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
@@ -65,4 +65,13 @@ class TaxRecordItem extends Model
         'discount_amount' => Money::class,
         'total' => Money::class,
     ];
+
+    protected static function booted(): void
+    {
+        static::creating(function (TaxRecordItem $record): void {
+            $total = ($record->unit_price * $record->quantity) - $record->discount_amount;
+
+            $record->total = $total;
+        });
+    }
 }

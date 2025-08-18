@@ -5,12 +5,17 @@ declare(strict_types=1);
 namespace App\Features\TaxRecordItem\Data;
 
 use Spatie\LaravelData\Attributes\Validation\GreaterThanOrEqualTo;
+use Spatie\LaravelData\Attributes\Validation\Required;
 use Spatie\LaravelData\Data;
+use Spatie\LaravelData\Normalizers\ArrayNormalizer;
+use Spatie\LaravelData\Normalizers\JsonNormalizer;
+use Spatie\LaravelData\Normalizers\ObjectNormalizer;
 
 class TaxRecordItemData extends Data
 {
     public function __construct(
-        public string $item_name,
+        #[Required]
+        public ?string $item_name,
         #[GreaterThanOrEqualTo(0)]
         public float $unit_price,
         public ?string $tax_record_id = null,
@@ -21,5 +26,17 @@ class TaxRecordItemData extends Data
         public float $total = 0
     ) {
         $this->total = ($this->unit_price * $this->quantity) - $this->discount_amount;
+    }
+
+    /**
+     * @return array<class-string>
+     */
+    public static function normalizers(): array
+    {
+        return [
+            ObjectNormalizer::class,
+            ArrayNormalizer::class,
+            JsonNormalizer::class,
+        ];
     }
 }

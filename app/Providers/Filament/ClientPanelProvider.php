@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace App\Providers\Filament;
 
+use App\Features\Business\Models\Business;
+use App\Filament\Client\Pages\Auth\Profile;
+use App\Filament\Client\Pages\Auth\Register;
+use App\Filament\Client\Pages\Tenancy\EditBusinessProfile;
+use App\Filament\Client\Pages\Tenancy\RegisterBusiness;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -29,10 +34,15 @@ class ClientPanelProvider extends PanelProvider
             ->id('client')
             ->path('client')
             ->login()
+            ->registration(Register::class)
+            ->profile(Profile::class)
+            ->emailVerification(isRequired: app()->isProduction())
+            ->passwordReset()
+            ->font('Poppins')
             ->brandName('POST')
             ->brandLogo(function () {
                 // Hide brand logo when user is on dashboard
-                if (request()->routeIs('filament.client.pages.*')) {
+                if (! request()->routeIs('filament.client.auth.*')) {
                     return '';
                 }
 
@@ -71,6 +81,9 @@ class ClientPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            ->tenant(Business::class, slugAttribute: 'slug')
+            ->tenantRegistration(RegisterBusiness::class)
+            ->tenantProfile(EditBusinessProfile::class);
     }
 }

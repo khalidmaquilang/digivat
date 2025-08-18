@@ -17,8 +17,6 @@ use CodeWithDennis\FilamentLucideIcons\Enums\LucideIcon;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class TaxRecordResource extends Resource
 {
@@ -56,16 +54,5 @@ class TaxRecordResource extends Resource
             'view' => ViewTaxRecord::route('/{record}'),
             'edit' => EditTaxRecord::route('/{record}/edit'),
         ];
-    }
-
-    /**
-     * @return Builder<TaxRecord>
-     */
-    public static function getRecordRouteBindingEloquentQuery(): Builder
-    {
-        return parent::getRecordRouteBindingEloquentQuery()
-            ->withoutGlobalScopes([
-                SoftDeletingScope::class,
-            ]);
     }
 }

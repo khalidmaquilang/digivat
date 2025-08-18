@@ -13,7 +13,7 @@ use Spatie\LaravelData\Optional;
 class TaxRecordData extends Data
 {
     public function __construct(
-        public string $user_id,
+        public string $business_id,
         public Carbon $sales_date,
         public string $transaction_reference,
         public float $gross_amount,

@@ -7,7 +7,6 @@ namespace App\Features\TaxRecord\Tests\Actions;
 use App\Features\TaxRecord\Actions\BulkCancelTaxRecordAction;
 use App\Features\TaxRecord\Enums\TaxRecordStatusEnum;
 use App\Features\TaxRecord\Models\TaxRecord;
-use App\Features\User\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -18,9 +17,7 @@ final class BulkCancelTaxRecordActionTest extends TestCase
 
     public function test_can_bulk_cancel_tax_records(): void
     {
-        $user = User::factory()->create();
         $tax_records = TaxRecord::factory()->count(3)->create([
-            'user_id' => $user->id,
             'status' => TaxRecordStatusEnum::Acknowledged,
         ]);
 
@@ -41,20 +38,15 @@ final class BulkCancelTaxRecordActionTest extends TestCase
 
     public function test_handles_mixed_status_tax_records(): void
     {
-        $user = User::factory()->create();
-
         $acknowledged_record = TaxRecord::factory()->create([
-            'user_id' => $user->id,
             'status' => TaxRecordStatusEnum::Acknowledged,
         ]);
 
         $cancelled_record = TaxRecord::factory()->create([
-            'user_id' => $user->id,
             'status' => TaxRecordStatusEnum::Cancelled,
         ]);
 
         $paid_record = TaxRecord::factory()->create([
-            'user_id' => $user->id,
             'status' => TaxRecordStatusEnum::Paid,
         ]);
 

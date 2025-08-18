@@ -21,13 +21,13 @@ class ValidateClientToken
         $token = Token::where('token', $token)
             ->first();
 
-        if (! $token || ! $token->user) {
+        if (! $token || ! $token->business) {
             return response()->json(['error' => 'Invalid token'], 401);
         }
 
-        $user = $token->user;
+        $business = $token->business;
 
-        $request->merge(['user' => $user]);
+        $request->merge(['business' => $business]);
 
         return $next($request);
     }

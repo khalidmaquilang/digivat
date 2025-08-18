@@ -19,6 +19,8 @@ class CalculateTaxAction
         protected CalculateTaxRecordItemAction $calculate_record_item_action,
         protected CreateTaxRecordAction $create_tax_record_action,
         protected CreateTaxRecordItemAction $create_tax_record_item_action,
+        protected GetTotalGrossAmountAction $get_total_gross_amount_action,
+        protected GetTaxByCategoryAction $get_tax_by_category_action
     ) {}
 
     /**
@@ -26,22 +28,20 @@ class CalculateTaxAction
      *
      * @throws \Throwable
      */
-    public function handle(CalculateTaxRecordData $data, string $user_id, string $referer_url): array
+    public function handle(CalculateTaxRecordData $data, string $business_id, ?string $referer_url = null): array
     {
         // calculate total amount of the item
-        $total_item_amount = $this->calculate_record_item_action->handle($data->items);
+        $total_item_amount = $this->get_total_gross_amount_action->handle($data->items);
+
         $taxable_amount = $total_item_amount - $data->order_discount;
 
-        // get class based on the category
-        $tax_class = $data->category_type->toTaxClass();
-        $tax_amount = $tax_class->calculate($taxable_amount);
+        $tax_amount = $this->get_tax_by_category_action->handle($data->category_type, $taxable_amount);
 
         $tax_record_data = $data->toTaxRecordData(
-            user_id: $user_id,
+            business_id: $business_id,
             gross_amount: $total_item_amount,
             taxable_amount: $taxable_amount,
-            tax_amount: $tax_amount,
-            valid_until: now()->addMonth()
+            tax_amount: $tax_amount
         );
 
         if ($data->mode === CalculateTaxRecordModeEnum::Preview) {
@@ -68,7 +68,7 @@ class CalculateTaxAction
         } catch (Exception $exception) {
             DB::rollBack();
             Log::error($exception->getMessage(), [
-                'user_id' => $user_id,
+                'business_id' => $business_id,
                 'data' => $data->toArray(),
                 'exception' => $exception,
             ]);

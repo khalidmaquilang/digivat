@@ -9,7 +9,6 @@ use App\Features\TaxRecord\Actions\CalculateTaxAction;
 use App\Features\TaxRecord\Data\CalculateTaxRecordData;
 use App\Features\TaxRecord\Enums\CalculateTaxRecordModeEnum;
 use App\Features\TaxRecord\Enums\CategoryTypeEnum;
-use App\Features\User\Models\User;
 use Dedoc\Scramble\Attributes\BodyParameter;
 use Dedoc\Scramble\Attributes\HeaderParameter;
 use Dedoc\Scramble\Attributes\Response;
@@ -46,14 +45,13 @@ class CalculateTaxRecordController extends ApiController
     #[Response(status: 404, description: 'User not found or unauthorized')]
     public function __invoke(CalculateTaxRecordData $request): JsonResponse
     {
-        /** @var ?User $user */
-        $user = $this->resolveUser();
-        abort_if($user === null, 404);
+        $business = $this->resolveBusiness();
+        abort_if(! $business instanceof \App\Features\Business\Models\Business, 404);
 
         // Get referer from the request
         $referer = request()->header('referer', '');
 
-        $result = $this->action->handle($request, $user->id, $referer);
+        $result = $this->action->handle($request, $business->id, $referer);
 
         return response()->json($result);
     }
