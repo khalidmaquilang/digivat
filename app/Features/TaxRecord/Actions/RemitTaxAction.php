@@ -13,7 +13,7 @@ class RemitTaxAction
 
     public function handle(TaxRecord $tax_record): void
     {
-        if ($tax_record->status !== TaxRecordStatusEnum::Acknowledged) {
+        if ($tax_record->status === TaxRecordStatusEnum::Cancelled || $tax_record->status === TaxRecordStatusEnum::Paid) {
             return;
         }
 

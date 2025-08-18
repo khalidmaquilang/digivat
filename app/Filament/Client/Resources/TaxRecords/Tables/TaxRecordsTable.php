@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Filament\Client\Resources\TaxRecords\Tables;
 
+use App\Features\Shared\Helpers\MoneyHelper;
 use App\Features\TaxRecord\Actions\BulkCancelTaxRecordAction;
+use App\Features\TaxRecord\Actions\BulkRemitTaxAction;
 use App\Features\TaxRecord\Actions\CancelTaxRecordAction;
 use App\Features\TaxRecord\Enums\TaxRecordStatusEnum;
 use App\Features\TaxRecord\Models\TaxRecord;
@@ -78,26 +80,28 @@ class TaxRecordsTable
                         ->icon(LucideIcon::Banknote)
                         ->color('success')
                         ->requiresConfirmation()
-                        ->modalHeading('Cancel Tax Records')
-                        ->modalDescription('Are you sure you want to cancel the selected tax records? This action cannot be undone.')
-                        ->schema([
-                            Textarea::make('cancel_reason')
-                                ->required()
-                                ->columnSpanFull(),
-                        ])
-                        ->action(function (Collection $records, array $data): void {
-                            /** @var ?string $cancel_reason */
-                            $cancel_reason = $data['cancel_reason'] ?? null;
-                            if ($cancel_reason === null) {
-                                return;
+                        ->modalHeading('Remit Tax Records')
+                        ->modalDescription(function (Collection $records): string {
+                            $total_tax_amount = $records
+                                ->filter(fn (TaxRecord $record): bool => $record->status === TaxRecordStatusEnum::Acknowledged || $record->status === TaxRecordStatusEnum::Expired)
+                                ->sum('tax_amount');
+
+                            return 'Are you sure you want to remit the selected tax records? This will update their status to Paid. Total tax amount: '.MoneyHelper::currency($total_tax_amount);
+                        })
+                        ->action(function (Collection $records): void {
+                            $remitted_count = app(BulkRemitTaxAction::class)->handle($records);
+
+                            if ($remitted_count > 0) {
+                                Notification::make()
+                                    ->title(sprintf('Successfully remitted %d tax record(s)!', $remitted_count))
+                                    ->success()
+                                    ->send();
+                            } else {
+                                Notification::make()
+                                    ->title('No tax records were remitted. Only records with Acknowledged or Expired status can be remitted.')
+                                    ->warning()
+                                    ->send();
                             }
-
-                            app(BulkCancelTaxRecordAction::class)->handle($records, $cancel_reason);
-
-                            Notification::make()
-                                ->title('Tax records cancelled successfully!')
-                                ->success()
-                                ->send();
                         }),
                     BulkAction::make('bulk_cancel')
                         ->label('Cancel selected')
