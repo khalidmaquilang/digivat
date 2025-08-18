@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Features\TaxRecord\Actions;
 
+use App\Features\TaxRecord\Data\CalculatedTaxRecordData;
 use App\Features\TaxRecord\Data\CalculateTaxRecordData;
 use App\Features\TaxRecord\Enums\CalculateTaxRecordModeEnum;
 use App\Features\TaxRecordItem\Actions\CalculateTaxRecordItemAction;
@@ -44,7 +45,11 @@ class CalculateTaxAction
         );
 
         if ($data->mode === CalculateTaxRecordModeEnum::Preview) {
-            return $tax_record_data->toArray();
+            return $data->toCalculatedTaxRecordData(
+                gross_amount: $total_item_amount,
+                taxable_amount: $taxable_amount,
+                tax_amount: $tax_amount,
+            )->toArray();
         }
 
         // Add referer
@@ -71,6 +76,6 @@ class CalculateTaxAction
             throw $exception;
         }
 
-        return $tax_record_data->toArray();
+        return CalculatedTaxRecordData::from($tax_record)->toArray();
     }
 }

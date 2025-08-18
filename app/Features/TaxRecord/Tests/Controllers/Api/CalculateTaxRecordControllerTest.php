@@ -50,25 +50,19 @@ final class CalculateTaxRecordControllerTest extends TestCase
 
         $response->assertSuccessful();
         $response->assertJsonStructure([
-            'business_id',
-            'sales_date',
             'transaction_reference',
             'gross_amount',
-            'order_discount',
             'taxable_amount',
             'tax_amount',
             'total_amount',
             'valid_until',
-            'status',
-            'category_type',
+            'bir_receipt_id',
         ]);
 
         // Verify response data
         $responseData = $response->json();
-        $this->assertEquals($business->id, $responseData['business_id']);
         $this->assertEquals('TX12345678', $responseData['transaction_reference']);
         $this->assertEquals(130.0, $responseData['gross_amount']); // (50*2) + (30*1)
-        $this->assertEquals(10.0, $responseData['order_discount']);
         $this->assertEquals(120.0, $responseData['taxable_amount']); // 130 - 10
         $this->assertEqualsWithDelta(14.4, $responseData['tax_amount'], 0.001); // 12% of 120
 
@@ -127,22 +121,17 @@ final class CalculateTaxRecordControllerTest extends TestCase
 
         $response->assertSuccessful();
         $response->assertJsonStructure([
-            'business_id',
-            'sales_date',
             'transaction_reference',
             'gross_amount',
-            'order_discount',
             'taxable_amount',
             'tax_amount',
             'total_amount',
             'valid_until',
-            'status',
-            'category_type',
+            'bir_receipt_id',
         ]);
 
         // Verify response data
         $responseData = $response->json();
-        $this->assertEquals($business->id, $responseData['business_id']);
         $this->assertEquals('TX-PREVIEW', $responseData['transaction_reference']);
         $this->assertEquals(100.0, $responseData['gross_amount']);
         $this->assertEquals(12.0, $responseData['tax_amount']); // 12% of 100
@@ -219,7 +208,6 @@ final class CalculateTaxRecordControllerTest extends TestCase
         // Verify response calculation
         $responseData = $response->json();
         $this->assertEquals(95.0, $responseData['gross_amount']); // 100 - 5 (item discount)
-        $this->assertEquals(15.0, $responseData['order_discount']);
         $this->assertEquals(80.0, $responseData['taxable_amount']); // 95 - 15
         $this->assertEquals(9.6, $responseData['tax_amount']); // 12% of 80
 
