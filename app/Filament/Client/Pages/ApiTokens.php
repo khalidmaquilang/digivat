@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace App\Filament\Client\Pages;
 
+use App\Features\Business\Models\Business;
+use App\Features\Token\Actions\CreateTokenAction;
 use App\Features\Token\Models\Token;
-use App\Features\User\Actions\CreateTokenAction;
-use App\Features\User\Models\User;
 use App\Filament\Components\Fields\TextInput\TextInput;
 use BackedEnum;
 use CodeWithDennis\FilamentLucideIcons\Enums\LucideIcon;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
+use Filament\Facades\Filament;
 use Filament\Pages\Page;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
@@ -40,10 +41,6 @@ class ApiTokens extends Page implements HasTable
 
     public function table(Table $table): Table
     {
-        /** @var ?User $user */
-        $user = auth()->user();
-        abort_if($user === null, 404);
-
         return $table
             ->query(Token::query())
             ->columns([
@@ -60,8 +57,12 @@ class ApiTokens extends Page implements HasTable
                         TextInput::make('name')
                             ->required(),
                     ])
-                    ->action(function (array $data) use ($user): void {
-                        $this->create_token_action->handle($user, $data['name']);
+                    ->action(function (array $data): void {
+                        /** @var ?Business $business */
+                        $business = Filament::getTenant();
+                        abort_if($business === null, 403);
+
+                        $this->create_token_action->handle($business, $data['name']);
                     }),
             ])
             ->recordActions([

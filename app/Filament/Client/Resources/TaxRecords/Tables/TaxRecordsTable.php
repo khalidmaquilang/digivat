@@ -8,6 +8,7 @@ use App\Features\TaxRecord\Actions\BulkCancelTaxRecordAction;
 use App\Features\TaxRecord\Actions\CancelTaxRecordAction;
 use App\Features\TaxRecord\Enums\TaxRecordStatusEnum;
 use App\Features\TaxRecord\Models\TaxRecord;
+use App\Filament\Client\Resources\TaxRecords\Actions\RemitTaxButton;
 use CodeWithDennis\FilamentLucideIcons\Enums\LucideIcon;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
@@ -36,6 +37,7 @@ class TaxRecordsTable
             ->recordActions([
                 ActionGroup::make([
                     ViewAction::make(),
+                    RemitTaxButton::make(),
                     Action::make('View Receipt')
                         ->icon(LucideIcon::Receipt)
                         ->color('primary')
@@ -71,8 +73,34 @@ class TaxRecordsTable
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
+                    BulkAction::make('remit_tax')
+                        ->label('Remit selected')
+                        ->icon(LucideIcon::Banknote)
+                        ->color('success')
+                        ->requiresConfirmation()
+                        ->modalHeading('Cancel Tax Records')
+                        ->modalDescription('Are you sure you want to cancel the selected tax records? This action cannot be undone.')
+                        ->schema([
+                            Textarea::make('cancel_reason')
+                                ->required()
+                                ->columnSpanFull(),
+                        ])
+                        ->action(function (Collection $records, array $data): void {
+                            /** @var ?string $cancel_reason */
+                            $cancel_reason = $data['cancel_reason'] ?? null;
+                            if ($cancel_reason === null) {
+                                return;
+                            }
+
+                            app(BulkCancelTaxRecordAction::class)->handle($records, $cancel_reason);
+
+                            Notification::make()
+                                ->title('Tax records cancelled successfully!')
+                                ->success()
+                                ->send();
+                        }),
                     BulkAction::make('bulk_cancel')
-                        ->label('Cancel Selected')
+                        ->label('Cancel selected')
                         ->icon(LucideIcon::XCircle)
                         ->color('danger')
                         ->requiresConfirmation()
