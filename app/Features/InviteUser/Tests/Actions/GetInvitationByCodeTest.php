@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit;
+namespace App\Features\InviteUser\Tests\Actions;
 
 use App\Features\Business\Models\Business;
 use App\Features\InviteUser\Actions\GetInvitationByCode;
@@ -10,7 +10,7 @@ use App\Features\InviteUser\Models\InviteUser;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class GetInvitationByCodeTest extends TestCase
+final class GetInvitationByCodeTest extends TestCase
 {
     use RefreshDatabase;
 

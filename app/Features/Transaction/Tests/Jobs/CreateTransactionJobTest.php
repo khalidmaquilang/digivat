@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Features\Transaction\Jobs;
+namespace App\Features\Transaction\Tests\Jobs;
 
 use App\Features\TaxRecord\Models\TaxRecord;
 use App\Features\Transaction\Enums\TransactionStatusEnum;
@@ -14,7 +14,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 
-class CreateTransactionJobTest extends TestCase
+final class CreateTransactionJobTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -98,13 +98,11 @@ class CreateTransactionJobTest extends TestCase
         CreateTransactionJob::dispatch($taxRecord->id, $user->id);
 
         // Assert
-        Queue::assertPushed(CreateTransactionJob::class, function ($job) use ($taxRecord, $user) {
-            return $job->taxRecordId === $taxRecord->id &&
-                   $job->userId === $user->id &&
-                   $job->type === TransactionTypeEnum::TaxRemittance &&
-                   $job->description === null &&
-                   $job->metadata === [];
-        });
+        Queue::assertPushed(CreateTransactionJob::class, fn ($job): bool => $job->taxRecordId === $taxRecord->id &&
+               $job->userId === $user->id &&
+               $job->type === TransactionTypeEnum::TaxRemittance &&
+               $job->description === null &&
+               $job->metadata === []);
     }
 
     public function test_job_dispatch_with_custom_parameters(): void
@@ -126,13 +124,11 @@ class CreateTransactionJobTest extends TestCase
         );
 
         // Assert
-        Queue::assertPushed(CreateTransactionJob::class, function ($job) use ($taxRecord, $user, $customDescription, $customMetadata) {
-            return $job->taxRecordId === $taxRecord->id &&
-                   $job->userId === $user->id &&
-                   $job->type === TransactionTypeEnum::Adjustment &&
-                   $job->description === $customDescription &&
-                   $job->metadata === $customMetadata;
-        });
+        Queue::assertPushed(CreateTransactionJob::class, fn ($job): bool => $job->taxRecordId === $taxRecord->id &&
+               $job->userId === $user->id &&
+               $job->type === TransactionTypeEnum::Adjustment &&
+               $job->description === $customDescription &&
+               $job->metadata === $customMetadata);
     }
 
     public function test_job_handles_missing_tax_record(): void

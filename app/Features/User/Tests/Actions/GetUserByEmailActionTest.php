@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit;
+namespace App\Features\User\Tests\Actions;
 
 use App\Features\User\Actions\GetUserByEmailAction;
 use App\Features\User\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class GetUserByEmailActionTest extends TestCase
+final class GetUserByEmailActionTest extends TestCase
 {
     use RefreshDatabase;
 

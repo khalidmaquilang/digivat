@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Features\Transaction\Actions;
+namespace App\Features\Transaction\Tests\Actions;
 
 use App\Features\TaxRecord\Models\TaxRecord;
 use App\Features\Transaction\Actions\CreateTransactionAction;
@@ -13,7 +13,7 @@ use App\Features\User\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class CreateTransactionActionTest extends TestCase
+final class CreateTransactionActionTest extends TestCase
 {
     use RefreshDatabase;
 

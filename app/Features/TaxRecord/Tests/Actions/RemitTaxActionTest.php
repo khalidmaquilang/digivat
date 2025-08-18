@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Features\TaxRecord\Actions;
+namespace App\Features\TaxRecord\Tests\Actions;
 
 use App\Features\TaxRecord\Actions\RemitTaxAction;
 use App\Features\TaxRecord\Enums\TaxRecordStatusEnum;
@@ -14,7 +14,7 @@ use App\Features\User\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class RemitTaxActionTest extends TestCase
+final class RemitTaxActionTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -31,7 +31,7 @@ class RemitTaxActionTest extends TestCase
         $action = app(RemitTaxAction::class);
 
         // Act
-        $action->handle($taxRecord, $user);
+        $action->handle($taxRecord);
 
         // Assert tax record status is updated
         $taxRecord->refresh();
@@ -64,7 +64,7 @@ class RemitTaxActionTest extends TestCase
         $action = app(RemitTaxAction::class);
 
         // Act
-        $action->handle($taxRecord, $user);
+        $action->handle($taxRecord);
 
         // Assert
         $taxRecord->refresh();
@@ -80,7 +80,7 @@ class RemitTaxActionTest extends TestCase
     public function test_does_not_remit_cancelled_tax_record(): void
     {
         // Arrange
-        $user = User::factory()->create();
+        User::factory()->create();
         $taxRecord = TaxRecord::factory()->create([
             'status' => TaxRecordStatusEnum::Cancelled,
         ]);
@@ -88,7 +88,7 @@ class RemitTaxActionTest extends TestCase
         $action = app(RemitTaxAction::class);
 
         // Act
-        $action->handle($taxRecord, $user);
+        $action->handle($taxRecord);
 
         // Assert - status remains unchanged and no transaction created
         $taxRecord->refresh();
@@ -102,7 +102,7 @@ class RemitTaxActionTest extends TestCase
     public function test_does_not_remit_already_paid_tax_record(): void
     {
         // Arrange
-        $user = User::factory()->create();
+        User::factory()->create();
         $taxRecord = TaxRecord::factory()->create([
             'status' => TaxRecordStatusEnum::Paid,
         ]);
@@ -110,7 +110,7 @@ class RemitTaxActionTest extends TestCase
         $action = app(RemitTaxAction::class);
 
         // Act
-        $action->handle($taxRecord, $user);
+        $action->handle($taxRecord);
 
         // Assert - status remains unchanged and no transaction created
         $taxRecord->refresh();
@@ -146,7 +146,7 @@ class RemitTaxActionTest extends TestCase
     public function test_transaction_contains_correct_metadata(): void
     {
         // Arrange
-        $user = User::factory()->create();
+        User::factory()->create();
         $taxRecord = TaxRecord::factory()->create([
             'status' => TaxRecordStatusEnum::Acknowledged,
             'gross_amount' => 10000.00,
@@ -159,7 +159,7 @@ class RemitTaxActionTest extends TestCase
         $action = app(RemitTaxAction::class);
 
         // Act
-        $action->handle($taxRecord, $user);
+        $action->handle($taxRecord);
 
         // Assert
         $transaction = Transaction::where('tax_record_id', $taxRecord->id)->first();
