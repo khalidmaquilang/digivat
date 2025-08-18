@@ -6,10 +6,13 @@ namespace App\Features\TaxRecord\Actions;
 
 use App\Features\TaxRecord\Enums\TaxRecordStatusEnum;
 use App\Features\TaxRecord\Models\TaxRecord;
+use App\Features\Transaction\Jobs\CreateTransactionJob;
 
 class RemitTaxAction
 {
-    public function __construct(protected UpdateTaxRecordStatusAction $action) {}
+    public function __construct(
+        protected UpdateTaxRecordStatusAction $updateTaxRecordStatusAction
+    ) {}
 
     public function handle(TaxRecord $tax_record): void
     {
@@ -17,6 +20,9 @@ class RemitTaxAction
             return;
         }
 
-        $this->action->handle($tax_record, TaxRecordStatusEnum::Paid);
+        // Update tax record status to paid
+        $this->updateTaxRecordStatusAction->handle($tax_record, TaxRecordStatusEnum::Paid);
+
+        CreateTransactionJob::dispatch($tax_record->id, $tax_record->business_id);
     }
 }
