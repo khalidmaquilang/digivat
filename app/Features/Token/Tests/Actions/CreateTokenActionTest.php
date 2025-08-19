@@ -71,6 +71,10 @@ final class CreateTokenActionTest extends TestCase
         $tokens = Token::where('business_id', $business->id)->get();
 
         $this->assertEquals(2, $tokens->count());
-        $this->assertNotEquals($tokens->first()->token, $tokens->last()->token);
+        $firstToken = $tokens->first();
+        $lastToken = $tokens->last();
+        $this->assertNotNull($firstToken);
+        $this->assertNotNull($lastToken);
+        $this->assertNotEquals($firstToken->token, $lastToken->token);
     }
 }

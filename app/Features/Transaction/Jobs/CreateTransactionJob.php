@@ -32,6 +32,8 @@ class CreateTransactionJob implements ShouldQueue
 
     /**
      * Create a new job instance.
+     *
+     * @param  array<array-key, mixed>  $metadata
      */
     public function __construct(
         public string $tax_record_id,

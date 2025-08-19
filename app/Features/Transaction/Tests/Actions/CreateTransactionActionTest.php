@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Features\Transaction\Tests\Actions;
 
+use App\Features\Business\Models\Business;
 use App\Features\TaxRecord\Models\TaxRecord;
 use App\Features\Transaction\Actions\CreateTransactionAction;
 use App\Features\Transaction\Enums\TransactionStatusEnum;
 use App\Features\Transaction\Enums\TransactionTypeEnum;
 use App\Features\Transaction\Models\Transaction;
-use App\Features\User\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -20,7 +20,7 @@ final class CreateTransactionActionTest extends TestCase
     public function test_creates_transaction_with_correct_data(): void
     {
         // Arrange
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
         $taxRecord = TaxRecord::factory()->create([
             'tax_amount' => 1200.50,
             'gross_amount' => 10000.00,
@@ -32,7 +32,7 @@ final class CreateTransactionActionTest extends TestCase
         $action = new CreateTransactionAction;
 
         // Act
-        $transaction = $action->handle($taxRecord, $user);
+        $transaction = $action->handle($taxRecord, $business);
 
         // Assert
         $this->assertInstanceOf(Transaction::class, $transaction);
@@ -42,15 +42,15 @@ final class CreateTransactionActionTest extends TestCase
         $this->assertDatabaseHas('transactions', [
             'id' => $transaction->id,
             'tax_record_id' => $taxRecord->id,
-            'user_id' => $user->id,
-            'amount' => '1200.50',
+            'business_id' => $business->id,
+            'amount' => $this->convertMoney(1200.50),
             'type' => TransactionTypeEnum::TaxRemittance->value,
             'status' => TransactionStatusEnum::Completed->value,
         ]);
 
         // Check field values
         $this->assertEquals($taxRecord->id, $transaction->tax_record_id);
-        $this->assertEquals($user->id, $transaction->user_id);
+        $this->assertEquals($business->id, $transaction->business_id);
         $this->assertEquals('1200.50', $transaction->amount);
         $this->assertEquals(TransactionTypeEnum::TaxRemittance, $transaction->type);
         $this->assertEquals(TransactionStatusEnum::Completed, $transaction->status);
@@ -71,7 +71,7 @@ final class CreateTransactionActionTest extends TestCase
     public function test_creates_transaction_with_custom_parameters(): void
     {
         // Arrange
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
         $taxRecord = TaxRecord::factory()->create(['tax_amount' => 500.00]);
 
         $action = new CreateTransactionAction;
@@ -81,8 +81,9 @@ final class CreateTransactionActionTest extends TestCase
         // Act
         $transaction = $action->handle(
             $taxRecord,
-            $user,
+            $business,
             TransactionTypeEnum::Refund,
+            null, // reference_number
             $customDescription,
             $customMetadata
         );
@@ -90,6 +91,7 @@ final class CreateTransactionActionTest extends TestCase
         // Assert
         $this->assertEquals(TransactionTypeEnum::Refund, $transaction->type);
         $this->assertEquals($customDescription, $transaction->description);
+        $this->assertIsArray($transaction->metadata);
         $this->assertArrayHasKey('custom_field', $transaction->metadata);
         $this->assertEquals('custom_value', $transaction->metadata['custom_field']);
     }
@@ -97,31 +99,31 @@ final class CreateTransactionActionTest extends TestCase
     public function test_relationships_work_correctly(): void
     {
         // Arrange
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
         $taxRecord = TaxRecord::factory()->create();
 
         $action = new CreateTransactionAction;
 
         // Act
-        $transaction = $action->handle($taxRecord, $user);
+        $transaction = $action->handle($taxRecord, $business);
 
         // Assert relationships
         $this->assertTrue($transaction->taxRecord->is($taxRecord));
-        $this->assertTrue($transaction->user->is($user));
+        $this->assertTrue($transaction->business->is($business));
     }
 
     public function test_reference_number_is_unique(): void
     {
         // Arrange
-        $user = User::factory()->create();
+        $business = Business::factory()->create();
         $taxRecord1 = TaxRecord::factory()->create();
         $taxRecord2 = TaxRecord::factory()->create();
 
         $action = new CreateTransactionAction;
 
         // Act
-        $transaction1 = $action->handle($taxRecord1, $user);
-        $transaction2 = $action->handle($taxRecord2, $user);
+        $transaction1 = $action->handle($taxRecord1, $business);
+        $transaction2 = $action->handle($taxRecord2, $business);
 
         // Assert
         $this->assertNotEquals($transaction1->reference_number, $transaction2->reference_number);

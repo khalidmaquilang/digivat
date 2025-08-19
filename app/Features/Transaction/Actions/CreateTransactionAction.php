@@ -12,6 +12,9 @@ use App\Features\Transaction\Models\Transaction;
 
 class CreateTransactionAction
 {
+    /**
+     * @param  array<array-key, mixed>  $metadata
+     */
     public function handle(
         TaxRecord $tax_record,
         Business $business,

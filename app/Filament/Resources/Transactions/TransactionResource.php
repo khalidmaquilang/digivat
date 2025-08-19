@@ -50,6 +50,9 @@ class TransactionResource extends Resource
         ];
     }
 
+    /**
+     * @return Builder<Transaction>
+     */
     public static function getRecordRouteBindingEloquentQuery(): Builder
     {
         return parent::getRecordRouteBindingEloquentQuery()

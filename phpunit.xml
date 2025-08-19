@@ -8,6 +8,21 @@
         <testsuite name="TaxRecord">
             <directory>app/Features/TaxRecord/Tests</directory>
         </testsuite>
+        <testsuite name="InviteUser">
+            <directory>app/Features/InviteUser/Tests</directory>
+        </testsuite>
+        <testsuite name="TaxRecordItem">
+            <directory>app/Features/TaxRecordItem/Tests</directory>
+        </testsuite>
+        <testsuite name="Token">
+            <directory>app/Features/Token/Tests</directory>
+        </testsuite>
+        <testsuite name="Transaction">
+            <directory>app/Features/Transaction/Tests</directory>
+        </testsuite>
+        <testsuite name="User">
+            <directory>app/Features/User/Tests</directory>
+        </testsuite>
     </testsuites>
     <source>
         <include>

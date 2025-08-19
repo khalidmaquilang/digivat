@@ -82,6 +82,7 @@ class TaxRecordsTable
                         ->requiresConfirmation()
                         ->modalHeading('Remit Tax Records')
                         ->modalDescription(function (Collection $records): string {
+                            /** @var Collection<int, TaxRecord> $records */
                             $total_tax_amount = $records
                                 ->filter(fn (TaxRecord $record): bool => $record->status === TaxRecordStatusEnum::Acknowledged || $record->status === TaxRecordStatusEnum::Expired)
                                 ->sum('tax_amount');
