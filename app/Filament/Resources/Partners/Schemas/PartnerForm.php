@@ -25,7 +25,8 @@ class PartnerForm
                             ->preload()
                             ->optionsLimit(10)
                             ->unique(ignoreRecord: true)
-                            ->required(),
+                            ->required()
+                            ->searchable(),
                         FusedGroup::make([
                             NumericInput::make('shares')
                                 ->minValue(0)
