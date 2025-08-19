@@ -45,9 +45,23 @@ class BusinessSeeder extends Seeder
         ]);
 
         $user = User::create([
-            'first_name' => 'Test',
+            'first_name' => 'Creatives',
             'last_name' => 'User',
             'email' => 'cc@cc.com',
+            'password' => bcrypt('123123123'),
+            'email_verified_at' => now(),
+        ]);
+        Business::create([
+            'owner_id' => $user->id,
+            'name' => 'Creatives Company',
+            'slug' => 'creatives-company',
+            'tin_number' => '1234567890',
+        ]);
+
+        $user = User::create([
+            'first_name' => 'Test',
+            'last_name' => 'User',
+            'email' => 'dd@dd.com',
             'password' => bcrypt('123123123'),
             'email_verified_at' => now(),
         ]);
