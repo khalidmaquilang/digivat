@@ -23,6 +23,12 @@
         <testsuite name="User">
             <directory>app/Features/User/Tests</directory>
         </testsuite>
+        <testsuite name="Partner">
+            <directory>app/Features/Partner/Tests</directory>
+        </testsuite>
+        <testsuite name="BalanceTransaction">
+            <directory>app/Features/BalanceTransaction/Tests</directory>
+        </testsuite>
     </testsuites>
     <source>
         <include>

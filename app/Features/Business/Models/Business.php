@@ -10,6 +10,7 @@ use App\Features\CreativeDomain\Models\CreativeDomain;
 use App\Features\InviteUser\Models\InviteUser;
 use App\Features\TaxRecord\Models\TaxRecord;
 use App\Features\Token\Models\Token;
+use App\Features\Transaction\Models\Transaction;
 use App\Features\User\Models\User;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Interfaces\WalletFloat;
@@ -32,6 +33,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Features\BalanceTransaction\Models\BalanceTransaction> $balanceTransactions
+ * @property-read int|null $balance_transactions_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, CreativeDomain> $creativeDomains
  * @property-read int|null $creative_domains_count
  * @property-read non-empty-string $balance
@@ -48,6 +51,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read int|null $received_transfers_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, TaxRecord> $taxRecords
  * @property-read int|null $tax_records_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Transaction> $taxTransactions
+ * @property-read int|null $tax_transactions_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Token> $tokens
  * @property-read int|null $tokens_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Features\BalanceTransaction\Models\BalanceTransaction> $transactions
@@ -84,7 +89,9 @@ class Business extends Model implements Wallet, WalletFloat
     use HasFactory;
 
     use HasUuids;
-    use HasWalletFloat;
+    use HasWalletFloat {
+        transactions as balanceTransactions;
+    }
     use SoftDeletes;
 
     protected static function newFactory(): BusinessFactory
@@ -138,5 +145,13 @@ class Business extends Model implements Wallet, WalletFloat
     public function creativeDomains(): BelongsToMany
     {
         return $this->belongsToMany(CreativeDomain::class);
+    }
+
+    /**
+     * @return HasMany<Transaction, $this>
+     */
+    public function taxTransactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class);
     }
 }

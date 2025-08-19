@@ -26,7 +26,7 @@ class SplitRevenueAction
         foreach ($partners as $partner) {
             $share_amount = $partner->getShares($amount);
 
-            $this->deposit_action->handle($partner, $share_amount, $transaction->id);
+            $this->deposit_action->handle($partner->business, $share_amount, $transaction->id);
         }
     }
 }

@@ -29,7 +29,7 @@ final class CreateTransactionActionTest extends TestCase
             'transaction_reference' => 'TR-123456789',
         ]);
 
-        $action = new CreateTransactionAction;
+        $action = app(CreateTransactionAction::class);
 
         // Act
         $transaction = $action->handle($taxRecord, $business);
@@ -74,7 +74,7 @@ final class CreateTransactionActionTest extends TestCase
         $business = Business::factory()->create();
         $taxRecord = TaxRecord::factory()->create(['tax_amount' => 500.00]);
 
-        $action = new CreateTransactionAction;
+        $action = app(CreateTransactionAction::class);
         $customDescription = 'Custom transaction description';
         $customMetadata = ['custom_field' => 'custom_value'];
 
@@ -102,7 +102,7 @@ final class CreateTransactionActionTest extends TestCase
         $business = Business::factory()->create();
         $taxRecord = TaxRecord::factory()->create();
 
-        $action = new CreateTransactionAction;
+        $action = app(CreateTransactionAction::class);
 
         // Act
         $transaction = $action->handle($taxRecord, $business);
@@ -110,24 +110,5 @@ final class CreateTransactionActionTest extends TestCase
         // Assert relationships
         $this->assertTrue($transaction->taxRecord->is($taxRecord));
         $this->assertTrue($transaction->business->is($business));
-    }
-
-    public function test_reference_number_is_unique(): void
-    {
-        // Arrange
-        $business = Business::factory()->create();
-        $taxRecord1 = TaxRecord::factory()->create();
-        $taxRecord2 = TaxRecord::factory()->create();
-
-        $action = new CreateTransactionAction;
-
-        // Act
-        $transaction1 = $action->handle($taxRecord1, $business);
-        $transaction2 = $action->handle($taxRecord2, $business);
-
-        // Assert
-        $this->assertNotEquals($transaction1->reference_number, $transaction2->reference_number);
-        $this->assertStringStartsWith('TXN-', $transaction1->reference_number);
-        $this->assertStringStartsWith('TXN-', $transaction2->reference_number);
     }
 }

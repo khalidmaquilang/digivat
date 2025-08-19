@@ -7,7 +7,10 @@ namespace App\Features\Partner\Models;
 use App\Features\Business\Models\Business;
 use App\Features\Partner\Enums\PartnerShareTypeEnum;
 use App\Features\Partner\Helpers\PartnerCacheHelper;
+use Database\Factories\PartnerFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -22,6 +25,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read Business $business
  *
+ * @method static \Database\Factories\PartnerFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Partner newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Partner newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Partner onlyTrashed()
@@ -40,6 +44,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Partner extends Model
 {
+    use HasFactory;
     use HasUuids;
     use SoftDeletes;
 
@@ -59,6 +64,11 @@ class Partner extends Model
         static::updated(function (Partner $model): void {
             PartnerCacheHelper::flush();
         });
+    }
+
+    protected static function newFactory(): Factory
+    {
+        return PartnerFactory::new();
     }
 
     /**

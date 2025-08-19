@@ -20,7 +20,7 @@ class PartnerCacheHelper
      */
     public static function get(): Collection
     {
-        return Cache::remember(self::CACHE_KEY, self::CACHE_TTL, fn () => Partner::with('business')->get());
+        return Cache::remember(self::CACHE_KEY, self::CACHE_TTL, fn () => Partner::with('business', 'business.wallet')->get());
     }
 
     /**
