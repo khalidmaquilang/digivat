@@ -7,6 +7,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "bavix/laravel-wallet-uuid": "^3.0",
         "brick/money": "^0.10.2",
         "codewithdennis/filament-lucide-icons": "^4.0",
         "dedoc/scramble": "^0.12.30",
