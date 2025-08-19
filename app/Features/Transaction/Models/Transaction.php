@@ -10,15 +10,14 @@ use App\Features\Shared\Models\Traits\HasUuidsTrait;
 use App\Features\TaxRecord\Models\TaxRecord;
 use App\Features\Transaction\Enums\TransactionStatusEnum;
 use App\Features\Transaction\Enums\TransactionTypeEnum;
-use App\Features\User\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property string $id
+ * @property string $business_id
  * @property string $tax_record_id
- * @property string $user_id
  * @property float $amount
  * @property string $reference_number
  * @property TransactionTypeEnum $type
@@ -29,15 +28,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \App\Features\Business\Models\Business|null $business
+ * @property-read \App\Features\Business\Models\Business $business
  * @property-read TaxRecord $taxRecord
- * @property-read User $user
  *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction whereBusinessId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction whereDescription($value)
@@ -49,7 +48,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction whereTransactionDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction withTrashed(bool $withTrashed = true)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction withoutTrashed()
  *
@@ -78,14 +76,6 @@ class Transaction extends Model
     public function taxRecord(): BelongsTo
     {
         return $this->belongsTo(TaxRecord::class);
-    }
-
-    /**
-     * @return BelongsTo<User, $this>
-     */
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
     }
 
     protected function getPrefixId(): string

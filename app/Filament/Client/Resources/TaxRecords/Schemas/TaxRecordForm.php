@@ -52,7 +52,8 @@ class TaxRecordForm
                         Group::make([
                             DatePicker::make('sales_date')
                                 ->maxDate(now())
-                                ->required(),
+                                ->required()
+                                ->default(now()),
                             Select::make('category_type')
                                 ->options(CategoryTypeEnum::class)
                                 ->required()

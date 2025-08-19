@@ -31,9 +31,9 @@ return new class extends Migration
                 ->references('id')
                 ->on('tax_records')
                 ->cascadeOnDelete();
-            $table->index(['tax_record_id', 'type']);
-            $table->index(['user_id', 'transaction_date']);
-            $table->index(['status', 'transaction_date']);
+            $table->index(['type']);
+            $table->index(['transaction_date']);
+            $table->index(['status']);
         });
     }
 
