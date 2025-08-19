@@ -21,7 +21,7 @@ final class CreateTransactionActionTest extends TestCase
     {
         // Arrange
         $business = Business::factory()->create();
-        $taxRecord = TaxRecord::factory()->create([
+        $tax_record = TaxRecord::factory()->create([
             'tax_amount' => 1200.50,
             'gross_amount' => 10000.00,
             'taxable_amount' => 10000.00,
@@ -32,7 +32,7 @@ final class CreateTransactionActionTest extends TestCase
         $action = app(CreateTransactionAction::class);
 
         // Act
-        $transaction = $action->handle($taxRecord, $business);
+        $transaction = $action->handle($tax_record, $business);
 
         // Assert
         $this->assertInstanceOf(Transaction::class, $transaction);
@@ -41,7 +41,7 @@ final class CreateTransactionActionTest extends TestCase
         // Check database record
         $this->assertDatabaseHas('transactions', [
             'id' => $transaction->id,
-            'tax_record_id' => $taxRecord->id,
+            'tax_record_id' => $tax_record->id,
             'business_id' => $business->id,
             'amount' => $this->convertMoney(1200.50),
             'type' => TransactionTypeEnum::TaxRemittance->value,
@@ -49,7 +49,7 @@ final class CreateTransactionActionTest extends TestCase
         ]);
 
         // Check field values
-        $this->assertEquals($taxRecord->id, $transaction->tax_record_id);
+        $this->assertEquals($tax_record->id, $transaction->tax_record_id);
         $this->assertEquals($business->id, $transaction->business_id);
         $this->assertEquals('1200.50', $transaction->amount);
         $this->assertEquals(TransactionTypeEnum::TaxRemittance, $transaction->type);
@@ -58,39 +58,39 @@ final class CreateTransactionActionTest extends TestCase
         $this->assertNotNull($transaction->transaction_date);
 
         // Check metadata
-        $expectedMetadata = [
+        $expected_metadata = [
             'tax_record_reference' => 'TR-123456789',
             'gross_amount' => 10000.00,
             'taxable_amount' => 10000.00,
             'tax_amount' => 1200.50,
             'total_amount' => 11200.50,
         ];
-        $this->assertEquals($expectedMetadata, $transaction->metadata);
+        $this->assertEquals($expected_metadata, $transaction->metadata);
     }
 
     public function test_creates_transaction_with_custom_parameters(): void
     {
         // Arrange
         $business = Business::factory()->create();
-        $taxRecord = TaxRecord::factory()->create(['tax_amount' => 500.00]);
+        $tax_record = TaxRecord::factory()->create(['tax_amount' => 500.00]);
 
         $action = app(CreateTransactionAction::class);
-        $customDescription = 'Custom transaction description';
-        $customMetadata = ['custom_field' => 'custom_value'];
+        $custom_description = 'Custom transaction description';
+        $custom_metadata = ['custom_field' => 'custom_value'];
 
         // Act
         $transaction = $action->handle(
-            $taxRecord,
+            $tax_record,
             $business,
             TransactionTypeEnum::Refund,
             null, // reference_number
-            $customDescription,
-            $customMetadata
+            $custom_description,
+            $custom_metadata
         );
 
         // Assert
         $this->assertEquals(TransactionTypeEnum::Refund, $transaction->type);
-        $this->assertEquals($customDescription, $transaction->description);
+        $this->assertEquals($custom_description, $transaction->description);
         $this->assertIsArray($transaction->metadata);
         $this->assertArrayHasKey('custom_field', $transaction->metadata);
         $this->assertEquals('custom_value', $transaction->metadata['custom_field']);
@@ -100,15 +100,15 @@ final class CreateTransactionActionTest extends TestCase
     {
         // Arrange
         $business = Business::factory()->create();
-        $taxRecord = TaxRecord::factory()->create();
+        $tax_record = TaxRecord::factory()->create();
 
         $action = app(CreateTransactionAction::class);
 
         // Act
-        $transaction = $action->handle($taxRecord, $business);
+        $transaction = $action->handle($tax_record, $business);
 
         // Assert relationships
-        $this->assertTrue($transaction->taxRecord->is($taxRecord));
+        $this->assertTrue($transaction->taxRecord->is($tax_record));
         $this->assertTrue($transaction->business->is($business));
     }
 }
