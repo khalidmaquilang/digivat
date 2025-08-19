@@ -84,6 +84,7 @@ class ClientPanelProvider extends PanelProvider
             ])
             ->tenant(Business::class, slugAttribute: 'slug')
             ->tenantRegistration(RegisterBusiness::class)
-            ->tenantProfile(EditBusinessProfile::class);
+            ->tenantProfile(EditBusinessProfile::class)
+            ->domain(app()->isProduction() ? config('domains.post') : null);
     }
 }

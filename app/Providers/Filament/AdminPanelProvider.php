@@ -72,6 +72,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            ->domain(app()->isProduction() ? config('domains.dtrms') : null);
     }
 }
