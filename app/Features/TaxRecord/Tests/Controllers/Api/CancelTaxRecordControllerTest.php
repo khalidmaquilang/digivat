@@ -26,7 +26,7 @@ final class CancelTaxRecordControllerTest extends TestCase
 
         $response = $this->postJson(
             route('api.tax.cancel', ['tax_record' => $tax_record->id]),
-            [],
+            ['cancel_reason' => 'Test API cancellation'],
             ['Authorization' => 'Bearer '.$token->token]
         );
 
@@ -54,7 +54,7 @@ final class CancelTaxRecordControllerTest extends TestCase
 
         $response = $this->postJson(
             route('api.tax.cancel', ['tax_record' => $tax_record->id]),
-            [],
+            ['cancel_reason' => 'Already cancelled API test'],
             ['Authorization' => 'Bearer '.$token->token]
         );
 
@@ -83,7 +83,7 @@ final class CancelTaxRecordControllerTest extends TestCase
 
         $response = $this->postJson(
             route('api.tax.cancel', ['tax_record' => $tax_record->id]),
-            [],
+            ['cancel_reason' => 'Test cancellation'],
             ['Authorization' => 'Bearer '.$token->token]
         );
 
@@ -104,7 +104,7 @@ final class CancelTaxRecordControllerTest extends TestCase
 
         $response = $this->postJson(
             route('api.tax.cancel', ['tax_record' => $nonexistent_id]),
-            [],
+            ['cancel_reason' => 'Test cancellation'],
             ['Authorization' => 'Bearer '.$token->token]
         );
 

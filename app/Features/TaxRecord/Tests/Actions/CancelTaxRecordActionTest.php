@@ -23,7 +23,7 @@ final class CancelTaxRecordActionTest extends TestCase
             'status' => TaxRecordStatusEnum::Acknowledged,
         ]);
 
-        $result = app(CancelTaxRecordAction::class)->handle($tax_record);
+        $result = app(CancelTaxRecordAction::class)->handle($tax_record, 'Test cancellation');
 
         $this->assertInstanceOf(TaxRecord::class, $result);
         $this->assertEquals(TaxRecordStatusEnum::Cancelled, $result->status);
@@ -43,7 +43,7 @@ final class CancelTaxRecordActionTest extends TestCase
 
         $original_updated_at = $tax_record->updated_at;
 
-        $result = app(CancelTaxRecordAction::class)->handle($tax_record);
+        $result = app(CancelTaxRecordAction::class)->handle($tax_record, 'Already cancelled test');
 
         $this->assertInstanceOf(TaxRecord::class, $result);
         $this->assertEquals(TaxRecordStatusEnum::Cancelled, $result->status);

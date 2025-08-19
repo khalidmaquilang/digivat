@@ -21,7 +21,7 @@ class UserForm
                     ->required(),
                 TextInput::make('suffix'),
                 TextInput::make('email')
-                    ->unique(ignorable: true),
+                    ->unique(ignoreRecord: true),
                 DateTimePicker::make('email_verified_at'),
             ]);
     }

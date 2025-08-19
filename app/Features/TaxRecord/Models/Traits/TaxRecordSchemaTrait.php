@@ -128,6 +128,11 @@ trait TaxRecordSchemaTrait
                                 ->badge()
                                 ->size('lg')
                                 ->color('info'),
+                            TextEntry::make('cancel_reason')
+                                ->badge()
+                                ->size('lg')
+                                ->color('danger')
+                                ->placeholder('-'),
                         ]),
                 ])
                 ->columnSpanFull(),

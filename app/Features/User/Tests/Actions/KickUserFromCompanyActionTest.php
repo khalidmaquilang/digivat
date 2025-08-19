@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit;
+namespace App\Features\User\Tests\Actions;
 
 use App\Features\Business\Models\Business;
 use App\Features\User\Actions\KickUserFromCompanyAction;
@@ -10,7 +10,7 @@ use App\Features\User\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class KickUserFromCompanyActionTest extends TestCase
+final class KickUserFromCompanyActionTest extends TestCase
 {
     use RefreshDatabase;
 

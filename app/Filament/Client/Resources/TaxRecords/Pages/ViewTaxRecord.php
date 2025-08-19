@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Client\Resources\TaxRecords\Pages;
 
+use App\Filament\Client\Resources\TaxRecords\Actions\RemitTaxButton;
 use App\Filament\Client\Resources\TaxRecords\RelationManagers\TaxRecordItemsRelationManager;
 use App\Filament\Client\Resources\TaxRecords\TaxRecordResource;
 use CodeWithDennis\FilamentLucideIcons\Enums\LucideIcon;
@@ -20,6 +21,7 @@ class ViewTaxRecord extends ViewRecord
             Action::make('View Receipt')
                 ->icon(LucideIcon::Receipt)
                 ->url(route('bir-receipt.show', $this->record)),
+            RemitTaxButton::make(),
         ];
     }
 

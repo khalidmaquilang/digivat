@@ -8,7 +8,6 @@ use App\Features\TaxRecord\Models\TaxRecord;
 use App\Features\TaxRecordItem\Actions\CreateTaxRecordItemAction;
 use App\Features\TaxRecordItem\Data\TaxRecordItemData;
 use App\Features\TaxRecordItem\Models\TaxRecordItem;
-use App\Features\User\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -18,8 +17,7 @@ final class CreateTaxRecordItemActionTest extends TestCase
 
     public function test_can_create_tax_record_item(): void
     {
-        $user = User::factory()->create();
-        $tax_record = TaxRecord::factory()->create(['user_id' => $user->id]);
+        $tax_record = TaxRecord::factory()->create();
 
         $data = new TaxRecordItemData(
             item_name: 'Test Item',
@@ -47,8 +45,7 @@ final class CreateTaxRecordItemActionTest extends TestCase
 
     public function test_can_create_item_without_discount(): void
     {
-        $user = User::factory()->create();
-        $tax_record = TaxRecord::factory()->create(['user_id' => $user->id]);
+        $tax_record = TaxRecord::factory()->create();
 
         $data = new TaxRecordItemData(
             item_name: 'No Discount Item',
@@ -74,8 +71,7 @@ final class CreateTaxRecordItemActionTest extends TestCase
 
     public function test_can_create_item_with_single_quantity(): void
     {
-        $user = User::factory()->create();
-        $tax_record = TaxRecord::factory()->create(['user_id' => $user->id]);
+        $tax_record = TaxRecord::factory()->create();
 
         $data = new TaxRecordItemData(
             item_name: 'Single Item',
@@ -101,8 +97,7 @@ final class CreateTaxRecordItemActionTest extends TestCase
 
     public function test_can_create_item_with_decimal_prices(): void
     {
-        $user = User::factory()->create();
-        $tax_record = TaxRecord::factory()->create(['user_id' => $user->id]);
+        $tax_record = TaxRecord::factory()->create();
 
         $data = new TaxRecordItemData(
             item_name: 'Decimal Price Item',
@@ -130,8 +125,7 @@ final class CreateTaxRecordItemActionTest extends TestCase
 
     public function test_can_create_item_with_high_quantity(): void
     {
-        $user = User::factory()->create();
-        $tax_record = TaxRecord::factory()->create(['user_id' => $user->id]);
+        $tax_record = TaxRecord::factory()->create();
 
         $data = new TaxRecordItemData(
             item_name: 'Bulk Purchase',
@@ -159,8 +153,7 @@ final class CreateTaxRecordItemActionTest extends TestCase
 
     public function test_can_create_item_with_zero_total(): void
     {
-        $user = User::factory()->create();
-        $tax_record = TaxRecord::factory()->create(['user_id' => $user->id]);
+        $tax_record = TaxRecord::factory()->create();
 
         $data = new TaxRecordItemData(
             item_name: 'Free Item',
@@ -186,8 +179,7 @@ final class CreateTaxRecordItemActionTest extends TestCase
 
     public function test_can_create_multiple_items_for_same_tax_record(): void
     {
-        $user = User::factory()->create();
-        $tax_record = TaxRecord::factory()->create(['user_id' => $user->id]);
+        $tax_record = TaxRecord::factory()->create();
 
         $data1 = new TaxRecordItemData(
             item_name: 'First Item',
@@ -234,8 +226,7 @@ final class CreateTaxRecordItemActionTest extends TestCase
 
     public function test_creates_item_with_correct_timestamps(): void
     {
-        $user = User::factory()->create();
-        $tax_record = TaxRecord::factory()->create(['user_id' => $user->id]);
+        $tax_record = TaxRecord::factory()->create();
 
         $data = new TaxRecordItemData(
             item_name: 'Timestamp Test Item',
@@ -260,8 +251,7 @@ final class CreateTaxRecordItemActionTest extends TestCase
 
     public function test_total_calculation_matches_data_object(): void
     {
-        $user = User::factory()->create();
-        $tax_record = TaxRecord::factory()->create(['user_id' => $user->id]);
+        $tax_record = TaxRecord::factory()->create();
 
         $data = new TaxRecordItemData(
             item_name: 'Calculation Test',

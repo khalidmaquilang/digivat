@@ -25,6 +25,10 @@ class UpdateExpiredTaxRecords implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
+    public int $tries = 3; // Or more
+
+    public int $timeout = 120; // Avoid long-running DB locks
+
     /**
      * Create a new job instance.
      */
@@ -62,5 +66,22 @@ class UpdateExpiredTaxRecords implements ShouldQueue
                     ->allowFailures()
                     ->dispatch();
             });
+    }
+
+    /**
+     * @return array<string>
+     */
+    public function tags(): array
+    {
+        return [
+            'UpdateExpiredTaxRecords',
+        ];
+    }
+
+    public function backoff(): int
+    {
+        $base = 5 * 2 ** ($this->attempts() - 1); // Exponential
+
+        return $base + random_int(1, 10); // Add randomness to each retry
     }
 }

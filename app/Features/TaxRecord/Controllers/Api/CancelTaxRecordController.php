@@ -7,11 +7,12 @@ namespace App\Features\TaxRecord\Controllers\Api;
 use App\Features\Business\Models\Business;
 use App\Features\Shared\Controllers\ApiController;
 use App\Features\TaxRecord\Actions\CancelTaxRecordAction;
+use App\Features\TaxRecord\Data\CancelTaxRecordData;
 use App\Features\TaxRecord\Models\TaxRecord;
-use App\Features\User\Models\User;
+use Dedoc\Scramble\Attributes\BodyParameter;
+use Dedoc\Scramble\Attributes\HeaderParameter;
 use Dedoc\Scramble\Attributes\PathParameter;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class CancelTaxRecordController extends ApiController
 {
@@ -24,8 +25,10 @@ class CancelTaxRecordController extends ApiController
      * Only tax records in 'preview' or 'acknowledged' status can be cancelled.
      * Once cancelled, the tax record status will be updated to 'cancelled' and cannot be reversed.
      */
+    #[HeaderParameter(name: 'Idempotency-Key', description: 'It must be a unique string, use UUID', required: true)]
     #[PathParameter(name: 'tax_record', description: 'The UUID of the tax record to cancel', required: true, type: 'string')]
-    public function __invoke(Request $request, string $tax_record): JsonResponse
+    #[BodyParameter(name: 'cancel_reason', description: 'The reason for cancelling this tax record', required: true, type: 'string', example: 'Order cancelled by customer')]
+    public function __invoke(CancelTaxRecordData $request, string $tax_record): JsonResponse
     {
         /** @var ?Business $business */
         $business = $this->resolveBusiness();
@@ -40,7 +43,7 @@ class CancelTaxRecordController extends ApiController
             abort(403, 'Unauthorized access to tax record');
         }
 
-        $this->action->handle($tax_record_model);
+        $this->action->handle($tax_record_model, $request->cancel_reason);
 
         return response()->json([
             'message' => 'Tax record cancelled successfully',

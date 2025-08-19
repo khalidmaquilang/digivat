@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit;
+namespace App\Features\InviteUser\Tests\Actions;
 
 use App\Features\Business\Models\Business;
 use App\Features\InviteUser\Actions\GetInvitationByCode;
@@ -10,7 +10,7 @@ use App\Features\InviteUser\Models\InviteUser;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class GetInvitationByCodeTest extends TestCase
+final class GetInvitationByCodeTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -23,7 +23,7 @@ class GetInvitationByCodeTest extends TestCase
             'email' => 'test@example.com',
             'code' => 'TEST123',
         ]);
-
+        /** @var InviteUser $invitation */
         $action = new GetInvitationByCode;
 
         // Act
@@ -32,6 +32,7 @@ class GetInvitationByCodeTest extends TestCase
         // Assert
         $this->assertNotNull($result);
         $this->assertInstanceOf(InviteUser::class, $result);
+        /** @var InviteUser $result */
         $this->assertEquals($invitation->id, $result->id);
         $this->assertEquals('TEST123', $result->code);
         $this->assertEquals('test@example.com', $result->email);
@@ -73,6 +74,7 @@ class GetInvitationByCodeTest extends TestCase
             'business_id' => $business->id,
             'code' => 'CODE2',
         ]);
+        /** @var InviteUser $targetInvitation */
         InviteUser::factory()->create([
             'business_id' => $business->id,
             'code' => 'CODE3',
@@ -85,6 +87,7 @@ class GetInvitationByCodeTest extends TestCase
 
         // Assert
         $this->assertNotNull($result);
+        /** @var InviteUser $result */
         $this->assertEquals($targetInvitation->id, $result->id);
         $this->assertEquals('CODE2', $result->code);
     }
