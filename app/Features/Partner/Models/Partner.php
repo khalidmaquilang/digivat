@@ -6,6 +6,7 @@ namespace App\Features\Partner\Models;
 
 use App\Features\Business\Models\Business;
 use App\Features\Partner\Enums\PartnerShareTypeEnum;
+use App\Features\Partner\Helpers\PartnerCacheHelper;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,7 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * @property string $id
  * @property string $business_id
- * @property string $shares
+ * @property float $shares
  * @property PartnerShareTypeEnum $share_type
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -46,8 +47,19 @@ class Partner extends Model
      * @var \class-string[]
      */
     protected $casts = [
+        'shares' => 'float',
         'share_type' => PartnerShareTypeEnum::class,
     ];
+
+    protected static function booted(): void
+    {
+        static::created(function (Partner $model): void {
+            PartnerCacheHelper::flush();
+        });
+        static::updated(function (Partner $model): void {
+            PartnerCacheHelper::flush();
+        });
+    }
 
     /**
      * @return BelongsTo<Business, $this>
@@ -55,5 +67,14 @@ class Partner extends Model
     public function business(): BelongsTo
     {
         return $this->belongsTo(Business::class);
+    }
+
+    public function getShares(float $amount): float
+    {
+        if ($this->share_type === PartnerShareTypeEnum::Fixed) {
+            return $this->shares;
+        }
+
+        return round($amount * ($this->shares / 100), 2);
     }
 }
