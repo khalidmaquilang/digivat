@@ -5,17 +5,17 @@ declare(strict_types=1);
 namespace App\Filament\Client\Resources\BalanceTransactions\Pages;
 
 use App\Filament\Client\Resources\BalanceTransactions\BalanceTransactionResource;
-use Filament\Actions\CreateAction;
+use App\Filament\Client\Resources\BalanceTransactions\Widgets\Wallet;
 use Filament\Resources\Pages\ListRecords;
 
 class ListBalanceTransactions extends ListRecords
 {
     protected static string $resource = BalanceTransactionResource::class;
 
-    protected function getHeaderActions(): array
+    protected function getHeaderWidgets(): array
     {
         return [
-            CreateAction::make(),
+            Wallet::class,
         ];
     }
 }

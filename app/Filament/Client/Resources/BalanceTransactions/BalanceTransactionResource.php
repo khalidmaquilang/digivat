@@ -7,8 +7,6 @@ namespace App\Filament\Client\Resources\BalanceTransactions;
 use App\Features\BalanceTransaction\Models\BalanceTransaction;
 use App\Features\Business\Models\Business;
 use App\Features\Partner\Actions\CheckPartnerAction;
-use App\Filament\Client\Resources\BalanceTransactions\Pages\CreateBalanceTransaction;
-use App\Filament\Client\Resources\BalanceTransactions\Pages\EditBalanceTransaction;
 use App\Filament\Client\Resources\BalanceTransactions\Pages\ListBalanceTransactions;
 use App\Filament\Client\Resources\BalanceTransactions\Schemas\BalanceTransactionForm;
 use App\Filament\Client\Resources\BalanceTransactions\Tables\BalanceTransactionsTable;
@@ -50,19 +48,10 @@ class BalanceTransactionResource extends Resource
         return BalanceTransactionsTable::configure($table);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
     public static function getPages(): array
     {
         return [
             'index' => ListBalanceTransactions::route('/'),
-            'create' => CreateBalanceTransaction::route('/create'),
-            'edit' => EditBalanceTransaction::route('/{record}/edit'),
         ];
     }
 }

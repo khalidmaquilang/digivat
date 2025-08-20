@@ -154,4 +154,9 @@ class Business extends Model implements Wallet, WalletFloat
     {
         return $this->hasMany(Transaction::class);
     }
+
+    public function getBalance(): float
+    {
+        return $this->balanceFloatNum;
+    }
 }

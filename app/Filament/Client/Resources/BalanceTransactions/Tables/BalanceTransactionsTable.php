@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Filament\Client\Resources\BalanceTransactions\Tables;
 
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
+use App\Filament\Components\TableColumns\MoneyColumn\MoneyColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Table;
+use Malzariey\FilamentDaterangepickerFilter\Filters\DateRangeFilter;
 
 class BalanceTransactionsTable
 {
@@ -15,18 +16,23 @@ class BalanceTransactionsTable
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('uuid')
+                    ->label('Wallet transaction id')
+                    ->searchable(),
+                TextColumn::make('created_at')
+                    ->label('Transaction date'),
+                MoneyColumn::make('amount_float')
+                    ->label('Amount'),
+                TextColumn::make('type')
+                    ->badge(),
+                TextColumn::make('meta')
+                    ->label('Transaction reference')
+                    ->searchable(),
             ])
             ->filters([
-                //
-            ])
-            ->recordActions([
-                EditAction::make(),
-            ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
-            ]);
+                DateRangeFilter::make('created_at')
+                    ->label('Transaction date'),
+            ], layout: FiltersLayout::AboveContent)
+            ->defaultSort('created_at', 'desc');
     }
 }
