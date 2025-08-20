@@ -44,12 +44,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Partner extends Model
 {
+    /** @use HasFactory<PartnerFactory> */
     use HasFactory;
+
     use HasUuids;
     use SoftDeletes;
 
     /**
-     * @var \class-string[]
+     * @var array<string, string>
      */
     protected $casts = [
         'shares' => 'float',
@@ -66,6 +68,9 @@ class Partner extends Model
         });
     }
 
+    /**
+     * @return Factory<Partner>
+     */
     protected static function newFactory(): Factory
     {
         return PartnerFactory::new();

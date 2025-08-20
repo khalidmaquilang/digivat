@@ -58,8 +58,8 @@ final class SplitRevenueActionTest extends TestCase
             'status' => TransactionStatusEnum::Completed,
         ]);
 
-        $partner_1_initial_balance = $partner_business_1->balanceFloat;
-        $partner_2_initial_balance = $partner_business_2->balanceFloat;
+        $partner_1_initial_balance = $partner_business_1->balanceFloatNum;
+        $partner_2_initial_balance = $partner_business_2->balanceFloatNum;
 
         app(SplitRevenueAction::class)->handle($transaction);
 
@@ -67,10 +67,10 @@ final class SplitRevenueActionTest extends TestCase
         $partner_business_2->refresh();
 
         // Assert partner 1 received 30% (300.00)
-        $this->assertEquals($partner_1_initial_balance + 300.00, $partner_business_1->balanceFloat);
+        $this->assertEquals($partner_1_initial_balance + 300.00, $partner_business_1->balanceFloatNum);
 
         // Assert partner 2 received 20% (200.00)
-        $this->assertEquals($partner_2_initial_balance + 200.00, $partner_business_2->balanceFloat);
+        $this->assertEquals($partner_2_initial_balance + 200.00, $partner_business_2->balanceFloatNum);
     }
 
     public function test_can_split_revenue_among_partners_with_fixed_shares(): void
@@ -106,8 +106,8 @@ final class SplitRevenueActionTest extends TestCase
             'status' => TransactionStatusEnum::Completed,
         ]);
 
-        $partner_1_initial_balance = $partner_business_1->balanceFloat;
-        $partner_2_initial_balance = $partner_business_2->balanceFloat;
+        $partner_1_initial_balance = $partner_business_1->balanceFloatNum;
+        $partner_2_initial_balance = $partner_business_2->balanceFloatNum;
 
         app(SplitRevenueAction::class)->handle($transaction);
 
@@ -115,10 +115,10 @@ final class SplitRevenueActionTest extends TestCase
         $partner_business_2->refresh();
 
         // Assert partner 1 received fixed amount (150.00)
-        $this->assertEquals($partner_1_initial_balance + 150.00, $partner_business_1->balanceFloat);
+        $this->assertEquals($partner_1_initial_balance + 150.00, $partner_business_1->balanceFloatNum);
 
         // Assert partner 2 received fixed amount (75.00)
-        $this->assertEquals($partner_2_initial_balance + 75.00, $partner_business_2->balanceFloat);
+        $this->assertEquals($partner_2_initial_balance + 75.00, $partner_business_2->balanceFloatNum);
     }
 
     public function test_does_nothing_when_no_partners_available(): void
@@ -144,8 +144,8 @@ final class SplitRevenueActionTest extends TestCase
         // This should not throw any errors
         app(SplitRevenueAction::class)->handle($transaction);
 
-        // No assertions needed as we're testing it doesn't crash
-        $this->assertTrue(true);
+        // Test passes if no exceptions are thrown
+        $this->expectNotToPerformAssertions();
     }
 
     public function test_uses_dependency_injection_correctly(): void
@@ -216,8 +216,8 @@ final class SplitRevenueActionTest extends TestCase
             'status' => TransactionStatusEnum::Completed,
         ]);
 
-        $partner_1_initial_balance = $partner_business_1->balanceFloat;
-        $partner_2_initial_balance = $partner_business_2->balanceFloat;
+        $partner_1_initial_balance = $partner_business_1->balanceFloatNum;
+        $partner_2_initial_balance = $partner_business_2->balanceFloatNum;
 
         app(SplitRevenueAction::class)->handle($transaction);
 
@@ -225,9 +225,9 @@ final class SplitRevenueActionTest extends TestCase
         $partner_business_2->refresh();
 
         // Partner 1: 25% of 800.00 = 200.00
-        $this->assertEquals($partner_1_initial_balance + 200.00, $partner_business_1->balanceFloat);
+        $this->assertEquals($partner_1_initial_balance + 200.00, $partner_business_1->balanceFloatNum);
 
         // Partner 2: Fixed 100.00
-        $this->assertEquals($partner_2_initial_balance + 100.00, $partner_business_2->balanceFloat);
+        $this->assertEquals($partner_2_initial_balance + 100.00, $partner_business_2->balanceFloatNum);
     }
 }

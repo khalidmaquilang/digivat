@@ -50,6 +50,9 @@ class PartnerResource extends Resource
         ];
     }
 
+    /**
+     * @return Builder<Partner>
+     */
     public static function getRecordRouteBindingEloquentQuery(): Builder
     {
         return parent::getRecordRouteBindingEloquentQuery()

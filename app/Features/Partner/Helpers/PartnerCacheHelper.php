@@ -16,7 +16,7 @@ class PartnerCacheHelper
     const CACHE_TTL = 60;
 
     /**
-     * @return Collection<Partner>
+     * @return Collection<int, Partner>
      */
     public static function get(): Collection
     {

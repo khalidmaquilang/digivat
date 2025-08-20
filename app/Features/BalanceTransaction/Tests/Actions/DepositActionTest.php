@@ -19,13 +19,13 @@ final class DepositActionTest extends TestCase
         $amount = 100.50;
         $transaction_id = 'TXN-12345';
 
-        $initial_balance = $business->balanceFloat;
+        $initial_balance = $business->balanceFloatNum;
 
         app(DepositAction::class)->handle($business, $amount, $transaction_id);
 
         $business->refresh();
 
-        $this->assertEquals($initial_balance + $amount, $business->balanceFloat);
+        $this->assertEquals($initial_balance + $amount, $business->balanceFloatNum);
     }
 
     public function test_deposit_includes_transaction_id_in_meta(): void
@@ -40,6 +40,8 @@ final class DepositActionTest extends TestCase
         $this->assertCount(1, $transactions);
 
         $transaction = $transactions->first();
+        $this->assertNotNull($transaction);
+        $this->assertNotNull($transaction->meta);
         $this->assertEquals($transaction_id, $transaction->meta['transaction_id']);
         $this->assertEquals($this->convertMoney($amount), $transaction->amount);
     }
@@ -65,19 +67,19 @@ final class DepositActionTest extends TestCase
         $amount = 9999.99;
         $transaction_id = 'TXN-LARGE';
 
-        $initial_balance = $business->balanceFloat;
+        $initial_balance = $business->balanceFloatNum;
 
         app(DepositAction::class)->handle($business, $amount, $transaction_id);
 
         $business->refresh();
 
-        $this->assertEquals($initial_balance + $amount, $business->balanceFloat);
+        $this->assertEquals($initial_balance + $amount, $business->balanceFloatNum);
     }
 
     public function test_multiple_deposits_accumulate(): void
     {
         $business = Business::factory()->create();
-        $initial_balance = $business->balanceFloat;
+        $initial_balance = $business->balanceFloatNum;
 
         app(DepositAction::class)->handle($business, 100.00, 'TXN-1');
         app(DepositAction::class)->handle($business, 200.00, 'TXN-2');
@@ -85,7 +87,7 @@ final class DepositActionTest extends TestCase
 
         $business->refresh();
 
-        $this->assertEquals($initial_balance + 350.50, $business->balanceFloat);
+        $this->assertEquals($initial_balance + 350.50, $business->balanceFloatNum);
         $this->assertCount(3, $business->walletTransactions);
     }
 }

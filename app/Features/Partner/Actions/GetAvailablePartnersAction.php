@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Collection;
 class GetAvailablePartnersAction
 {
     /**
-     * @return Collection<Partner>
+     * @return Collection<int, Partner>
      */
     public function handle(): Collection
     {

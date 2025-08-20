@@ -62,7 +62,9 @@ final class GetAvailablePartnersActionTest extends TestCase
 
         $result = app(GetAvailablePartnersAction::class)->handle();
 
-        $this->assertTrue($result->first()->relationLoaded('business'));
-        $this->assertEquals($business->id, $result->first()->business->id);
+        $partner = $result->first();
+        $this->assertNotNull($partner);
+        $this->assertTrue($partner->relationLoaded('business'));
+        $this->assertEquals($business->id, $partner->business->id);
     }
 }
