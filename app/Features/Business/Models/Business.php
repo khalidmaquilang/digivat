@@ -10,7 +10,11 @@ use App\Features\CreativeDomain\Models\CreativeDomain;
 use App\Features\InviteUser\Models\InviteUser;
 use App\Features\TaxRecord\Models\TaxRecord;
 use App\Features\Token\Models\Token;
+use App\Features\Transaction\Models\Transaction;
 use App\Features\User\Models\User;
+use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Interfaces\WalletFloat;
+use Bavix\Wallet\Traits\HasWalletFloat;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -29,17 +33,34 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Features\BalanceTransaction\Models\BalanceTransaction> $balanceTransactions
+ * @property-read int|null $balance_transactions_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, CreativeDomain> $creativeDomains
  * @property-read int|null $creative_domains_count
+ * @property-read non-empty-string $balance
+ * @property-read non-empty-string $balance_float
+ * @property-read float $balance_float_num
+ * @property-read int $balance_int
+ * @property-read \App\Features\Wallet\Models\Wallet $wallet
  * @property-read \Illuminate\Database\Eloquent\Collection<int, InviteUser> $inviteUsers
  * @property-read int|null $invite_users_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $members
  * @property-read int|null $members_count
  * @property-read User $owner
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Bavix\Wallet\Models\Transfer> $receivedTransfers
+ * @property-read int|null $received_transfers_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, TaxRecord> $taxRecords
  * @property-read int|null $tax_records_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Transaction> $taxTransactions
+ * @property-read int|null $tax_transactions_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Token> $tokens
  * @property-read int|null $tokens_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Features\BalanceTransaction\Models\BalanceTransaction> $transactions
+ * @property-read int|null $transactions_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Bavix\Wallet\Models\Transfer> $transfers
+ * @property-read int|null $transfers_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Features\BalanceTransaction\Models\BalanceTransaction> $walletTransactions
+ * @property-read int|null $wallet_transactions_count
  *
  * @method static \App\Features\Business\Database\Factories\BusinessFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Business newModelQuery()
@@ -60,7 +81,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *
  * @mixin \Eloquent
  */
-class Business extends Model
+class Business extends Model implements Wallet, WalletFloat
 {
     use BusinessSchemaTrait;
 
@@ -68,6 +89,9 @@ class Business extends Model
     use HasFactory;
 
     use HasUuids;
+    use HasWalletFloat {
+        transactions as balanceTransactions;
+    }
     use SoftDeletes;
 
     protected static function newFactory(): BusinessFactory
@@ -121,5 +145,18 @@ class Business extends Model
     public function creativeDomains(): BelongsToMany
     {
         return $this->belongsToMany(CreativeDomain::class);
+    }
+
+    /**
+     * @return HasMany<Transaction, $this>
+     */
+    public function taxTransactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
+    public function getBalance(): float
+    {
+        return $this->balanceFloatNum;
     }
 }

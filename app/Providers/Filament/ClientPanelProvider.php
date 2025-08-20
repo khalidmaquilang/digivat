@@ -43,12 +43,19 @@ class ClientPanelProvider extends PanelProvider
             ->brandLogo(function () {
                 // Hide brand logo when user is on dashboard
                 if (! request()->routeIs('filament.client.auth.*')) {
-                    return '';
+                    return asset('/images/post.png');
                 }
 
                 return asset('/images/post-logo.png');
             })
-            ->brandLogoHeight('10rem')
+            ->brandLogoHeight(function (): string {
+                // Hide brand logo when user is on dashboard
+                if (! request()->routeIs('filament.client.auth.*')) {
+                    return '5rem';
+                }
+
+                return '10rem';
+            })
             ->colors([
                 'primary' => Color::Blue,
                 'success' => Color::Green,
@@ -84,6 +91,7 @@ class ClientPanelProvider extends PanelProvider
             ])
             ->tenant(Business::class, slugAttribute: 'slug')
             ->tenantRegistration(RegisterBusiness::class)
-            ->tenantProfile(EditBusinessProfile::class);
+            ->tenantProfile(EditBusinessProfile::class)
+            ->domain(app()->isProduction() ? config('domains.post') : null);
     }
 }

@@ -34,12 +34,19 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogo(function () {
                 // Hide brand logo when user is on dashboard
                 if (! request()->routeIs('filament.admin.auth.*')) {
-                    return '';
+                    return asset('/images/dtrms.png');
                 }
 
                 return asset('/images/dtrms-logo.png');
             })
-            ->brandLogoHeight('10rem')
+            ->brandLogoHeight(function (): string {
+                // Hide brand logo when user is on dashboard
+                if (! request()->routeIs('filament.admin.auth.*')) {
+                    return '5rem';
+                }
+
+                return '10rem';
+            })
             ->colors([
                 'primary' => Color::Amber,
                 'success' => Color::Green,
@@ -72,6 +79,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            ->domain(app()->isProduction() ? config('domains.dtrms') : null);
     }
 }
