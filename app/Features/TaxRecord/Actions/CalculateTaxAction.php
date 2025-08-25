@@ -37,13 +37,6 @@ class CalculateTaxAction
 
         $tax_amount = $this->get_tax_by_category_action->handle($data->category_type, $taxable_amount);
 
-        $tax_record_data = $data->toTaxRecordData(
-            business_id: $business_id,
-            gross_amount: $total_item_amount,
-            taxable_amount: $taxable_amount,
-            tax_amount: $tax_amount
-        );
-
         if ($data->mode === CalculateTaxRecordModeEnum::Preview) {
             return $data->toCalculatedTaxRecordData(
                 gross_amount: $total_item_amount,
@@ -51,6 +44,13 @@ class CalculateTaxAction
                 tax_amount: $tax_amount,
             )->toArray();
         }
+
+        $tax_record_data = $data->toTaxRecordData(
+            business_id: $business_id,
+            gross_amount: $total_item_amount,
+            taxable_amount: $taxable_amount,
+            tax_amount: $tax_amount
+        );
 
         // Add referer
         $tax_record_data->referer = $referer_url;
